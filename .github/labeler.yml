@@ -3,6 +3,7 @@
 documentation:
   - docs/**/*
   - .github/*
+  - ./*.md
 
 ci:
   - .dependabot/*
