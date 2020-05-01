@@ -1,6 +1,6 @@
 # template
 
-This is my template repository
+![Lint](https://github.com/AndreasAugustin/template/workflows/Lint/badge.svg)
 
 ## DEV
 
