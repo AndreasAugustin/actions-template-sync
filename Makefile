@@ -21,3 +21,7 @@ help:  ## help target to show available commands with information
 markdownlint: ## Validate markdown files
 	docker-compose run docs markdownlint .github/ --ignore node_modules
 	docker-compose run docs markdownlint . --ignore node_modules
+
+.PHONY: zsh
+zsh: ## open dev container with build environment
+	docker-compose run --service-ports dev /bin/zsh
