@@ -2,7 +2,7 @@
 #######################################
 # image for creating the documentation
 ######################################
-FROM node:13.13.0-alpine as DOCS
+FROM node:14.1.0-alpine as DOCS
 
 # install packages
 RUN apk add --update --no-cache bash make git zsh curl tmux
