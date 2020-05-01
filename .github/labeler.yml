@@ -1,6 +1,7 @@
 # this file is for the labeler workflow job
 # Documentation https://github.com/marketplace/actions/labeler
 documentation:
-    - docs/**/*
-    - .github/*
+  - docs/**/*
+  - .github/*
+  - *.md
 
