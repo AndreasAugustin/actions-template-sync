@@ -1,5 +1,9 @@
 # Contributing
 
+## Branching model
+
+We use the [GitHub flow](https://guides.github.com/introduction/flow/)
+
 ## Commit messages
 
 We use [conventional commits](https://www.conventionalcommits.org/en/v1.0.0/)
