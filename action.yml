@@ -1,0 +1,16 @@
+name: 'Template sync'
+description: 'Synchronises changes of the template repository'
+author: 'AndreasAugustin'
+branding:
+  icon: cloud
+  color: green
+inputs:
+  github_token:
+    description: 'Token for the repo. Can be passed in using $\{{ secrets.GITHUB_TOKEN }}'
+    required: true
+  repository:
+    description: 'Repository name to push. Default or empty value represents current github repository (${GITHUB_REPOSITORY})'
+    required: true
+runs:
+  using: 'node12'
+  main: 'start.js'
