@@ -1,0 +1,15 @@
+version: '3.7'
+
+services:
+  dev:
+    build:
+      context: .
+      target: DEV
+    volumes:
+      - .:/app/
+  docs:
+    build:
+      context: .
+      target: DOCS
+    volumes:
+      - .:/app/

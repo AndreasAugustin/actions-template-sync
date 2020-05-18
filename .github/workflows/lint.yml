@@ -1,0 +1,16 @@
+name: Lint
+
+on: [push]
+
+jobs:
+
+  lint:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: markdownlint
+      run: make markdownlint
+    - name: prune
+      run: make prune
