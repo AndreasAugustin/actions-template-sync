@@ -12,5 +12,9 @@ inputs:
     description: 'Repository name to push. Default or empty value represents current github repository (${GITHUB_REPOSITORY})'
     required: true
 runs:
-  using: 'node12'
-  main: 'start.js'
+  using: 'docker'
+  main: 'src/Dockerfile'
+  env:
+    GITHUB_TOKEN: ${{ inputs.github_token }}
+  args:
+    - ${{ inputs.source_repo }}
