@@ -16,4 +16,4 @@ jobs:
         uses: ./ # Uses an action in the root directory
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
-          source_repo:
+          source_repo: git@github.com:AndreasAugustin/template.git
