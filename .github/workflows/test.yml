@@ -3,14 +3,16 @@ name: test
 on: [push]
 
 jobs:
+
   test-implementation-job:
+
     runs-on: ubuntu-latest
-    name: Test
+
     steps:
       # To use this repository's private action, you must check out the repository
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Hello world action step
+      - name: Test action step
         uses: ./ # Uses an action in the root directory
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
