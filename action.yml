@@ -13,7 +13,7 @@ inputs:
     required: true
 runs:
   using: 'docker'
-  main: 'src/Dockerfile'
+  image: 'src/Dockerfile'
   env:
-    GITHUB_TOKEN: ${{ inputs.github_token }}
-    SOURCE_REPO: ${{ inputs.source_repo }}
+    - GITHUB_TOKEN: ${{ inputs.github_token }}
+    - SOURCE_REPO: ${{ inputs.source_repo }}
