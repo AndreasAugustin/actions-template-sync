@@ -15,5 +15,5 @@ jobs:
       - name: Test action step
         uses: ./ # Uses an action in the root directory
         with:
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
           source_repo: git@github.com:AndreasAugustin/template.git
