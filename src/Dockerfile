@@ -12,7 +12,6 @@ RUN apk add --no-cache git bash openssh-client && \
   echo "StrictHostKeyChecking no" >> /etc/ssh/ssh_config
 
 ADD *.sh /bin/
-RUN chmod +x /bin/entrypoint.sh && \
-    chmod +x /bin/template-sync.sh
+RUN chmod +x /bin/entrypoint.sh
 
 ENTRYPOINT ["/bin/entrypoint.sh"]
