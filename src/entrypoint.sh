@@ -6,9 +6,7 @@ set -e
     exit 1;
 };
 
-SOURCE_REPO=$1
-
-if [[ -z "$SOURCE_REPO" ]]; then
+if [[ -z "${SOURCE_REPO}" ]]; then
   echo "Missing input 'source_repo: \${{ input.source_repo }}'.;"
   exit 1
 fi
