@@ -1,0 +1,19 @@
+name: 'Template sync'
+description: 'Synchronises changes of the template repository'
+author: 'AndreasAugustin'
+branding:
+  icon: cloud
+  color: green
+inputs:
+  github_token:
+    description: 'Token for the repo. Can be passed in using $\{{ secrets.GITHUB_TOKEN }}'
+    required: true
+  source_repo_path:
+    description: 'Repository path of the template'
+    required: true
+runs:
+  using: 'docker'
+  image: 'src/Dockerfile'
+  env:
+    GITHUB_TOKEN: ${{ inputs.github_token }}
+    SOURCE_REPO_PATH: ${{ inputs.source_repo_path }}
