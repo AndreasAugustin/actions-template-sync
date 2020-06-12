@@ -17,7 +17,8 @@ echo "start sync"
 echo "create new branch from default branch with name ${NEW_BRANCH}"
 git checkout -b ${NEW_BRANCH}
 echo "pull changes from template"
-git pull "https://$GITHUB_ACTOR:$GITHUB_TOKEN@github.com/$SOURCE_REPO" --allow-unrelated-histories
+#git pull "https://$GITHUB_ACTOR:$GITHUB_TOKEN@github.com/$SOURCE_REPO" --allow-unrelated-histories
+git pull "${SOURCE_REPO}"
 git add .
 git commit -m "chore(template): merge template changes :up:"
 echo "push changes"
