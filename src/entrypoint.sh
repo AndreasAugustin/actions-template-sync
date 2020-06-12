@@ -12,4 +12,9 @@ if [[ -z "${SOURCE_REPO_PATH}" ]]; then
 fi
 
 SOURCE_REPO="https://${GITHUB_ACTOR}:${GITHUB_TOKEN}@github.com/${SOURCE_REPO_PATH}"
+
+echo "set git global configuration"
+git config --global user.email "github-action@actions-template-sync.noreply.github.com@"
+git config --global user.name "actions-template-sync"
+
 source sync_template.sh
