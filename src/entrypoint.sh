@@ -11,5 +11,5 @@ if [[ -z "${SOURCE_REPO_PATH}" ]]; then
   exit 1
 fi
 
-SOURCE_REPO="https://${GITHUB_ACTOR}:${GITHUB_TOKEN}@github.com/${INPUT_SOURCE_REPO}"
+SOURCE_REPO="https://${GITHUB_ACTOR}:${GITHUB_TOKEN}@github.com/${SOURCE_REPO_PATH}"
 source sync_template.sh
