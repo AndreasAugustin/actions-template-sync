@@ -17,7 +17,7 @@ echo "start sync"
 echo "create new branch from default branch with name ${NEW_BRANCH}"
 git checkout -b ${NEW_BRANCH}
 echo "pull changes from template"
-git pull "${SOURCE_REPO}" --allow-unrelated-histories
+git pull "${SOURCE_REPO}" --allow-unrelated-histories --sqash --strategy=recursive -X theirs
 git add .
 git commit -m "chore(template): merge template changes :up:"
 echo "push changes"
