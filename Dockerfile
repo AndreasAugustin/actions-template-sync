@@ -4,7 +4,7 @@
 FROM golang:1.14-alpine as DEV
 
 # install packages
-RUN apk add --update --no-cache bash make git zsh curl tmux musl build-base
+RUN apk add --update --no-cache bash make git zsh curl tmux musl build-base openssh
 
 # Make zsh your default shell for tmux
 RUN echo "set-option -g default-shell /bin/zsh" >> /root/.tmux.conf
