@@ -8,8 +8,8 @@ inputs:
   github_token:
     description: 'Token for the repo. Can be passed in using $\{{ secrets.GITHUB_TOKEN }}'
     required: true
-  source_repo:
-    description: 'Repository source of the. Default or empty value represents current github repository (${GITHUB_REPOSITORY})'
+  source_repo_path:
+    description: 'Repository path of the template'
     required: true
 runs:
   using: 'docker'
