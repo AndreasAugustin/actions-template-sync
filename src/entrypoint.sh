@@ -15,6 +15,6 @@ SOURCE_REPO="https://${GITHUB_ACTOR}:${GITHUB_TOKEN}@github.com/${SOURCE_REPO_PA
 
 echo "set git global configuration"
 git config --global user.email "github-action@actions-template-sync.noreply.github.com@"
-git config --global user.name "actions-template-sync"
+git config --global user.name "${GITHUB_ACTOR}"
 
 source sync_template.sh
