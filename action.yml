@@ -16,4 +16,4 @@ runs:
   image: 'src/Dockerfile'
   env:
     GITHUB_TOKEN: ${{ inputs.github_token }}
-    SOURCE_REPO: ${{ inputs.source_repo }}
+    SOURCE_REPO_PATH: ${{ inputs.source_repo_path }}

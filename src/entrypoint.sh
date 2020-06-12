@@ -6,22 +6,10 @@ set -e
     exit 1;
 };
 
-if [[ -z "${SOURCE_REPO}" ]]; then
-  echo "Missing input 'source_repo: \${{ input.source_repo }}'.;"
+if [[ -z "${SOURCE_REPO_PATH}" ]]; then
+  echo "Missing input 'source_repo_path: \${{ input.source_repo_path }}'.;"
   exit 1
 fi
 
-NEW_BRANCH="chore/template_sync"
-
-echo "start sync"
-echo "create new branch from default branch with name ${NEW_BRANCH}"
-git checkout -b ${NEW_BRANCH}
-echo "pull changes from template"
-#git pull "https://$GITHUB_ACTOR:$GITHUB_TOKEN@github.com/$SOURCE_REPO" --allow-unrelated-histories
-git pull "${SOURCE_REPO}" --allow-unrelated-histories
-git add .
-git commit -m "chore(template): merge template changes :up:"
-echo "push changes"
-git push --set-upstream origin "${NEW_BRANCH}"
-echo "create pull request"
-gh pr create -b master -f -l chore
+SOURCE_REPO="https://${GITHUB_ACTOR}:${GITHUB_TOKEN}@github.com/${INPUT_SOURCE_REPO}"
+source ./sync_template.sh
