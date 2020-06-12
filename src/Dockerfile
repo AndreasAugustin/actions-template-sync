@@ -1,5 +1,4 @@
-FROM alpine:3.11
-
+FROM golang:1.14-alpine
 # labels
 LABEL \
   "name"="GitHub template sync" \
@@ -8,10 +7,15 @@ LABEL \
   "maintainer"="Andreas Augustin <dev@andreas-augustin.org>"
 
 # install packages
-RUN apk add --no-cache git bash openssh-client && \
-  echo "StrictHostKeyChecking no" >> /etc/ssh/ssh_config
+RUN apk add --update --no-cache bash make git zsh curl tmux musl build-base
+
+RUN git clone https://github.com/cli/cli.git gh-cli \
+    && cd gh-cli \
+    && make \
+    && mv ./bin/gh /usr/local/bin/
 
 ADD *.sh /bin/
-RUN chmod +x /bin/entrypoint.sh
+RUN chmod +x /bin/entrypoint.sh \
+  && chmod +x /bin/sync_template.sh
 
 ENTRYPOINT ["/bin/entrypoint.sh"]

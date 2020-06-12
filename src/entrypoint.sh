@@ -12,4 +12,4 @@ if [[ -z "${SOURCE_REPO_PATH}" ]]; then
 fi
 
 SOURCE_REPO="https://${GITHUB_ACTOR}:${GITHUB_TOKEN}@github.com/${INPUT_SOURCE_REPO}"
-source ./sync_template.sh
+source sync_template.sh
