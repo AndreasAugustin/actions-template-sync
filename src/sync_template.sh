@@ -23,4 +23,4 @@ git commit -m "chore(template): merge template changes :up:"
 echo "push changes"
 git push --set-upstream origin "${NEW_BRANCH}"
 echo "create pull request"
-gh pr create -b master -f -l chore
+gh pr create -B master -f -l chore
