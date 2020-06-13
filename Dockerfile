@@ -4,7 +4,7 @@
 FROM golang:1.14-alpine as DEV
 
 # install packages
-RUN apk add --update --no-cache bash make git zsh curl tmux musl build-base
+RUN apk add --update --no-cache bash make git zsh curl tmux musl build-base openssh
 
 # Make zsh your default shell for tmux
 RUN echo "set-option -g default-shell /bin/zsh" >> /root/.tmux.conf
@@ -12,10 +12,20 @@ RUN echo "set-option -g default-shell /bin/zsh" >> /root/.tmux.conf
 # install oh-my-zsh
 RUN sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
 
-RUN git clone https://github.com/cli/cli.git gh-cli \
-    && cd gh-cli \
-    && make \
-    && mv ./bin/gh /usr/local/bin/
+# github-cli not stable yet
+#RUN git clone https://github.com/cli/cli.git gh-cli \
+#    && cd gh-cli \
+#    && make \
+#    && mv ./bin/gh /usr/local/bin/
+
+RUN apk add --update --no-cache groff util-linux
+RUN git clone \
+  --config transfer.fsckobjects=false \
+  --config receive.fsckobjects=false \
+  --config fetch.fsckobjects=false \
+  https://github.com/github/hub.git \
+ && cd hub \
+ && make install prefix=/usr/local
 
 WORKDIR /app
 
