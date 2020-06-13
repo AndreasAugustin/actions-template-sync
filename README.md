@@ -1,6 +1,6 @@
 # template
 
-![Lint](https://github.com/AndreasAugustin/actions-template-sync/workflows/Lint/badge.svg)
+![Lint](https://github.com/AndreasAugustin/template/workflows/Lint/badge.svg)
 
 ## DEV
 
