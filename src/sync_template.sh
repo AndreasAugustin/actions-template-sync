@@ -23,4 +23,10 @@ git commit -m "chore(template): merge template changes :up:"
 echo "push changes"
 git push --set-upstream origin "${NEW_BRANCH}"
 echo "create pull request"
-gh pr create -B master -f -l chore
+# Workaround for `hub` auth error https://github.com/github/hub/issues/2149#issuecomment-513214342
+export GITHUB_USER="$GITHUB_ACTOR"
+hub pull-request \
+  -b master \
+  -h $NEW_BRANCH \
+  --no-edit
+# gh pr create -B master -f -l chore
