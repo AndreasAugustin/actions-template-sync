@@ -6,8 +6,13 @@ if [[ -z "${SOURCE_REPO}" ]]; then
   exit 1;
 fi
 
-if ! [ -x "$(command -v gh)" ]; then
-  echo "Error: github-cli gh is not installed. 'https://github.com/cli/cli'" >&2;
+# if ! [ -x "$(command -v gh)" ]; then
+#   echo "Error: github-cli gh is not installed. 'https://github.com/cli/cli'" >&2;
+#   exit 1;
+# fi
+
+if ! [ -x "$(command -v hub)" ]; then
+  echo "Error: hub is not installed. 'https://github.com/github/hub'" >&2;
   exit 1;
 fi
 
