@@ -1,4 +1,4 @@
-name: 'Template sync'
+name: 'actions-template-sync'
 description: 'Synchronises changes of the template repository'
 author: 'AndreasAugustin'
 branding:
