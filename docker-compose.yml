@@ -7,9 +7,6 @@ services:
       target: DEV
     volumes:
       - .:/app/
-      - ~/.gitconfig:/root/.gitconfig:ro
-      - ~/.ssh:/root/.ssh/:ro
-
   docs:
     build:
       context: .
