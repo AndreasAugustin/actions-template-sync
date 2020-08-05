@@ -1,0 +1,24 @@
+{
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": false,
+  "contributors": [
+    {
+      "login": "AndreasAugustin",
+      "name": "andy Augustin",
+      "avatar_url": "https://avatars0.githubusercontent.com/u/8027933?v=4",
+      "profile": "https://github.com/AndreasAugustin",
+      "contributions": [
+        "doc"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7,
+  "projectName": "actions-template-sync",
+  "projectOwner": "AndreasAugustin",
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "skipCi": true
+}
