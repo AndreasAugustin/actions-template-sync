@@ -1,7 +1,7 @@
 #######################################
 # image for dev build environment
 ######################################
-FROM golang:1.14-alpine as DEV
+FROM golang:1.15.7-alpine as DEV
 
 # install packages
 RUN apk add --update --no-cache bash make git zsh curl tmux musl build-base openssh
