@@ -40,7 +40,7 @@ jobs:
         uses: AndreasAugustin/actions-template-sync@v0.1.0-draft
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          source_repo_path: <the_path_to_the_repo>
+          source_repo_path: <owner/repo>
 ```
 
 You will receive a pull request within your repository if there are some changes available.
