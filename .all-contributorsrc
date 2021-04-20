@@ -13,6 +13,15 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "pattacini",
+      "name": "Ugo Pattacini",
+      "avatar_url": "https://avatars.githubusercontent.com/u/3738070?v=4",
+      "profile": "https://www.iit.it/people/ugo-pattacini",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
