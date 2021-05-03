@@ -17,15 +17,16 @@ if ! [ -x "$(command -v hub)" ]; then
 fi
 
 TEMPLATE_VERSION_FILE_NAME=".templateversionrc"
-NEW_BRANCH="chore/template_sync"
+TEMPLATE_REMOTE_GIT_HASH=$(git ls-remote "${SOURCE_REPO}" HEAD | awk {'print $1}')
+NEW_TEMPLATE_GIT_HASH=$(git rev-parse --short "${TEMPLATE_REMOTE_GIT_HASH}")
+NEW_BRANCH="chore/template_sync_${NEW_TEMPLATE_GIT_HASH}"
 
 echo "start sync"
 echo "create new branch from default branch with name ${NEW_BRANCH}"
-git checkout -b ${NEW_BRANCH}
+git checkout -b "${NEW_BRANCH}"
 echo "pull changes from template"
 git pull "${SOURCE_REPO}" --allow-unrelated-histories --squash --strategy=recursive -X theirs
 
-NEW_TEMPLATE_GIT_HASH=$(git ls-remote "${SOURCE_REPO}" HEAD )
 echo "new Git HASH ${NEW_TEMPLATE_GIT_HASH}"
 if [ -r ${TEMPLATE_VERSION_FILE_NAME} ]
 then
@@ -50,11 +51,10 @@ echo "push changes"
 git push --set-upstream origin "${NEW_BRANCH}"
 echo "create pull request"
 
-
-# Workaround for `hub` auth error https://github.com/github/hub/issues/2149#issuecomment-513214342
+# # Workaround for `hub` auth error https://github.com/github/hub/issues/2149#issuecomment-513214342
 export GITHUB_USER="$GITHUB_ACTOR"
 hub pull-request \
   -b master \
-  -h $NEW_BRANCH \
+  -h "${NEW_BRANCH}" \
   --no-edit
 # gh pr create -B master -f -l chore
