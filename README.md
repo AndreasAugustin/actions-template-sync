@@ -37,7 +37,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: actions-template-sync
-        uses: AndreasAugustin/actions-template-sync@v0.1.1-draft
+        uses: AndreasAugustin/actions-template-sync@v0.1.2-draft
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           source_repo_path: <owner/repo>
