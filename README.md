@@ -41,6 +41,7 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           source_repo_path: <owner/repo>
+          upstream_branch: <target_branch> # defaults to main
 ```
 
 You will receive a pull request within your repository if there are some changes available.

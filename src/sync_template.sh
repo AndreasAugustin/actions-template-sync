@@ -6,6 +6,11 @@ if [[ -z "${SOURCE_REPO}" ]]; then
   exit 1;
 fi
 
+if [[ -z "${UPSTREAM_BRANCH}" ]]; then
+  echo "Error: Missing env variable 'UPSTREAM_BRANCH'" >&2;
+  exit 1;
+fi
+
 # if ! [ -x "$(command -v gh)" ]; then
 #   echo "Error: github-cli gh is not installed. 'https://github.com/cli/cli'" >&2;
 #   exit 1;
@@ -54,7 +59,7 @@ echo "create pull request"
 # # Workaround for `hub` auth error https://github.com/github/hub/issues/2149#issuecomment-513214342
 export GITHUB_USER="$GITHUB_ACTOR"
 hub pull-request \
-  -b master \
+  -b "${UPSTREAM_BRANCH}" \
   -h "${NEW_BRANCH}" \
   --no-edit
 # gh pr create -B master -f -l chore

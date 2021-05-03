@@ -11,9 +11,14 @@ inputs:
   source_repo_path:
     description: 'Repository path of the template'
     required: true
+  upstream_branch:
+    description: 'The target branch'
+    required: true
+    default: 'main'
 runs:
   using: 'docker'
   image: 'src/Dockerfile'
   env:
     GITHUB_TOKEN: ${{ inputs.github_token }}
     SOURCE_REPO_PATH: ${{ inputs.source_repo_path }}
+    UPSTREAM_BRANCH: ${{ inputs.upstream_branch }}
