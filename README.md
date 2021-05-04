@@ -37,10 +37,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: actions-template-sync
-        uses: AndreasAugustin/actions-template-sync@v0.1.1-draft
+        uses: AndreasAugustin/actions-template-sync@v0.1.2-draft
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           source_repo_path: <owner/repo>
+          upstream_branch: <target_branch> # defaults to main
 ```
 
 You will receive a pull request within your repository if there are some changes available.

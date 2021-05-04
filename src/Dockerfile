@@ -1,4 +1,7 @@
-FROM golang:1.14-alpine
+FROM alpine:3.13
+
+ARG GH_CLI_VER=1.9.2
+
 # labels
 LABEL \
   "name"="GitHub template sync" \
@@ -7,22 +10,10 @@ LABEL \
   "maintainer"="Andreas Augustin <dev@andreas-augustin.org>"
 
 # install packages
-RUN apk add --update --no-cache bash make git zsh curl tmux musl build-base
+RUN apk add --update --no-cache bash git curl musl
 
-# github-cli not stable yet
-#RUN git clone https://github.com/cli/cli.git gh-cli \
-#    && cd gh-cli \
-#    && make \
-#    && mv ./bin/gh /usr/local/bin/
-
-RUN apk add --update --no-cache groff util-linux
-RUN git clone \
-  --config transfer.fsckobjects=false \
-  --config receive.fsckobjects=false \
-  --config fetch.fsckobjects=false \
-  https://github.com/github/hub.git \
- && cd hub \
- && make install prefix=/usr/local
+RUN wget https://github.com/cli/cli/releases/download/v${GH_CLI_VER}/gh_${GH_CLI_VER}_linux_386.tar.gz -O ghcli.tar.gz
+RUN tar --strip-components=1 -xf ghcli.tar.gz
 
 ADD *.sh /bin/
 RUN chmod +x /bin/entrypoint.sh \
