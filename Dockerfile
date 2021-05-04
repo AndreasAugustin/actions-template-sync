@@ -1,10 +1,15 @@
 #######################################
 # image for dev build environment
 ######################################
-FROM golang:1.16.3-alpine as DEV
+FROM alpine:3.13 as dev
+
+ARG GH_CLI_VER=1.9.2
 
 # install packages
-RUN apk add --update --no-cache bash make git zsh curl tmux musl build-base openssh
+RUN apk add --update --no-cache bash make git zsh curl tmux musl
+
+RUN wget https://github.com/cli/cli/releases/download/v${GH_CLI_VER}/gh_${GH_CLI_VER}_linux_386.tar.gz -O ghcli.tar.gz
+RUN tar --strip-components=1 -xf ghcli.tar.gz
 
 # Make zsh your default shell for tmux
 RUN echo "set-option -g default-shell /bin/zsh" >> /root/.tmux.conf
@@ -12,27 +17,12 @@ RUN echo "set-option -g default-shell /bin/zsh" >> /root/.tmux.conf
 # install oh-my-zsh
 RUN sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
 
-# github-cli not stable yet
-#RUN git clone https://github.com/cli/cli.git gh-cli \
-#    && cd gh-cli \
-#    && make \
-#    && mv ./bin/gh /usr/local/bin/
-
-RUN apk add --update --no-cache groff util-linux
-RUN git clone \
-  --config transfer.fsckobjects=false \
-  --config receive.fsckobjects=false \
-  --config fetch.fsckobjects=false \
-  https://github.com/github/hub.git \
- && cd hub \
- && make install prefix=/usr/local
-
 WORKDIR /app
 
 #######################################
 # image for creating the documentation
 ######################################
-FROM node:16.0.0-alpine as DOCS
+FROM node:16.0.0-alpine as docs
 
 # install packages
 RUN apk add --update --no-cache bash make git zsh curl tmux

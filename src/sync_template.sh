@@ -11,15 +11,15 @@ if [[ -z "${UPSTREAM_BRANCH}" ]]; then
   exit 1;
 fi
 
-# if ! [ -x "$(command -v gh)" ]; then
-#   echo "Error: github-cli gh is not installed. 'https://github.com/cli/cli'" >&2;
-#   exit 1;
-# fi
-
-if ! [ -x "$(command -v hub)" ]; then
-  echo "Error: hub is not installed. 'https://github.com/github/hub'" >&2;
+if ! [ -x "$(command -v gh)" ]; then
+  echo "Error: github-cli gh is not installed. 'https://github.com/cli/cli'" >&2;
   exit 1;
 fi
+
+# if ! [ -x "$(command -v hub)" ]; then
+#   echo "Error: hub is not installed. 'https://github.com/github/hub'" >&2;
+#   exit 1;
+# fi
 
 TEMPLATE_VERSION_FILE_NAME=".templateversionrc"
 TEMPLATE_REMOTE_GIT_HASH=$(git ls-remote "${SOURCE_REPO}" HEAD | awk {'print $1}')
@@ -56,10 +56,4 @@ echo "push changes"
 git push --set-upstream origin "${NEW_BRANCH}"
 echo "create pull request"
 
-# # Workaround for `hub` auth error https://github.com/github/hub/issues/2149#issuecomment-513214342
-export GITHUB_USER="$GITHUB_ACTOR"
-hub pull-request \
-  -b "${UPSTREAM_BRANCH}" \
-  -h "${NEW_BRANCH}" \
-  --no-edit
-# gh pr create -B master -f -l chore
+gh pr create --fill -B "${UPSTREAM_BRANCH}"
