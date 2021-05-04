@@ -53,5 +53,5 @@ echo "create pull request"
 
 gh pr create \
   --title "upstream merge template repository" \
-  --body "Merge ${SOURCE_REPO} ${NEW_TEMPLATE_GIT_HASH}" \
+  --body "Merge ${SOURCE_REPO_PATH} ${NEW_TEMPLATE_GIT_HASH}" \
   -B "${UPSTREAM_BRANCH}"
