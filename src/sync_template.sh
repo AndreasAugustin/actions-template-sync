@@ -16,11 +16,6 @@ if ! [ -x "$(command -v gh)" ]; then
   exit 1;
 fi
 
-# if ! [ -x "$(command -v hub)" ]; then
-#   echo "Error: hub is not installed. 'https://github.com/github/hub'" >&2;
-#   exit 1;
-# fi
-
 TEMPLATE_VERSION_FILE_NAME=".templateversionrc"
 TEMPLATE_REMOTE_GIT_HASH=$(git ls-remote "${SOURCE_REPO}" HEAD | awk {'print $1}')
 NEW_TEMPLATE_GIT_HASH=$(git rev-parse --short "${TEMPLATE_REMOTE_GIT_HASH}")
@@ -56,4 +51,7 @@ echo "push changes"
 git push --set-upstream origin "${NEW_BRANCH}"
 echo "create pull request"
 
-gh pr create --fill -B "${UPSTREAM_BRANCH}"
+gh pr create \
+  --title "upstream merge template repository" \
+  --body "Merge ${SOURCE_REPO} ${NEW_TEMPLATE_GIT_HASH}" \
+  -B "${UPSTREAM_BRANCH}"
