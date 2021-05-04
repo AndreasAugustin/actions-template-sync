@@ -4,15 +4,12 @@ services:
   dev:
     build:
       context: .
-      target: dev
+      target: DEV
     volumes:
       - .:/app/
-      - ~/.gitconfig:/root/.gitconfig:ro
-      - ~/.ssh:/root/.ssh/:ro
-
   docs:
     build:
       context: .
-      target: docs
+      target: DOCS
     volumes:
       - .:/app/
