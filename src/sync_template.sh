@@ -1,6 +1,6 @@
 #! /usr/bin/env bash
 set -e
-set -u
+# set -u
 set -x
 
 if [[ -z "${SOURCE_REPO}" ]]; then
