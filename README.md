@@ -46,6 +46,10 @@ jobs:
 
 You will receive a pull request within your repository if there are some changes available.
 
+## Debug
+
+You must create a secret named `ACTIONS_STEP_DEBUG` with the value `true` to see the debug messages set by this command in the log. For more information, see "[Enabling debug logging.][enabling-debug-logging]"
+
 ## DEV
 
 The development environment targets are located in the [Makefile](Makefile)
@@ -75,3 +79,5 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 
 This project follows the [all-contributors](https://github.com/all-contributors/all-contributors)
 specification. Contributions of any kind welcome!
+
+[enabling-debug-logging]: https://docs.github.com/en/actions/managing-workflow-runs/enabling-debug-logging
