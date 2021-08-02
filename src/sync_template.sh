@@ -58,7 +58,7 @@ git add .
 if [ -r ${TEMPLATE_SYNC_IGNORE_FILE_NAME} ]
 then
   echo "::debug::unstage files from template sync ignore"
-  git reset `cat .templatesyncignore`
+  git reset `cat ${TEMPLATE_SYNC_IGNORE_FILE_NAME}`
 fi
 
 git commit -m "chore(template): merge template changes :up:"
