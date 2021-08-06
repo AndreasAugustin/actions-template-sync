@@ -59,6 +59,12 @@ if [ -r ${TEMPLATE_SYNC_IGNORE_FILE_NAME} ]
 then
   echo "::debug::unstage files from template sync ignore"
   git reset `cat ${TEMPLATE_SYNC_IGNORE_FILE_NAME}`
+
+  echo "::debug::clean untracked files"
+  git clean -df
+
+  echo "::debug::discard all unstaged changes"
+  git checkout -- .
 fi
 
 git commit -m "chore(template): merge template changes :up:"
