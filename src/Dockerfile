@@ -10,7 +10,7 @@ LABEL \
   "maintainer"="Andreas Augustin <dev@andreas-augustin.org>"
 
 # install packages
-RUN apk add --update --no-cache bash git curl musl
+RUN apk add --update --no-cache bash git curl musl openssh
 
 RUN wget https://github.com/cli/cli/releases/download/v${GH_CLI_VER}/gh_${GH_CLI_VER}_linux_386.tar.gz -O ghcli.tar.gz
 RUN tar --strip-components=1 -xf ghcli.tar.gz

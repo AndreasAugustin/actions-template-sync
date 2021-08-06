@@ -37,7 +37,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: actions-template-sync
-        uses: AndreasAugustin/actions-template-sync@v0.1.3-draft
+        uses: AndreasAugustin/actions-template-sync@v0.1.4-draft
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           source_repo_path: <owner/repo>
@@ -45,6 +45,35 @@ jobs:
 ```
 
 You will receive a pull request within your repository if there are some changes available.
+
+#### Private template repository
+
+If you have a private template repository.
+
+##### SSH
+
+You have various options to use ssh keys with GitHub.
+An example are [deployment keys][deployment-keys]. For our use case write permissions are not needed.
+Within the repository where the GitHub action is enabled add a secret (e.q. `SOURCE_REPO_SSH_PRIVATE_KEY`) with the content of your private SSH key. Make sure that the read permissions of that secret fulfil your use case.
+Set the optional `source_repo_ssh_private_key` input parameter.
+
+```yaml
+jobs:
+  repo-sync:
+    runs-on: ubuntu-latest
+
+    steps:
+      # To use this repository's private action, you must check out the repository
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: actions-template-sync
+        uses: AndreasAugustin/actions-template-sync@v0.1.4-draft
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          source_repo_path: <owner/repo>
+          upstream_branch: <target_branch> # defaults to main
+          source_repo_ssh_private_key: ${{ secrets.<secret_name> }}
+```
 
 ## Debug
 
@@ -81,3 +110,4 @@ This project follows the [all-contributors](https://github.com/all-contributors/
 specification. Contributions of any kind welcome!
 
 [enabling-debug-logging]: https://docs.github.com/en/actions/managing-workflow-runs/enabling-debug-logging
+[deployment-keys]: https://docs.github.com/en/developers/overview/managing-deploy-keys#deploy-keys
