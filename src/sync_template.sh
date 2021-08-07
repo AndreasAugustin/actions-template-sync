@@ -18,6 +18,11 @@ if ! [ -x "$(command -v gh)" ]; then
   exit 1;
 fi
 
+if [[ -n "${SRC_SSH_PRIVATEKEY_ABS_PATH}" ]]; then
+  echo "::debug:: using ssh private key for private source repository"
+  export GIT_SSH_COMMAND="ssh -i ${SRC_SSH_PRIVATEKEY_ABS_PATH}"
+fi
+
 TEMPLATE_VERSION_FILE_NAME=".templateversionrc"
 TEMPLATE_SYNC_IGNORE_FILE_NAME=".templatesyncignore"
 TEMPLATE_REMOTE_GIT_HASH=$(git ls-remote "${SOURCE_REPO}" HEAD | awk '{print $1}')

@@ -9,6 +9,8 @@ services:
       - .:/app/
       - ~/.gitconfig:/root/.gitconfig:ro
       - ~/.ssh:/root/.ssh/:ro
+    environment:
+      - SSH_PRIVATE_KEY_SRC
 
   docs:
     build:
