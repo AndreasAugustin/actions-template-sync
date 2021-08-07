@@ -58,13 +58,10 @@ git add .
 if [ -r ${TEMPLATE_SYNC_IGNORE_FILE_NAME} ]
 then
   echo "::debug::unstage files from template sync ignore"
-
-  while IFS= read -r line || [ -n "$line" ]; do
-    git reset "$line" -q
-  done < ${TEMPLATE_SYNC_IGNORE_FILE_NAME} 
+  git reset --pathspec-from-file="${TEMPLATE_SYNC_IGNORE_FILE_NAME}"
 
   echo "::debug::clean untracked files"
-  git clean -dfq
+  git clean -df
 
   echo "::debug::discard all unstaged changes"
   git checkout -- .
