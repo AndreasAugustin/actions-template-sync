@@ -33,8 +33,8 @@ export SOURCE_REPO="${SOURCE_REPO_PREFIX}${SOURCE_REPO_PATH}"
 
 echo "::group::git init"
 echo "set git global configuration"
-# git config --global user.email "github-action@actions-template-sync.noreply.github.com"
-# git config --global user.name "${GITHUB_ACTOR}"
+git config --global user.email "github-action@actions-template-sync.noreply.github.com"
+git config --global user.name "${GITHUB_ACTOR}"
 echo "::endgroup::"
 
 # shellcheck source=sync_template.sh
