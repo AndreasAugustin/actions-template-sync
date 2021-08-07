@@ -71,9 +71,9 @@ jobs:
         uses: AndreasAugustin/actions-template-sync@v0.1.4-draft
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          source_repo_path: <owner/repo>
-          upstream_branch: <target_branch> # defaults to main
-          source_repo_ssh_private_key: ${{ secrets.<secret_name> }}
+          source_repo_path: ${{ secrets.SOURCE_REPO_PATH }} # <owner/repo>, should be within secrets
+          upstream_branch: ${{ secrets.TARGET_BRANCH }} #<target_branch> # defaults to main
+          source_repo_ssh_private_key: ${{ secrets.SOURCE_REPO_SSH_PRIVATE_KEY }} # contains the private ssh key of the private repository
 ```
 
 ## Ignore Files

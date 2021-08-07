@@ -18,16 +18,14 @@ if ! [ -x "$(command -v gh)" ]; then
   exit 1;
 fi
 
-GIT_SRC_CMD=git
-
 if [[ -n "${SRC_SSH_PRIVATEKEY_ABS_PATH}" ]]; then
   echo "::debug:: using ssh private key for private source repository"
-  GIT_SRC_CMD="GIT_SSH_COMMAND=ssh -i ${SRC_SSH_PRIVATEKEY_ABS_PATH}" git
+  export GIT_SSH_COMMAND="ssh -i ${SRC_SSH_PRIVATEKEY_ABS_PATH}"
 fi
 
 TEMPLATE_VERSION_FILE_NAME=".templateversionrc"
 TEMPLATE_SYNC_IGNORE_FILE_NAME=".templatesyncignore"
-TEMPLATE_REMOTE_GIT_HASH=$("${GIT_SRC_CMD}" ls-remote "${SOURCE_REPO}" HEAD | awk '{print $1}')
+TEMPLATE_REMOTE_GIT_HASH=$(git ls-remote "${SOURCE_REPO}" HEAD | awk '{print $1}')
 NEW_TEMPLATE_GIT_HASH=$(git rev-parse --short "${TEMPLATE_REMOTE_GIT_HASH}")
 NEW_BRANCH="chore/template_sync_${NEW_TEMPLATE_GIT_HASH}"
 
@@ -46,24 +44,19 @@ then
 fi
 echo "::endgroup::"
 
-# echo "::group::Pull template"
-# echo "::debug::create new branch from default branch with name ${NEW_BRANCH}"
-# git checkout -b "${NEW_BRANCH}"
-# echo "::debug::pull changes from template"
-# "${GIT_SRC_CMD}" pull "${SOURCE_REPO}" --allow-unrelated-histories --squash --strategy=recursive -X theirs
-# echo "::endgroup::"
+echo "::group::Pull template"
+echo "::debug::create new branch from default branch with name ${NEW_BRANCH}"
+git checkout -b "${NEW_BRANCH}"
+echo "::debug::pull changes from template"
+git pull "${SOURCE_REPO}" --allow-unrelated-histories --squash --strategy=recursive -X theirs
+echo "::endgroup::"
 
-# echo "::group::persist template version"
-# echo "write new template version file"
-# echo "${NEW_TEMPLATE_GIT_HASH}" > ${TEMPLATE_VERSION_FILE_NAME}
-# echo "::debug::wrote new template version file with content $(cat ${TEMPLATE_VERSION_FILE_NAME})"
-# echo "::endgroup::"
+echo "::group::persist template version"
+echo "write new template version file"
+echo "${NEW_TEMPLATE_GIT_HASH}" > ${TEMPLATE_VERSION_FILE_NAME}
+echo "::debug::wrote new template version file with content $(cat ${TEMPLATE_VERSION_FILE_NAME})"
+echo "::endgroup::"
 
-<<<<<<< HEAD
-# echo "::group::commit and push changes"
-# git add .
-# git commit -m "chore(template): merge template changes :up:"
-=======
 echo "::group::commit and push changes"
 git add .
 
@@ -80,15 +73,14 @@ then
 fi
 
 git commit -m "chore(template): merge template changes :up:"
->>>>>>> main
 
-# echo "::debug::push changes"
-# git push --set-upstream origin "${NEW_BRANCH}"
-# echo "::endgroup::"
+echo "::debug::push changes"
+git push --set-upstream origin "${NEW_BRANCH}"
+echo "::endgroup::"
 
-# echo "::group::create pull request"
-# gh pr create \
-#   --title "upstream merge template repository" \
-#   --body "Merge ${SOURCE_REPO_PATH} ${NEW_TEMPLATE_GIT_HASH}" \
-#   -B "${UPSTREAM_BRANCH}"
-# echo "::endgroup::"
+echo "::group::create pull request"
+gh pr create \
+  --title "upstream merge template repository" \
+  --body "Merge ${SOURCE_REPO_PATH} ${NEW_TEMPLATE_GIT_HASH}" \
+  -B "${UPSTREAM_BRANCH}"
+echo "::endgroup::"
