@@ -16,6 +16,7 @@ This GitHub action will help you to keep track of the template changes.
 
 * Sync template repository with the current repository
 * Ignore files and folders from syncing using a `.templatesyncignore` file
+
 ## Usage
 
 ### GitHub Actions
@@ -37,7 +38,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: actions-template-sync
-        uses: AndreasAugustin/actions-template-sync@v0.1.3-draft
+        uses: AndreasAugustin/actions-template-sync@v0.1.4-draft
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           source_repo_path: <owner/repo>
@@ -47,6 +48,7 @@ jobs:
 You will receive a pull request within your repository if there are some changes available.
 
 ## Ignore Files
+
 Create a `.templatesyncignore` file. Just like writing a `.gitignore` file, follow the [glob pattern](https://en.wikipedia.org/wiki/Glob_(programming)) in defining the files and folders that should be excluded from syncing with the template repository.
 
 ## Debug
