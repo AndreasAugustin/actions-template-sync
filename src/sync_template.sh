@@ -19,6 +19,7 @@ if ! [ -x "$(command -v gh)" ]; then
 fi
 
 TEMPLATE_VERSION_FILE_NAME=".templateversionrc"
+TEMPLATE_SYNC_IGNORE_FILE_NAME=".templatesyncignore"
 TEMPLATE_REMOTE_GIT_HASH=$(git ls-remote "${SOURCE_REPO}" HEAD | awk '{print $1}')
 NEW_TEMPLATE_GIT_HASH=$(git rev-parse --short "${TEMPLATE_REMOTE_GIT_HASH}")
 NEW_BRANCH="chore/template_sync_${NEW_TEMPLATE_GIT_HASH}"
@@ -53,6 +54,19 @@ echo "::endgroup::"
 
 echo "::group::commit and push changes"
 git add .
+
+if [ -r ${TEMPLATE_SYNC_IGNORE_FILE_NAME} ]
+then
+  echo "::debug::unstage files from template sync ignore"
+  git reset --pathspec-from-file="${TEMPLATE_SYNC_IGNORE_FILE_NAME}"
+
+  echo "::debug::clean untracked files"
+  git clean -df
+
+  echo "::debug::discard all unstaged changes"
+  git checkout -- .
+fi
+
 git commit -m "chore(template): merge template changes :up:"
 
 echo "::debug::push changes"
