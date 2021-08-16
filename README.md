@@ -59,7 +59,6 @@ See the definition [here][self-usage]
 
 You can use all [triggers][action-triggers] which are supported for GitHub actions
 
-
 #### Private template repository
 
 If you have a private template repository.
