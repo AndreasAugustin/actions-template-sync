@@ -10,14 +10,16 @@ updates:
   - dependency-name: node
     versions:
     - 15.10.0.pre.alpine
+    - 15.11.0.pre.alpine
+    - 15.12.0.pre.alpine
     - 15.13.0.pre.alpine
     - 15.6.0.pre.alpine
     - 15.7.0.pre.alpine
     - 15.8.0.pre.alpine
     - 15.9.0.pre.alpine
-  - dependency-name: alpine
+  - dependency-name: golang
     versions:
-    - 3.13.0
-    - 3.13.1
-    - 3.13.3
-    - 3.13.4
+    - 1.15.7.pre.alpine
+    - 1.15.8.pre.alpine
+    - 1.16.0.pre.alpine
+    - 1.16.2.pre.alpine
