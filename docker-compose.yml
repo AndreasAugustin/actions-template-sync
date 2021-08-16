@@ -4,12 +4,17 @@ services:
   dev:
     build:
       context: .
-      target: DEV
+      target: dev
     volumes:
       - .:/app/
+      - ~/.gitconfig:/root/.gitconfig:ro
+      - ~/.ssh:/root/.ssh/:ro
+    environment:
+      - SSH_PRIVATE_KEY_SRC
+
   docs:
     build:
       context: .
-      target: DOCS
+      target: docs
     volumes:
       - .:/app/
