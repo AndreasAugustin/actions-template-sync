@@ -1,15 +1,9 @@
 #######################################
 # image for dev build environment
 ######################################
-FROM alpine:3.14.1 as dev
-
-ARG GH_CLI_VER=1.9.2
-
+FROM alpine:3.14.1 as DEV
 # install packages
-RUN apk add --update --no-cache bash make git zsh curl tmux musl openssh
-
-RUN wget https://github.com/cli/cli/releases/download/v${GH_CLI_VER}/gh_${GH_CLI_VER}_linux_386.tar.gz -O ghcli.tar.gz
-RUN tar --strip-components=1 -xf ghcli.tar.gz
+RUN apk add --update --no-cache bash make git zsh curl tmux
 
 # Make zsh your default shell for tmux
 RUN echo "set-option -g default-shell /bin/zsh" >> /root/.tmux.conf
@@ -22,7 +16,8 @@ WORKDIR /app
 #######################################
 # image for creating the documentation
 ######################################
-FROM node:16.6.2-alpine as docs
+
+FROM node:16.6.2-alpine as DOCS
 
 # install packages
 RUN apk add --update --no-cache bash make git zsh curl tmux
