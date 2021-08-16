@@ -27,8 +27,11 @@ Add this configuration to your github action
 # File: .github/workflows/template-sync.yml
 
 on:
+    # cronjob trigger
   schedule:
   - cron:  "*/15 * * * *"
+  # manual trigger
+  workflow_dispatch:
 jobs:
   repo-sync:
     runs-on: ubuntu-latest
@@ -46,6 +49,16 @@ jobs:
 ```
 
 You will receive a pull request within your repository if there are some changes available.
+
+#### Example
+
+This repo uses this [template][template] and this action from the [marketplace][marketplace].
+See the definition [here][self-usage]
+
+#### Trigger
+
+You can use all [triggers][action-triggers] which are supported for GitHub actions
+
 
 #### Private template repository
 
@@ -118,3 +131,7 @@ specification. Contributions of any kind welcome!
 
 [enabling-debug-logging]: https://docs.github.com/en/actions/managing-workflow-runs/enabling-debug-logging
 [deployment-keys]: https://docs.github.com/en/developers/overview/managing-deploy-keys#deploy-keys
+[action-triggers]: https://docs.github.com/en/actions/reference/events-that-trigger-workflows
+[template]: https://github.com/AndreasAugustin/template
+[marketplace]: https://github.com/marketplace/actions/actions-template-sync
+[self-usage]: https://github.com/AndreasAugustin/actions-template-sync/blob/main/.github/workflows/actions_template_sync.yml
