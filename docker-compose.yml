@@ -18,3 +18,9 @@ services:
       target: docs
     volumes:
       - .:/app/
+
+  shellcheck:
+    image: koalaman/shellcheck:v0.7.2
+    volumes:
+      - .:/app/
+    working_dir: /app/
