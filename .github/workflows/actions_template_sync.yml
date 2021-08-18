@@ -1,9 +1,12 @@
+name: actions-template-sync
+
 on:
   # cronjob trigger At 00:00 on day-of-month 1. https://crontab.guru/every-month
   schedule:
   - cron:  "0 0 1 * *"
   # manual trigger
   workflow_dispatch:
+
 jobs:
   repo-sync:
     runs-on: ubuntu-latest
