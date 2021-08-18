@@ -37,5 +37,5 @@ git config --global user.email "github-action@actions-template-sync.noreply.gith
 git config --global user.name "${GITHUB_ACTOR}"
 echo "::endgroup::"
 
-# shellcheck source=sync_template.sh
+# shellcheck source=src/sync_template.sh
 source sync_template.sh
