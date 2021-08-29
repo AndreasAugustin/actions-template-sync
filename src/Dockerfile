@@ -19,4 +19,7 @@ ADD *.sh /bin/
 RUN chmod +x /bin/entrypoint.sh \
   && chmod +x /bin/sync_template.sh
 
+RUN mkdir -p /root/.ssh \
+  && ssh-keyscan -t rsa github.com >> /root/.ssh/known_hosts
+
 ENTRYPOINT ["/bin/entrypoint.sh"]
