@@ -4,3 +4,4 @@ README.md
 Dockerfile
 SECURITY.md
 docker-compose.yml
+Makefile

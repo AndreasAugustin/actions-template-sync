@@ -29,3 +29,7 @@ zsh: ## open dev container with build environment
 .PHONY: prune
 prune: ## delete the whole environment
 	docker-compose down -v --rmi all --remove-orphans
+
+.Phony: shellcheck
+shellcheck:  ## run shellcheck
+	docker-compose run shellcheck -x src/entrypoint.sh
