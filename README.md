@@ -29,7 +29,7 @@ Add this configuration to your github action
 on:
     # cronjob trigger
   schedule:
-  - cron:  "*/15 * * * *"
+  - cron:  "0 0 1 * *"
   # manual trigger
   workflow_dispatch:
 jobs:
