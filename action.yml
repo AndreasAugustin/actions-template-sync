@@ -17,6 +17,9 @@ inputs:
     default: 'main'
   source_repo_ssh_private_key:
     description: '[optional] private ssh key for the source repository. E.q. useful if using a private template repository.'
+  pr_labels:
+    description: '[optional] comma separated list of pull request labels'
+    default: 'chore,template-sync'
 runs:
   using: 'docker'
   image: 'src/Dockerfile'
@@ -25,3 +28,4 @@ runs:
     SOURCE_REPO_PATH: ${{ inputs.source_repo_path }}
     UPSTREAM_BRANCH: ${{ inputs.upstream_branch }}
     SSH_PRIVATE_KEY_SRC: ${{ inputs.source_repo_ssh_private_key}}
+    PR_LABELS: ${{inputs.pr_labels}}
