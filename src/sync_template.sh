@@ -13,6 +13,11 @@ if [[ -z "${UPSTREAM_BRANCH}" ]]; then
   exit 1;
 fi
 
+if [[ -z "${PR_LABELS}" ]]; then
+  echo "::error::Missing env variable 'PR_LABELS'" >&2;
+  exit 1;
+fi
+
 if ! [ -x "$(command -v gh)" ]; then
   echo "::error::github-cli gh is not installed. 'https://github.com/cli/cli'" >&2;
   exit 1;
@@ -82,5 +87,6 @@ echo "::group::create pull request"
 gh pr create \
   --title "upstream merge template repository" \
   --body "Merge ${SOURCE_REPO_PATH} ${NEW_TEMPLATE_GIT_HASH}" \
-  -B "${UPSTREAM_BRANCH}"
+  -B "${UPSTREAM_BRANCH}" \
+  -l "${PR_LABELS}"
 echo "::endgroup::"
