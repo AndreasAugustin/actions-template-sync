@@ -61,7 +61,6 @@ You will receive a pull request within your repository if there are some changes
 | source_repo_ssh_private_key | `[optional]` private ssh key for the source repository. E.q. useful if using a private template repository. [see](#private-template-repository)| `false` |  |
 | pr_labels | `[optional]` comma separated list. [pull request labels][pr-labels] | `false` | `chore,template_sync`  |
 
-
 ### Example
 
 This repo uses this [template][template] and this action from the [marketplace][marketplace].
