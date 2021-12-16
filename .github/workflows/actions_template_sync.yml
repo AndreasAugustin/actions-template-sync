@@ -16,8 +16,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: actions-template-sync
-        uses: AndreasAugustin/actions-template-sync@v0.1.5-draft
+        uses: AndreasAugustin/actions-template-sync@v0.2.0-draft
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           source_repo_path: AndreasAugustin/template
           upstream_branch: main # defaults to main
+          pr_labels: chore,template-sync,example
