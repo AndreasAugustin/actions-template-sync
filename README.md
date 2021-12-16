@@ -41,29 +41,41 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: actions-template-sync
-        uses: AndreasAugustin/actions-template-sync@v0.1.6-draft
+        uses: AndreasAugustin/actions-template-sync@v0.2.0-draft
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           source_repo_path: <owner/repo>
           upstream_branch: <target_branch> # defaults to main
+          pr_labels: <label1>,<label2>[,...] # defaults to chore,template-sync
 ```
 
 You will receive a pull request within your repository if there are some changes available.
 
-#### Example
+### Configuration parameters
+
+| Variable | Description | Required | `[Default]` |
+|----|----|----|----|
+| github_token | Token for the repo. Can be passed in using `$\{{ secrets.GITHUB_TOKEN }}` | `true` |  |
+| source_repo_path | Repository path of the template | `true` | |
+| upstream_branch | The target branch | `true` | `main` |
+| source_repo_ssh_private_key | `[optional]` private ssh key for the source repository. E.q. useful if using a private template repository. [see](#private-template-repository)| `false` |  |
+| pr_labels | `[optional]` comma separated list. [pull request labels][pr-labels] | `false` | `chore,template_sync`  |
+
+
+### Example
 
 This repo uses this [template][template] and this action from the [marketplace][marketplace].
 See the definition [here][self-usage]
 
-#### Trigger
+### Trigger
 
 You can use all [triggers][action-triggers] which are supported for GitHub actions
 
-#### Private template repository
+### Private template repository
 
 If you have a private template repository.
 
-##### SSH
+#### SSH
 
 You have various options to use ssh keys with GitHub.
 An example are [deployment keys][deployment-keys]. For our use case write permissions are not needed.
@@ -80,11 +92,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: actions-template-sync
-        uses: AndreasAugustin/actions-template-sync@v0.1.6-draft
+        uses: AndreasAugustin/actions-template-sync@v0.2.0-draft
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           source_repo_path: ${{ secrets.SOURCE_REPO_PATH }} # <owner/repo>, should be within secrets
           upstream_branch: ${{ secrets.TARGET_BRANCH }} #<target_branch> # defaults to main
+          pr_labels: <label1>,<label2>[,...] # defaults to chore,template-sync
           source_repo_ssh_private_key: ${{ secrets.SOURCE_REPO_SSH_PRIVATE_KEY }} # contains the private ssh key of the private repository
 ```
 
@@ -136,3 +149,4 @@ specification. Contributions of any kind welcome!
 [template]: https://github.com/AndreasAugustin/template
 [marketplace]: https://github.com/marketplace/actions/actions-template-sync
 [self-usage]: https://github.com/AndreasAugustin/actions-template-sync/blob/main/.github/workflows/actions_template_sync.yml
+[pr-labels]: https://docs.github.com/en/issues/using-labels-and-milestones-to-track-work/managing-labels
