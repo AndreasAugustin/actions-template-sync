@@ -60,6 +60,15 @@
       "contributions": [
         "ideas"
       ]
+    },
+    {
+      "login": "akulpillai",
+      "name": "Akul Pillai",
+      "avatar_url": "https://avatars.githubusercontent.com/u/32793567?v=4",
+      "profile": "http://akulpillai.com",
+      "contributions": [
+        "security"
+      ]
     }
   ],
   "contributorsPerLine": 7,
