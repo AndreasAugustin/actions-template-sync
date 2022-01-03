@@ -35,6 +35,7 @@ echo "::group::git init"
 echo "set git global configuration"
 git config --global user.email "github-action@actions-template-sync.noreply.github.com"
 git config --global user.name "${GITHUB_ACTOR}"
+git config --global pull.rebase false
 echo "::endgroup::"
 
 # shellcheck source=src/sync_template.sh
