@@ -20,6 +20,9 @@ inputs:
   pr_labels:
     description: '[optional] comma separated list of pull request labels'
     default: 'chore,template-sync'
+  hostname:
+    description: '[optional] the hostname of the GitHub repository'
+    default: 'github.com'
 runs:
   using: 'docker'
   image: 'src/Dockerfile'
@@ -27,5 +30,6 @@ runs:
     GITHUB_TOKEN: ${{ inputs.github_token }}
     SOURCE_REPO_PATH: ${{ inputs.source_repo_path }}
     UPSTREAM_BRANCH: ${{ inputs.upstream_branch }}
-    SSH_PRIVATE_KEY_SRC: ${{ inputs.source_repo_ssh_private_key}}
-    PR_LABELS: ${{inputs.pr_labels}}
+    SSH_PRIVATE_KEY_SRC: ${{ inputs.source_repo_ssh_private_key }}
+    PR_LABELS: ${{ inputs.pr_labels }}
+    HOSTNAME: ${{ inputs.hostname }}

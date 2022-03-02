@@ -41,7 +41,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: actions-template-sync
-        uses: AndreasAugustin/actions-template-sync@v0.2.1-draft
+        uses: AndreasAugustin/actions-template-sync@v0.3.0-draft
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           source_repo_path: <owner/repo>
@@ -59,7 +59,8 @@ You will receive a pull request within your repository if there are some changes
 | source_repo_path | Repository path of the template | `true` | |
 | upstream_branch | The target branch | `true` | `main` |
 | source_repo_ssh_private_key | `[optional]` private ssh key for the source repository. E.q. useful if using a private template repository. [see](#private-template-repository)| `false` |  |
-| pr_labels | `[optional]` comma separated list. [pull request labels][pr-labels] | `false` | `chore,template_sync`  |
+| pr_labels | `[optional]` comma separated list. [pull request labels][pr-labels]. Must be already created. | `false` | `chore,template_sync`  |
+| hostname | `[optional]` the hostname of the repository | `false` | `github.com` |
 
 ### Example
 
@@ -91,7 +92,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: actions-template-sync
-        uses: AndreasAugustin/actions-template-sync@v0.2.1-draft
+        uses: AndreasAugustin/actions-template-sync@v0.3.0-draft
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           source_repo_path: ${{ secrets.SOURCE_REPO_PATH }} # <owner/repo>, should be within secrets
