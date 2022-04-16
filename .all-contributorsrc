@@ -79,6 +79,16 @@
       "contributions": [
         "ideas"
       ]
+    },
+    {
+      "login": "fabriziocacicia",
+      "name": "Fabrizio Cacicia",
+      "avatar_url": "https://avatars.githubusercontent.com/u/7525888?v=4",
+      "profile": "http://fabriziocacicia.com",
+      "contributions": [
+        "security",
+        "bug"
+      ]
     }
   ],
   "contributorsPerLine": 7,
