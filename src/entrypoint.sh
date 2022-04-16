@@ -38,6 +38,7 @@ echo "set git global configuration"
 git config --global user.email "github-action@actions-template-sync.noreply.${SOURCE_REPO_HOSTNAME}"
 git config --global user.name "${GITHUB_ACTOR}"
 git config --global pull.rebase false
+git config --global --add safe.directory /github/workspace
 echo "::endgroup::"
 
 # shellcheck source=src/sync_template.sh
