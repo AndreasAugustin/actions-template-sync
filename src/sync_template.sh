@@ -32,7 +32,7 @@ TEMPLATE_VERSION_FILE_NAME=".templateversionrc"
 TEMPLATE_SYNC_IGNORE_FILE_NAME=".templatesyncignore"
 TEMPLATE_REMOTE_GIT_HASH=$(git ls-remote "${SOURCE_REPO}" HEAD | awk '{print $1}')
 NEW_TEMPLATE_GIT_HASH=$(git rev-parse --short "${TEMPLATE_REMOTE_GIT_HASH}")
-NEW_BRANCH="chore/template_sync_${NEW_TEMPLATE_GIT_HASH}"
+NEW_BRANCH="${PR_BRANCH_NAME_PREFIX}_${NEW_TEMPLATE_GIT_HASH}"
 
 echo "::group::Check new changes"
 echo "::debug::new Git HASH ${NEW_TEMPLATE_GIT_HASH}"
@@ -85,7 +85,7 @@ echo "::endgroup::"
 
 echo "::group::create pull request"
 gh pr create \
-  --title "upstream merge template repository" \
+  --title ${PR_TITLE} \
   --body "Merge ${SOURCE_REPO_PATH} ${NEW_TEMPLATE_GIT_HASH}" \
   -B "${UPSTREAM_BRANCH}" \
   -l "${PR_LABELS}"

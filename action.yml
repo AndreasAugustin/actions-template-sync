@@ -17,6 +17,12 @@ inputs:
     default: 'main'
   source_repo_ssh_private_key:
     description: '[optional] private ssh key for the source repository. E.q. useful if using a private template repository.'
+  pr_branch_name_prefix:
+    description: '[optional] the prefix of branches created by this action'
+    default: 'chore/template_sync'
+  pr_title:
+    description: '[optional] the title of PRs opened by this action'
+    default: 'upstream merge template repository'
   pr_labels:
     description: '[optional] comma separated list of pull request labels'
     default: 'chore,template-sync'
@@ -31,5 +37,7 @@ runs:
     SOURCE_REPO_PATH: ${{ inputs.source_repo_path }}
     UPSTREAM_BRANCH: ${{ inputs.upstream_branch }}
     SSH_PRIVATE_KEY_SRC: ${{ inputs.source_repo_ssh_private_key }}
+    PR_BRANCH_NAME_PREFIX: ${{ inputs.pr_branch_name_prefix }}
+    PR_TITLE: ${{ inputs.pr_title }}
     PR_LABELS: ${{ inputs.pr_labels }}
     HOSTNAME: ${{ inputs.hostname }}
