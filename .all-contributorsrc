@@ -89,6 +89,15 @@
         "security",
         "bug"
       ]
+    },
+    {
+      "login": "JTunis",
+      "name": "Justin Tunis",
+      "avatar_url": "https://avatars.githubusercontent.com/u/11543636?v=4",
+      "profile": "https://github.com/JTunis",
+      "contributions": [
+        "ideas"
+      ]
     }
   ],
   "contributorsPerLine": 7,
