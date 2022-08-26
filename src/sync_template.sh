@@ -85,7 +85,7 @@ echo "::endgroup::"
 
 echo "::group::create pull request"
 gh pr create \
-  --title ${PR_TITLE} \
+  --title "${PR_TITLE}" \
   --body "Merge ${SOURCE_REPO_PATH} ${NEW_TEMPLATE_GIT_HASH}" \
   -B "${UPSTREAM_BRANCH}" \
   -l "${PR_LABELS}"
