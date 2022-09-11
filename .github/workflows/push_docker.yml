@@ -81,4 +81,4 @@ jobs:
           echo "Run tests"
           container-structure-test test \
             --image ghcr.io/andreasaugustin/${{ matrix.variant }}:main \
-            --pull --config src/test-config.yml
+            --pull --config src/test-config.yaml
