@@ -1,0 +1,6 @@
+schemaVersion: '2.0.0'
+commandTests:
+  - name: "gh is installed"
+    command: "which"
+    args: ["gh"]
+    expectedOutput: ["/bin/gh"]

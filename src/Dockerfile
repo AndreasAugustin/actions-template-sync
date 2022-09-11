@@ -1,13 +1,18 @@
 FROM alpine:3.15.4
 
-ARG GH_CLI_VER=2.8.0
+ARG GH_CLI_VER=2.15.0
 
-# labels
-LABEL \
-  "name"="GitHub template sync" \
-  "homepage"="https://github.com/marketplace/actions/github-template-sync" \
-  "repository"="https://github.com/AndreasAugustin/actions-template-sync" \
-  "maintainer"="Andreas Augustin <dev@andreas-augustin.org>"
+# TODO(anau) change user
+ARG GITHUB_URL="https://github.com/AndreasAugustin/actions-template-sync"
+
+# https://github.com/opencontainers/image-spec/blob/main/annotations.md#pre-defined-annotation-keys
+LABEL org.opencontainers.image.url="${GITHUB_URL}"
+LABEL org.opencontainers.image.documentation="${GITHUB_URL}/README.md"
+LABEL org.opencontainers.image.source="${GITHUB_URL}"
+LABEL org.opencontainers.image.licenses="MIT"
+LABEL org.opencontainers.image.authors="andyAugustin"
+LABEL org.opencontainers.image.title="actions-template-sync image"
+LABEL org.opencontainers.image.description="contains actions-template-sync"
 
 # install packages
 RUN apk add --update --no-cache bash git curl musl openssh
