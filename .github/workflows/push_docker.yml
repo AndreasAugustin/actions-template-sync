@@ -1,0 +1,84 @@
+name: push-docker
+
+on:
+  # Allow manual runs.
+  workflow_dispatch:
+  # Also run on updates to this repo.
+  push:
+    branches:
+      - main
+      # TODO(anau) remove branch
+      - feat/**
+    paths-ignore:
+      - '**/*.md'
+  pull_request:
+    paths-ignore:
+      - '**/*.md'
+
+jobs:
+
+  build-and-push:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    strategy:
+      matrix:
+        variant: [ "actions-template-sync" ]
+
+    steps:
+      -
+        name: checkout
+        uses: actions/checkout@v3
+      -
+        name: Login to DockerHub
+        if: github.event_name != 'pull_request'
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      -
+        name: Login to GHCR
+        if: github.event_name != 'pull_request'
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      -
+        name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v4
+        with:
+          images: |
+            andyAugustin/${{ matrix.variant }}
+            ghcr.io/AndreasAugustin/${{ matrix.variant }}
+      -
+        name: Build and push ${{ matrix.variant }}
+        uses: docker/build-push-action@v3
+        with:
+          context: ./src/
+          push: ${{ github.event_name != 'pull_request' }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+      -
+        name: Docker Hub Description
+        uses: peter-evans/dockerhub-description@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+          repository: andyAugustin/${{ matrix.variant }}
+          # readme-filepath: ./images/${{ matrix.variant }}/README.md
+          # short-description: See https://github.com/${{ github.repository }}/images/${{ matrix.variant }} for the source.
+      -
+        name: run tests
+        run: |
+          echo "Install container tools"
+          curl -LO https://storage.googleapis.com/container-structure-test/latest/container-structure-test-linux-amd64 \
+            && chmod +x container-structure-test-linux-amd64 \
+            && sudo mv container-structure-test-linux-amd64 /usr/local/bin/container-structure-test
+          echo "Run tests"
+          container-structure-test test \
+            --image ghcr.io/andreasaugustin/${{ matrix.variant }}:${{ github.head_ref || github.ref_name }} \
+            --pull --config test-config.yaml
