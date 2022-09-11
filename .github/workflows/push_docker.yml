@@ -80,5 +80,5 @@ jobs:
             && sudo mv container-structure-test-linux-amd64 /usr/local/bin/container-structure-test
           echo "Run tests"
           container-structure-test test \
-            --image ghcr.io/andreasaugustin/${{ matrix.variant }}:${{ github.head_ref || github.ref_name }} \
+            --image ghcr.io/andreasaugustin/${{ matrix.variant }}:feat-201_publish_image \
             --pull --config test-config.yaml
