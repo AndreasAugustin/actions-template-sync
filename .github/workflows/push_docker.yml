@@ -7,11 +7,6 @@ on:
   push:
     branches:
       - main
-      # TODO(anau) remove branch
-      - feat/**
-    paths-ignore:
-      - '**/*.md'
-  pull_request:
     paths-ignore:
       - '**/*.md'
 
