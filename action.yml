@@ -25,7 +25,6 @@ inputs:
     default: 'upstream merge template repository'
   pr_labels:
     description: '[optional] comma separated list of pull request labels'
-    default: 'chore,template-sync'
   hostname:
     description: '[optional] the hostname of the GitHub repository'
     default: 'github.com'
