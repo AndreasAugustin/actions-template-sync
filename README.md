@@ -46,7 +46,7 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           source_repo_path: <owner/repo>
           upstream_branch: <target_branch> # defaults to main
-          pr_labels: <label1>,<label2>[,...] # defaults to chore,template-sync
+          pr_labels: <label1>,<label2>[,...] # optional, no default
 ```
 
 You will receive a pull request within your repository if there are some changes available.
@@ -61,7 +61,7 @@ You will receive a pull request within your repository if there are some changes
 | source_repo_ssh_private_key | `[optional]` private ssh key for the source repository. E.q. useful if using a private template repository. [see](#private-template-repository)| `false` |  |
 | pr_branch_name_prefix | `[optional]` the prefix of branches created by this action | `false` | `chore/template_sync`  |
 | pr_title | `[optional]` the title of PRs opened by this action. Must be already created. | `false` | `upstream merge template repository`  |
-| pr_labels | `[optional]` comma separated list. [pull request labels][pr-labels]. Must be already created. | `false` | `chore,template_sync`  |
+| pr_labels | `[optional]` comma separated list. [pull request labels][pr-labels]. Must be already created. | `false` | |
 | hostname | `[optional]` the hostname of the repository | `false` | `github.com` |
 
 ### Example
@@ -99,7 +99,7 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           source_repo_path: ${{ secrets.SOURCE_REPO_PATH }} # <owner/repo>, should be within secrets
           upstream_branch: ${{ secrets.TARGET_BRANCH }} #<target_branch> # defaults to main
-          pr_labels: <label1>,<label2>[,...] # defaults to chore,template-sync
+          pr_labels: <label1>,<label2>[,...] # optional, no default
           source_repo_ssh_private_key: ${{ secrets.SOURCE_REPO_SSH_PRIVATE_KEY }} # contains the private ssh key of the private repository
 ```
 
