@@ -60,7 +60,9 @@ echo "::endgroup::"
 echo "::group::commit and push changes"
 git add .
 
-if [ -r ${TEMPLATE_SYNC_IGNORE_FILE_NAME} ]
+# we are checking the ignore file if it exists or is empty
+# -s is true if the file contains whitespaces
+if [ -s ${TEMPLATE_SYNC_IGNORE_FILE_NAME} ]
 then
   echo "::debug::unstage files from template sync ignore"
   git reset --pathspec-from-file="${TEMPLATE_SYNC_IGNORE_FILE_NAME}"
