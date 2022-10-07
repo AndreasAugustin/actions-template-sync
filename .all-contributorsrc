@@ -101,6 +101,15 @@
         "code",
         "bug"
       ]
+    },
+    {
+      "login": "mikematos84",
+      "name": "Michael Matos",
+      "avatar_url": "https://avatars.githubusercontent.com/u/4093433?v=4",
+      "profile": "https://mikematos84.github.io",
+      "contributions": [
+        "bug"
+      ]
     }
   ],
   "contributorsPerLine": 7,
@@ -108,5 +117,6 @@
   "projectOwner": "AndreasAugustin",
   "repoType": "github",
   "repoHost": "https://github.com",
-  "skipCi": true
+  "skipCi": true,
+  "commitConvention": "angular"
 }
