@@ -15,7 +15,8 @@
         "code",
         "review",
         "security",
-        "ideas"
+        "ideas",
+        "question"
       ]
     },
     {
@@ -109,6 +110,15 @@
       "profile": "https://mikematos84.github.io",
       "contributions": [
         "bug"
+      ]
+    },
+    {
+      "login": "fatmcgav-depop",
+      "name": "Gavin Williams",
+      "avatar_url": "https://avatars.githubusercontent.com/u/109519102?v=4",
+      "profile": "https://github.com/fatmcgav-depop",
+      "contributions": [
+        "ideas"
       ]
     }
   ],
