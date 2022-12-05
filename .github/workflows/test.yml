@@ -18,4 +18,4 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           source_repo_path: AndreasAugustin/template.git
           upstream_branch: main
-          is_dry_run: true
+          # is_dry_run: true
