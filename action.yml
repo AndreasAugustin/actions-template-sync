@@ -28,6 +28,8 @@ inputs:
   hostname:
     description: '[optional] the hostname of the GitHub repository'
     default: 'github.com'
+  is_dry_run:
+    description: '[optional] set to true if you do not want to push the changes and not want to create a PR'
 runs:
   using: 'docker'
   image: 'src/Dockerfile'
@@ -40,3 +42,4 @@ runs:
     PR_TITLE: ${{ inputs.pr_title }}
     PR_LABELS: ${{ inputs.pr_labels }}
     HOSTNAME: ${{ inputs.hostname }}
+    IS_DRY_RUN: ${{ inputs.is_dry_run }}

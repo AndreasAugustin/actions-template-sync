@@ -76,14 +76,22 @@ fi
 
 git commit -m "chore(template): merge template changes :up:"
 
-echo "::debug::push changes"
-git push --set-upstream origin "${NEW_BRANCH}"
-echo "::endgroup::"
+push_and_create_pr () {
+  if [ "$IS_DRY_RUN" != "true" ]; then
+    echo "::debug::push changes"
+    git push --set-upstream origin "${NEW_BRANCH}"
+    echo "::endgroup::"
 
-echo "::group::create pull request"
-gh pr create \
-  --title "${PR_TITLE}" \
-  --body "Merge ${SOURCE_REPO_PATH} ${NEW_TEMPLATE_GIT_HASH}" \
-  -B "${UPSTREAM_BRANCH}" \
-  -l "${PR_LABELS}"
-echo "::endgroup::"
+    echo "::group::create pull request"
+    gh pr create \
+      --title "${PR_TITLE}" \
+      --body "Merge ${SOURCE_REPO_PATH} ${NEW_TEMPLATE_GIT_HASH}" \
+      -B "${UPSTREAM_BRANCH}" \
+      -l "${PR_LABELS}"
+    echo "::endgroup::"
+  else
+    echo "::warn::dry_run option is set to off. Skipping push changes and skip create pr"
+  fi
+}
+
+push_and_create_pr

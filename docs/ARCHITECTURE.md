@@ -33,6 +33,8 @@ GitPullSync["pull from remote repository"]
 CheckIgnoreFileExistsSync{"check if .templatesyncignore file exists"}
 ResetChangesSync["Reset the changes listed within the ignore file"]
 GitCommitSync["commit the changes"]
+
+CheckIsDryRun{"check if is_dry_run is set to true"}
 GitPushSync["Push the changes to GitHub"]
 GitPullRequestSync["create a pull request on GitHub"]
 
@@ -82,7 +84,9 @@ ResetChangesSync --> GitCommitSync
 end
 
 subgraph github["gitHub actions"]
-GitCommitSync --> GitPushSync
+GitCommitSync --> CheckIsDryRun
+CheckIsDryRun -->|is true| Exit
+CheckIsDryRun -->|is not true| GitPushSync
 GitPushSync --> GitPullRequestSync
 GitPullRequestSync --> Exit
 
