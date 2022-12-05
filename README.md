@@ -14,8 +14,9 @@ This GitHub action will help you to keep track of the template changes.
 
 ## Features
 
-* Sync template repository with the current repository
+* Sync other public or private repository (e.q. template repositories) with the current repository
 * Ignore files and folders from syncing using a `.templatesyncignore` file
+* many configuration options
 
 ## Usage
 
@@ -41,7 +42,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - name: actions-template-sync
-        uses: AndreasAugustin/actions-template-sync@v0.4.2-draft
+        uses: AndreasAugustin/actions-template-sync@v0.5.0-draft
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           source_repo_path: <owner/repo>
@@ -95,7 +96,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - name: actions-template-sync
-        uses: AndreasAugustin/actions-template-sync@v0.4.2-draft
+        uses: AndreasAugustin/actions-template-sync@v0.5.0-draft
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           source_repo_path: ${{ secrets.SOURCE_REPO_PATH }} # <owner/repo>, should be within secrets
