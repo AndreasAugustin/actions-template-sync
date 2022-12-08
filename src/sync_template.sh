@@ -74,7 +74,7 @@ then
   git checkout -- .
 fi
 
-git commit -m "chore(template): merge template changes :up:"
+git commit -m "${PR_COMMIT_MSG}"
 
 push_and_create_pr () {
   if [ "$IS_DRY_RUN" != "true" ]; then

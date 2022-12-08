@@ -25,6 +25,9 @@ inputs:
     default: 'upstream merge template repository'
   pr_labels:
     description: '[optional] comma separated list of pull request labels'
+  pr_commit_msg:
+    description: '[optional] the commit message of the template merge'
+    default: 'chore(template): merge template changes :up:'
   hostname:
     description: '[optional] the hostname of the GitHub repository'
     default: 'github.com'
@@ -41,5 +44,6 @@ runs:
     PR_BRANCH_NAME_PREFIX: ${{ inputs.pr_branch_name_prefix }}
     PR_TITLE: ${{ inputs.pr_title }}
     PR_LABELS: ${{ inputs.pr_labels }}
+    PR_COMMIT_MSG: ${{ inputs.pr_commit_msg }}
     HOSTNAME: ${{ inputs.hostname }}
     IS_DRY_RUN: ${{ inputs.is_dry_run }}
