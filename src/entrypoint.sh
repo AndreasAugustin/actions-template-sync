@@ -19,7 +19,7 @@ fi
 SOURCE_REPO_HOSTNAME="${HOSTNAME:-github.com}"
 
 # In case of private template repository this will be overwritten
-SOURCE_REPO_PREFIX="https://${GITHUB_ACTOR}:${GITHUB_TOKEN}@${SOURCE_REPO_HOSTNAME}/"
+SOURCE_REPO_PREFIX="https://${SOURCE_REPO_HOSTNAME}/"
 
 function ssh_setup() {
   echo "::group::ssh setup"
@@ -54,6 +54,9 @@ function git_init() {
   git config --global pull.rebase false
   git config --global --add safe.directory /github/workspace
   git lfs install
+
+  git config --global "credential.https://${SOURCE_REPO_HOSTNAME}.helper" "!gh auth git-credential"
+  gh auth login --git-protocol "https" --hostname "${SOURCE_REPO_HOSTNAME}" --with-token <<< "${GITHUB_TOKEN}"
 
   echo "::endgroup::"
 }
