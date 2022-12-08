@@ -19,7 +19,7 @@ fi
 SOURCE_REPO_HOSTNAME="${HOSTNAME:-github.com}"
 
 # In case of private template repository this will be overwritten
-SOURCE_REPO_PREFIX="https://${GITHUB_ACTOR}:${GITHUB_TOKEN}@${SOURCE_REPO_HOSTNAME}/"
+SOURCE_REPO_PREFIX="https://${SOURCE_REPO_HOSTNAME}/"
 
 function ssh_setup() {
   echo "::group::ssh setup"
