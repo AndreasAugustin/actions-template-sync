@@ -1,6 +1,9 @@
 name: test-ssh
 
-on: [push]
+on:
+  - push
+  # manual trigger
+  - workflow_dispatch:
 
 jobs:
   test-implementation-job:
