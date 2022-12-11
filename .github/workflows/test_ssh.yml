@@ -1,6 +1,7 @@
 name: test-ssh
 
 on:
+  pull_request:
   push:
   # manual trigger
   workflow_dispatch:
