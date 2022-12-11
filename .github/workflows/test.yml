@@ -1,9 +1,9 @@
 name: test
 
 on:
-  - push:
+  push:
   # manual trigger
-  - workflow_dispatch:
+  workflow_dispatch:
 
 jobs:
 
