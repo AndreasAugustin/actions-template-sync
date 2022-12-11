@@ -1,4 +1,4 @@
-name: test
+name: test-ssh
 
 on:
   push:
@@ -6,7 +6,6 @@ on:
   workflow_dispatch:
 
 jobs:
-
   test-implementation-job:
 
     runs-on: ubuntu-latest
@@ -15,10 +14,10 @@ jobs:
       # To use this repository's private action, you must check out the repository
       - name: Checkout
         uses: actions/checkout@v3
-      - name: Test action step
+      - name: Test action step ssh
         uses: ./ # Uses an action in the root directory
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          source_repo_path: AndreasAugustin/template.git
-          upstream_branch: main
+          source_repo_path: ${{ secrets.SOURCE_REPO_PATH_SSH }} # <owner/repo>, should be within secrets
+          source_repo_ssh_private_key: ${{ secrets.SOURCE_REPO_SSH_PRIVATE_KEY }} # contains the private ssh key of the private repository
           is_dry_run: true
