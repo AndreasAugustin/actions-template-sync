@@ -17,7 +17,10 @@ jobs:
         uses: actions/checkout@v3
       - name: Test action step ssh
         uses: ./ # Uses an action in the root directory
-        if: ${{ secrets.SOURCE_REPO_PATH_SSH != null }} && ${{ secrets.SOURCE_REPO_SSH_PRIVATE_KEY != null }}
+        env:
+          source_repo_path_ssh: ${{ secrets.SOURCE_REPO_PATH_SSH }}
+          source_repo_ssh_private_key: ${{ secrets.SOURCE_REPO_SSH_PRIVATE_KEY }}
+        if: ${{ env.source_repo_path_ssh != null }} && ${{ env.source_repo_ssh_private_key != null }}
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           source_repo_path: ${{ secrets.SOURCE_REPO_PATH_SSH }} # <owner/repo>, should be within secrets
