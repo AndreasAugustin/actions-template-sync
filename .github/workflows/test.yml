@@ -1,7 +1,7 @@
 name: test
 
 on:
-  - push
+  - push:
   # manual trigger
   - workflow_dispatch:
 
