@@ -69,7 +69,9 @@ You will receive a pull request within your repository if there are some changes
 ### Example
 
 This repo uses this [template][template] and this action from the [marketplace][marketplace].
-See the definition [here][self-usage]
+See the definition [here][self-usage].
+
+If you look for a more detailed guide you can have a look at [Dev.to][devto-example] or [GitHub][github-example]
 
 ### Trigger
 
@@ -167,3 +169,5 @@ specification. Contributions of any kind welcome!
 [marketplace]: https://github.com/marketplace/actions/actions-template-sync
 [self-usage]: https://github.com/AndreasAugustin/actions-template-sync/blob/main/.github/workflows/actions_template_sync.yml
 [pr-labels]: https://docs.github.com/en/issues/using-labels-and-milestones-to-track-work/managing-labels
+[devto-example]: https://dev.to/andreasaugustin/github-actions-template-sync-1g9k
+[github-example]: https://github.com/AndreasAugustin/teaching/blob/main/docs/git/git_action_sync.md
