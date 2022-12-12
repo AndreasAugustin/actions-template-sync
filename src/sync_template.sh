@@ -3,6 +3,11 @@ set -e
 # set -u
 set -x
 
+if [[ -z "${PR_COMMIT_MSG}" ]]; then
+  echo "::error::Missing env variable 'PR_COMMIT_MSG'" >&2;
+  exit 1;
+fi
+
 if [[ -z "${SOURCE_REPO}" ]]; then
   echo "::error::Missing env variable 'SOURCE_REPO'" >&2;
   exit 1;
@@ -74,7 +79,7 @@ then
   git checkout -- .
 fi
 
-git commit -m "chore(template): merge template changes :up:"
+git commit -m "${PR_COMMIT_MSG}"
 
 push_and_create_pr () {
   if [ "$IS_DRY_RUN" != "true" ]; then
