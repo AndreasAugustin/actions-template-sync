@@ -36,14 +36,16 @@ NEW_BRANCH="${PR_BRANCH_NAME_PREFIX}_${NEW_TEMPLATE_GIT_HASH}"
 
 echo "::group::Check new changes"
 echo "::debug::new Git HASH ${NEW_TEMPLATE_GIT_HASH}"
-if [ -r ${TEMPLATE_VERSION_FILE_NAME} ]
-then
+
+if [[ -f ".github/$TEMPLATE_VERSION_FILE_NAME" ]]; then
+  TEMPLATE_VERSION_FILE_NAME=".github/$TEMPLATE_VERSION_FILE_NAME"
+fi
+if [ -r ${TEMPLATE_VERSION_FILE_NAME} ]; then
   CURRENT_TEMPLATE_GIT_HASH=$(cat ${TEMPLATE_VERSION_FILE_NAME})
   echo "::debug::Current git hash ${CURRENT_TEMPLATE_GIT_HASH}"
 fi
 
-if [ "${NEW_TEMPLATE_GIT_HASH}" == "${CURRENT_TEMPLATE_GIT_HASH}" ]
-then
+if [ "${NEW_TEMPLATE_GIT_HASH}" == "${CURRENT_TEMPLATE_GIT_HASH}" ]; then
   echo "::warn::repository is up to date"
   exit 0
 fi
@@ -65,10 +67,12 @@ echo "::endgroup::"
 echo "::group::commit and push changes"
 git add .
 
+if [[ -f ".github/$TEMPLATE_SYNC_IGNORE_FILE_NAME" ]]; then
+  TEMPLATE_SYNC_IGNORE_FILE_NAME=".github/$TEMPLATE_SYNC_IGNORE_FILE_NAME"
+fi
 # we are checking the ignore file if it exists or is empty
 # -s is true if the file contains whitespaces
-if [ -s ${TEMPLATE_SYNC_IGNORE_FILE_NAME} ]
-then
+if [ -s ${TEMPLATE_SYNC_IGNORE_FILE_NAME} ]; then
   echo "::debug::unstage files from template sync ignore"
   git reset --pathspec-from-file="${TEMPLATE_SYNC_IGNORE_FILE_NAME}"
 
