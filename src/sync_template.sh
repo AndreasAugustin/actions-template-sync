@@ -37,7 +37,10 @@ NEW_BRANCH="${PR_BRANCH_NAME_PREFIX}_${NEW_TEMPLATE_GIT_HASH}"
 echo "::group::Check new changes"
 echo "::debug::new Git HASH ${NEW_TEMPLATE_GIT_HASH}"
 
-if [[ -f ".github/$TEMPLATE_VERSION_FILE_NAME" ]]; then
+if [[ -f "$TEMPLATE_VERSION_FILE_NAME" ]]; then
+  echo "::debug::version file is located in root folder"
+else
+  echo "::debug::version file is located either in .github folder or not present"
   TEMPLATE_VERSION_FILE_NAME=".github/$TEMPLATE_VERSION_FILE_NAME"
 fi
 if [ -r ${TEMPLATE_VERSION_FILE_NAME} ]; then
