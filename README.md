@@ -112,6 +112,8 @@ jobs:
 
 Create a `.templatesyncignore` file. Just like writing a `.gitignore` file, follow the [glob pattern](https://en.wikipedia.org/wiki/Glob_(programming)) in defining the files and folders that should be excluded from syncing with the template repository.
 
+It can also be stored inside `.github` folder.
+
 ## Debug
 
 You must create a secret named `ACTIONS_STEP_DEBUG` with the value `true` to see the debug messages set by this command in the log. For more information, see "[Enabling debug logging.][enabling-debug-logging]"
