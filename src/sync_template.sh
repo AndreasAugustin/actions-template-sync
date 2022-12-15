@@ -28,8 +28,8 @@ if [[ -n "${SRC_SSH_PRIVATEKEY_ABS_PATH}" ]]; then
   export GIT_SSH_COMMAND="ssh -i ${SRC_SSH_PRIVATEKEY_ABS_PATH}"
 fi
 
-TEMPLATE_VERSION_FILE_NAME=".templateversionrc"
-TEMPLATE_SYNC_IGNORE_FILE_NAME=".templatesyncignore"
+TEMPLATE_VERSION_FILE_PATH=".templateversionrc"
+TEMPLATE_SYNC_IGNORE_FILE_PATH=".templatesyncignore"
 TEMPLATE_REMOTE_GIT_HASH=$(git ls-remote "${SOURCE_REPO}" HEAD | awk '{print $1}')
 NEW_TEMPLATE_GIT_HASH=$(git rev-parse --short "${TEMPLATE_REMOTE_GIT_HASH}")
 NEW_BRANCH="${PR_BRANCH_NAME_PREFIX}_${NEW_TEMPLATE_GIT_HASH}"
@@ -37,14 +37,16 @@ NEW_BRANCH="${PR_BRANCH_NAME_PREFIX}_${NEW_TEMPLATE_GIT_HASH}"
 echo "::group::Check new changes"
 echo "::debug::new Git HASH ${NEW_TEMPLATE_GIT_HASH}"
 
-if [[ -f "$TEMPLATE_VERSION_FILE_NAME" ]]; then
+# Check if the Version File exists inside root of the repository
+if [[ -f "$TEMPLATE_VERSION_FILE_PATH" ]]; then
   echo "::debug::version file is located in root folder"
 else
+  # Else use it as if it is located in the .github folder
   echo "::debug::version file is located either in .github folder or not present"
-  TEMPLATE_VERSION_FILE_NAME=".github/$TEMPLATE_VERSION_FILE_NAME"
+  TEMPLATE_VERSION_FILE_PATH=".github/$TEMPLATE_VERSION_FILE_PATH"
 fi
-if [ -r ${TEMPLATE_VERSION_FILE_NAME} ]; then
-  CURRENT_TEMPLATE_GIT_HASH=$(cat ${TEMPLATE_VERSION_FILE_NAME})
+if [ -r ${TEMPLATE_VERSION_FILE_PATH} ]; then
+  CURRENT_TEMPLATE_GIT_HASH=$(cat ${TEMPLATE_VERSION_FILE_PATH})
   echo "::debug::Current git hash ${CURRENT_TEMPLATE_GIT_HASH}"
 fi
 
@@ -63,21 +65,22 @@ echo "::endgroup::"
 
 echo "::group::persist template version"
 echo "write new template version file"
-echo "${NEW_TEMPLATE_GIT_HASH}" > ${TEMPLATE_VERSION_FILE_NAME}
-echo "::debug::wrote new template version file with content $(cat ${TEMPLATE_VERSION_FILE_NAME})"
+echo "${NEW_TEMPLATE_GIT_HASH}" > ${TEMPLATE_VERSION_FILE_PATH}
+echo "::debug::wrote new template version file with content $(cat ${TEMPLATE_VERSION_FILE_PATH})"
 echo "::endgroup::"
 
 echo "::group::commit and push changes"
 git add .
 
-if [[ -f ".github/$TEMPLATE_SYNC_IGNORE_FILE_NAME" ]]; then
-  TEMPLATE_SYNC_IGNORE_FILE_NAME=".github/$TEMPLATE_SYNC_IGNORE_FILE_NAME"
+#
+if [[ -f ".github/$TEMPLATE_SYNC_IGNORE_FILE_PATH" ]]; then
+  TEMPLATE_SYNC_IGNORE_FILE_PATH=".github/$TEMPLATE_SYNC_IGNORE_FILE_PATH"
 fi
 # we are checking the ignore file if it exists or is empty
 # -s is true if the file contains whitespaces
-if [ -s ${TEMPLATE_SYNC_IGNORE_FILE_NAME} ]; then
+if [ -s ${TEMPLATE_SYNC_IGNORE_FILE_PATH} ]; then
   echo "::debug::unstage files from template sync ignore"
-  git reset --pathspec-from-file="${TEMPLATE_SYNC_IGNORE_FILE_NAME}"
+  git reset --pathspec-from-file="${TEMPLATE_SYNC_IGNORE_FILE_PATH}"
 
   echo "::debug::clean untracked files"
   git clean -df
