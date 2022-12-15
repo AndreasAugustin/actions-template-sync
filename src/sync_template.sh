@@ -74,10 +74,10 @@ git add .
 
 # Check if the Ignore File exists inside root of the repository
 if [[ -f "$TEMPLATE_SYNC_IGNORE_FILE_PATH" ]]; then
-  echo "::debug::version file is located in root folder"
+  echo "::debug::ignore file is located in root folder"
 else
   # Else use it as if it is located in the .github folder
-  echo "::debug::version file is located either in .github folder or not present"
+  echo "::debug::ignore file is located either in .github folder or not present"
   TEMPLATE_SYNC_IGNORE_FILE_PATH=".github/$TEMPLATE_SYNC_IGNORE_FILE_PATH"
 fi
 # we are checking the ignore file if it exists or is empty
