@@ -11,6 +11,11 @@ source sync_common.sh
   exit 1;
 };
 
+if [[ -z "${SOURCE_REPO_GITHUB_TOKEN}" ]]; then
+  echo "::debug::Missing input 'source_repo_github_token: \${{ input.source_repo_github_token }}'. Using github_token as default."
+  SOURCE_REPO_GITHUB_TOKEN="${GITHUB_TOKEN}"
+fi
+
 if [[ -z "${SOURCE_REPO_PATH}" ]]; then
   err "Missing input 'source_repo_path: \${{ input.source_repo_path }}'.";
   exit 1
@@ -45,6 +50,7 @@ fi
 
 export SOURCE_REPO="${SOURCE_REPO_PREFIX}${SOURCE_REPO_PATH}"
 
+<<<<<<< HEAD
 function git_init() {
   echo "::group::git init"
   info "set git global configuration"
@@ -62,6 +68,16 @@ function git_init() {
 }
 
 git_init
+=======
+echo "::group::git init"
+echo "set git global configuration"
+git config --global user.email "github-action@actions-template-sync.noreply.${SOURCE_REPO_HOSTNAME}"
+git config --global user.name "${GITHUB_ACTOR}"
+git config --global pull.rebase false
+git config --global --add safe.directory /github/workspace
+git config --global "credential.https://${SOURCE_REPO_HOSTNAME}.helper" "!gh auth git-credential"
+echo "::endgroup::"
+>>>>>>> 42e4d55 (feat(gh-auth): add own source_repo_github_token handling for template repo)
 
 # shellcheck source=src/sync_template.sh
 source sync_template.sh

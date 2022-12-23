@@ -63,7 +63,12 @@ You will receive a pull request within your repository if there are some changes
 | github_token | Token for the repo. Can be passed in using `$\{{ secrets.GITHUB_TOKEN }}` | `true` |  |
 | source_repo_path | Repository path of the template | `true` | |
 | upstream_branch | The target branch | `true` | `main` |
+<<<<<<< HEAD
 | source_repo_ssh_private_key | `[optional]` private ssh key for the source repository. [see](#private-template-repository)| `false` |  |
+=======
+| source_repo_ssh_private_key | `[optional]` private ssh key for the source repository. E.q. useful if using a private template repository. [see](#private-template-repository)| `false` |  |
+| source_repo_github_token | `[optional]` separate github token to interact with the source repository. | `false` | `$\{{ inputs.github_token }}` |
+>>>>>>> 42e4d55 (feat(gh-auth): add own source_repo_github_token handling for template repo)
 | pr_branch_name_prefix | `[optional]` the prefix of branches created by this action | `false` | `chore/template_sync`  |
 | pr_title | `[optional]` the title of PRs opened by this action. Must be already created. | `false` | `upstream merge template repository`  |
 | pr_labels | `[optional]` comma separated list. [pull request labels][pr-labels]. Must be already created. | `false` | |
@@ -85,6 +90,33 @@ You can use all [triggers][action-triggers] which are supported for GitHub actio
 ### Private template repository
 
 If you have a private template repository.
+
+#### Using github app
+
+You can create and use a [GitHub App](https://docs.github.com/en/developers/apps/getting-started-with-apps/about-apps#about-github-apps) to handle the access to your private repository. To generate a token for your app you can use a separate action like [tibdex/github-app-token](https://github.com/tibdex/github-app-token).
+
+```yaml
+jobs:
+  repo-sync:
+    runs-on: ubuntu-latest
+
+    steps:
+     - name: Generate token to read from source repo # see: https://github.com/tibdex/github-app-token
+        id: generate_token
+        uses: tibdex/github-app-token@v1
+        with:
+          app_id: ${{ secrets.APP_ID }}
+          private_key: ${{ secrets.PRIVATE_KEY }}
+
+      - name: actions-template-sync
+        uses: AndreasAugustin/actions-template-sync@v0.5.0-draft
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          source_repo_github_token: ${{ steps.generate_token.outputs.token }}
+          source_repo_path: <owner/repo>
+          upstream_branch: <target_branch> # defaults to main
+          pr_labels: <label1>,<label2>[,...] # optional, no default
+```
 
 #### SSH
 
