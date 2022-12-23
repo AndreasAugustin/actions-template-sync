@@ -86,6 +86,33 @@ You can use all [triggers][action-triggers] which are supported for GitHub actio
 
 If you have a private template repository.
 
+#### Using github app
+
+You can create and use a [GitHub App](https://docs.github.com/en/developers/apps/getting-started-with-apps/about-apps#about-github-apps) to handle the access to your private repository. To generate a token for your app you can use a separate action like [tibdex/github-app-token](https://github.com/tibdex/github-app-token).
+
+```yaml
+jobs:
+  repo-sync:
+    runs-on: ubuntu-latest
+
+    steps:
+     - name: Generate token to read from source repo # see: https://github.com/tibdex/github-app-token
+        id: generate_token
+        uses: tibdex/github-app-token@v1
+        with:
+          app_id: ${{ secrets.APP_ID }}
+          private_key: ${{ secrets.PRIVATE_KEY }}
+
+      - name: actions-template-sync
+        uses: AndreasAugustin/actions-template-sync@v0.5.0-draft
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          source_repo_github_token: ${{ steps.generate_token.outputs.token }}
+          source_repo_path: <owner/repo>
+          upstream_branch: <target_branch> # defaults to main
+          pr_labels: <label1>,<label2>[,...] # optional, no default
+```
+
 #### SSH
 
 You have various options to use ssh keys with GitHub.
