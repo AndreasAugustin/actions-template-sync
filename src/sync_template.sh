@@ -53,12 +53,6 @@ echo "::group::Pull template"
 echo "::debug::create new branch from default branch with name ${NEW_BRANCH}"
 git checkout -b "${NEW_BRANCH}"
 
-if [ -s ${TEMPLATE_SYNC_IGNORE_FILE_NAME} ]
-then
-  echo "::debug::backup ignore file in case of incomming changes"
-  cp "${TEMPLATE_SYNC_IGNORE_FILE_NAME}" "${TEMPLATE_SYNC_IGNORE_FILE_NAME}.tmp"
-fi
-
 echo "::debug::pull changes from template"
 git pull "${SOURCE_REPO}" --allow-unrelated-histories --squash --strategy=recursive -X theirs
 echo "::endgroup::"
@@ -66,15 +60,8 @@ echo "::endgroup::"
 if [ -s ${TEMPLATE_SYNC_IGNORE_FILE_NAME} ]
 then
   echo "::group::restore ignore file"
-  # restore ignore file. the ignore file in the final repo always wins
-  mv -f "${TEMPLATE_SYNC_IGNORE_FILE_NAME}.tmp" "${TEMPLATE_SYNC_IGNORE_FILE_NAME}"
-  # we are checking the ignore file for diff to give propper feedback
-  # if exit code != 0 we had an imcomming change form the tpl repo
-  if ! git diff --exit-code "${TEMPLATE_SYNC_IGNORE_FILE_NAME}"; then
-    echo "::debug::restored ignore file because of incomming changes from tpl repository"
-  else
-    echo "::debug::no diff detected in ${TEMPLATE_SYNC_IGNORE_FILE_NAME}"
-  fi
+  git reset ${TEMPLATE_SYNC_IGNORE_FILE_NAME}
+  git checkout -- ${TEMPLATE_SYNC_IGNORE_FILE_NAME}
   echo "::endgroup::"
 fi
 
