@@ -52,7 +52,6 @@ echo "::endgroup::"
 echo "::group::Pull template"
 echo "::debug::create new branch from default branch with name ${NEW_BRANCH}"
 git checkout -b "${NEW_BRANCH}"
-
 echo "::debug::pull changes from template"
 git pull "${SOURCE_REPO}" --allow-unrelated-histories --squash --strategy=recursive -X theirs
 echo "::endgroup::"
