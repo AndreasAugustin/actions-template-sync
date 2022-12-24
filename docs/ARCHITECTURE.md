@@ -25,12 +25,14 @@ GitConfigureEntry[Configure git global settings]
 EnvCheckSync{required environment variables exists}
 SshConfigureSync[Configure SSH variables]
 SetVariablesSync[Set the needed variables, e.q. with reading remote repository]
-CheckTemplateFileExists{"Check if the .templatesyncrc file exists in repository"}
+CheckTemplateFileExistsGithub{"Check if the .templatesyncrc file exists inside .github folder"}
+CheckTemplateFileExistsRoot{"Check if the .templatesyncrc file exists inside root folder"}
 WriteTemplateVersionSync["Read and write the template sync version into variable"]
 CompareTemplateVersionSync{"Compare the source repository version"}
 GitCheckoutSync["create git branch <branch_prefix_git_hash>"]
 GitPullSync["pull from remote repository"]
-CheckIgnoreFileExistsSync{"check if .templatesyncignore file exists"}
+CheckIgnoreFileExistsSyncGithub{"Check if the .templatesyncignore file exists inside .github folder"}
+CheckIgnoreFileExistsSyncRoot{"Check if the .templatesyncignore file exists inside root folder"}
 ResetChangesSync["Reset the changes listed within the ignore file"]
 GitCommitSync["commit the changes"]
 
@@ -67,9 +69,11 @@ EnvCheckSync -->|do exist| SshConfigureSync
 SshConfigureSync --> SetVariablesSync
 
 subgraph compareVersion["compare the sync version"]
-SetVariablesSync --> CheckTemplateFileExists
-CheckTemplateFileExists -->|exists| WriteTemplateVersionSync
-CheckTemplateFileExists -->|does not exist|CompareTemplateVersionSync
+SetVariablesSync --> CheckTemplateFileExistsGithub
+CheckTemplateFileExistsGithub -->|exists| WriteTemplateVersionSync
+CheckTemplateFileExistsGithub -->|does not exist|CheckTemplateFileExistsRoot
+CheckTemplateFileExistsRoot --> |exists| WriteTemplateVersionSync
+CheckTemplateFileExistsRoot --> |does not exist| CompareTemplateVersionSync
 WriteTemplateVersionSync --> CompareTemplateVersionSync
 CompareTemplateVersionSync -->|equal versions| Exit
 end
@@ -78,8 +82,10 @@ subgraph git["Git actions"]
 CompareTemplateVersionSync -->|versions not equal| GitCheckoutSync
 GitCheckoutSync --> GitPullSync
 GitPullSync --> CheckIgnoreFileExistsSync
-CheckIgnoreFileExistsSync -->|does not exist| GitCommitSync
-CheckIgnoreFileExistsSync -->|exists| ResetChangesSync
+CheckIgnoreFileExistsSyncGithub -->|exists| ResetChangesSync
+CheckIgnoreFileExistsSyncGithub -->|does not exist| CheckIgnoreFileExistsSyncRoot
+CheckIgnoreFileExistsSyncRoot -->|exists| ResetChangesSync
+CheckIgnoreFileExistsSyncRoot -->|does not exist| GitCommitSync
 ResetChangesSync --> GitCommitSync
 end
 
