@@ -60,6 +60,14 @@ echo "::debug::pull changes from template"
 git pull "${SOURCE_REPO}" --allow-unrelated-histories --squash --strategy=recursive -X theirs
 echo "::endgroup::"
 
+if [ -s ${TEMPLATE_SYNC_IGNORE_FILE_NAME} ]
+then
+  echo "::group::restore ignore file"
+  git reset ${TEMPLATE_SYNC_IGNORE_FILE_NAME}
+  git checkout -- ${TEMPLATE_SYNC_IGNORE_FILE_NAME}
+  echo "::endgroup::"
+fi
+
 echo "::group::persist template version"
 echo "write new template version file"
 echo "${NEW_TEMPLATE_GIT_HASH}" > ${TEMPLATE_VERSION_FILE_PATH}
