@@ -112,6 +112,8 @@ jobs:
 
 Create a `.templatesyncignore` file. Just like writing a `.gitignore` file, follow the [glob pattern](https://en.wikipedia.org/wiki/Glob_(programming)) in defining the files and folders that should be excluded from syncing with the template repository.
 
+It can also be stored inside `.github` folder.
+
 _Note: It is not possible to sync also the `.templatesyncignore` itself. Any changes from the template repository will be restored automatically._
 
 ## Debug
