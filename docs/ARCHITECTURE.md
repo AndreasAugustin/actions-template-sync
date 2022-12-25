@@ -25,14 +25,12 @@ GitConfigureEntry[Configure git global settings]
 EnvCheckSync{required environment variables exists}
 SshConfigureSync[Configure SSH variables]
 SetVariablesSync[Set the needed variables, e.q. with reading remote repository]
-CheckTemplateFileExistsGithub{"Check if the .templatesyncrc file exists inside .github folder"}
-CheckTemplateFileExistsRoot{"Check if the .templatesyncrc file exists inside root folder"}
+CheckTemplateFileExists{"Check if the .templatesyncrc file exists\n(First inside .github folder, then in root)"}
 WriteTemplateVersionSync["Read and write the template sync version into variable"]
 CompareTemplateVersionSync{"Compare the source repository version"}
 GitCheckoutSync["create git branch <branch_prefix_git_hash>"]
 GitPullSync["pull from remote repository"]
-CheckIgnoreFileExistsSyncGithub{"Check if the .templatesyncignore file exists inside .github folder"}
-CheckIgnoreFileExistsSyncRoot{"Check if the .templatesyncignore file exists inside root folder"}
+CheckIgnoreFileExistsSync{"Check if .templatesyncignore file exists\n(First inside .github folder, then in root)"}
 ResetChangesSync["Reset the changes listed within the ignore file"]
 GitCommitSync["commit the changes"]
 
@@ -69,11 +67,9 @@ EnvCheckSync -->|do exist| SshConfigureSync
 SshConfigureSync --> SetVariablesSync
 
 subgraph compareVersion["compare the sync version"]
-SetVariablesSync --> CheckTemplateFileExistsGithub
-CheckTemplateFileExistsGithub -->|exists| WriteTemplateVersionSync
-CheckTemplateFileExistsGithub -->|does not exist|CheckTemplateFileExistsRoot
-CheckTemplateFileExistsRoot --> |exists| WriteTemplateVersionSync
-CheckTemplateFileExistsRoot --> |does not exist| CompareTemplateVersionSync
+SetVariablesSync --> CheckTemplateFileExists
+CheckTemplateFileExists -->|exists| WriteTemplateVersionSync
+CheckTemplateFileExists -->|does not exist| CompareTemplateVersionSync
 WriteTemplateVersionSync --> CompareTemplateVersionSync
 CompareTemplateVersionSync -->|equal versions| Exit
 end
@@ -82,10 +78,8 @@ subgraph git["Git actions"]
 CompareTemplateVersionSync -->|versions not equal| GitCheckoutSync
 GitCheckoutSync --> GitPullSync
 GitPullSync --> CheckIgnoreFileExistsSync
-CheckIgnoreFileExistsSyncGithub -->|exists| ResetChangesSync
-CheckIgnoreFileExistsSyncGithub -->|does not exist| CheckIgnoreFileExistsSyncRoot
-CheckIgnoreFileExistsSyncRoot -->|exists| ResetChangesSync
-CheckIgnoreFileExistsSyncRoot -->|does not exist| GitCommitSync
+CheckIgnoreFileExistsSync -->|does not exist| GitCommitSync
+CheckIgnoreFileExistsSync -->|exists| ResetChangesSync
 ResetChangesSync --> GitCommitSync
 end
 
