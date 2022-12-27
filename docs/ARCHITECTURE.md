@@ -23,11 +23,9 @@ SshConfigureEntry[Configure ssh related variables]
 GitConfigureEntry[Configure git global settings]
 
 EnvCheckSync{Required environment variables exists}
-SshConfigureSync[Configure SSH variables]
+SshConfigureSync[Eventually configure SSH variables]
 SetVariablesSync[Set the needed variables, e.q. with reading remote repository]
-CheckTemplateFileExists{"Check if the .templatesyncrc file exists\n(First inside .github folder, then in root)"}
-WriteTemplateVersionSync["Read and write the template sync version into variable"]
-CompareTemplateVersionSync{"Compare the source repository version"}
+CheckCommitLocalExistent{"Check if source commit hash is present in target repo"}
 GitCheckoutSync["Create git branch <branch_prefix_git_hash>"]
 GitPullSync["Pull from remote repository"]
 CheckIgnoreFileExistsSync{"Check if .templatesyncignore file exists\n(First inside .github folder, then in root)"}
@@ -67,15 +65,12 @@ EnvCheckSync -->|do exist| SshConfigureSync
 SshConfigureSync --> SetVariablesSync
 
 subgraph compareVersion["Compare the sync version"]
-SetVariablesSync --> CheckTemplateFileExists
-CheckTemplateFileExists -->|exists| WriteTemplateVersionSync
-CheckTemplateFileExists -->|does not exist| CompareTemplateVersionSync
-WriteTemplateVersionSync --> CompareTemplateVersionSync
-CompareTemplateVersionSync -->|equal versions| Exit
+SetVariablesSync --> CheckCommitLocalExistent
+CheckCommitLocalExistent -->|commit hash already in target history| Exit
 end
 
 subgraph git["Git Actions"]
-CompareTemplateVersionSync -->|versions not equal| GitCheckoutSync
+CheckCommitLocalExistent -->|commit hash not in target history| GitCheckoutSync
 GitCheckoutSync --> GitPullSync
 GitPullSync --> CheckIgnoreFileExistsSync
 CheckIgnoreFileExistsSync -->|does not exist| GitCommitSync

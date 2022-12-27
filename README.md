@@ -20,6 +20,10 @@ This GitHub action will help you to keep track of the template changes.
 
 ## Usage
 
+### Update
+
+starting with version v0.5.2-draft the `templateversionrc` file is not needed anymore. You can delete that file from the target repositories.
+
 ### GitHub Actions
 
 Add this configuration to your github action
