@@ -32,51 +32,38 @@ if [[ -n "${SRC_SSH_PRIVATEKEY_ABS_PATH}" ]]; then
   export GIT_SSH_COMMAND="ssh -i ${SRC_SSH_PRIVATEKEY_ABS_PATH}"
 fi
 
-TEMPLATE_VERSION_FILE_PATH=".templateversionrc"
 TEMPLATE_SYNC_IGNORE_FILE_PATH=".templatesyncignore"
 TEMPLATE_REMOTE_GIT_HASH=$(git ls-remote "${SOURCE_REPO}" HEAD | awk '{print $1}')
 NEW_TEMPLATE_GIT_HASH=$(git rev-parse --short "${TEMPLATE_REMOTE_GIT_HASH}")
 NEW_BRANCH="${PR_BRANCH_NAME_PREFIX}_${NEW_TEMPLATE_GIT_HASH}"
-
-echo "::group::Check new changes"
 debug "new Git HASH ${NEW_TEMPLATE_GIT_HASH}"
 
-# Check if the Version File exists inside .github folder or if it doesn't exist at all
-if [[ -f ".github/${TEMPLATE_VERSION_FILE_PATH}" || ! -f "${TEMPLATE_VERSION_FILE_PATH}" ]]; then
-  debug "using version file as in .github folder"
-  TEMPLATE_VERSION_FILE_PATH=".github/${TEMPLATE_VERSION_FILE_PATH}"
-fi
-if [ -r ${TEMPLATE_VERSION_FILE_PATH} ]; then
-  CURRENT_TEMPLATE_GIT_HASH=$(cat ${TEMPLATE_VERSION_FILE_PATH})
-  debug "Current git hash ${CURRENT_TEMPLATE_GIT_HASH}"
-fi
+echo "::group::Check new changes"
 
-if [ "${NEW_TEMPLATE_GIT_HASH}" == "${CURRENT_TEMPLATE_GIT_HASH}" ]; then
-  warn "repository is up to date"
-  exit 0
-fi
+exit_with_warn() {
+    warn "$*"
+    exit 0
+}
+
+git cat-file -e "${TEMPLATE_REMOTE_GIT_HASH}" || exit_with_warn "repository is up to date"
+
 echo "::endgroup::"
 
 echo "::group::Pull template"
 debug "create new branch from default branch with name ${NEW_BRANCH}"
 git checkout -b "${NEW_BRANCH}"
 debug "pull changes from template"
+# TODO(anau) eventually make squash optional
 git pull "${SOURCE_REPO}" --allow-unrelated-histories --squash --strategy=recursive -X theirs
 echo "::endgroup::"
 
-if [ -s "${TEMPLATE_SYNC_IGNORE_FILE_NAME}" ]
-then
+if [ -s "${TEMPLATE_SYNC_IGNORE_FILE_NAME}" ]; then
   echo "::group::restore ignore file"
+	info "restore the ignore file"
   git reset "${TEMPLATE_SYNC_IGNORE_FILE_NAME}"
   git checkout -- "${TEMPLATE_SYNC_IGNORE_FILE_NAME}"
   echo "::endgroup::"
 fi
-
-echo "::group::persist template version"
-info "write new template version file"
-echo "${NEW_TEMPLATE_GIT_HASH}" > ${TEMPLATE_VERSION_FILE_PATH}
-debug "wrote new template version file with content $(cat ${TEMPLATE_VERSION_FILE_PATH})"
-echo "::endgroup::"
 
 echo "::group::commit changes"
 git add .
