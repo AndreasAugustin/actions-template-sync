@@ -32,4 +32,4 @@ prune: ## delete the whole environment
 
 .Phony: shellcheck
 shellcheck:  ## run shellcheck
-	docker-compose run shellcheck -x src/entrypoint.sh
+	docker-compose run shellcheck -x src/*.sh
