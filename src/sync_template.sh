@@ -40,12 +40,11 @@ debug "new Git HASH ${NEW_TEMPLATE_GIT_HASH}"
 
 echo "::group::Check new changes"
 
-exit_with_warn() {
-    warn "$*"
-    exit 0
-}
-
-git cat-file -e "${TEMPLATE_REMOTE_GIT_HASH}" || exit_with_warn "repository is up to date"
+git cat-file -e "${TEMPLATE_REMOTE_GIT_HASH}" || COMMIT_NOT_IN_HIST=true
+if [ "$COMMIT_NOT_IN_HIST" != true ] ; then
+    warn "repository is up to date!"
+		exit 0
+fi
 
 echo "::endgroup::"
 
