@@ -20,6 +20,10 @@ This GitHub action will help you to keep track of the template changes.
 
 ## Usage
 
+### Update
+
+starting with version v0.5.2-draft the `templateversionrc` file is not needed anymore. You can delete that file from the target repositories.
+
 ### GitHub Actions
 
 Add this configuration to your github action
@@ -59,7 +63,8 @@ You will receive a pull request within your repository if there are some changes
 | github_token | Token for the repo. Can be passed in using `$\{{ secrets.GITHUB_TOKEN }}` | `true` |  |
 | source_repo_path | Repository path of the template | `true` | |
 | upstream_branch | The target branch | `true` | `main` |
-| source_repo_ssh_private_key | `[optional]` private ssh key for the source repository. E.q. useful if using a private template repository. [see](#private-template-repository)| `false` |  |
+| source_repo_ssh_private_key | `[optional]` private ssh key for the source repository. E.q. useful if using a private template repository.
+[see](#private-template-repository)| `false` |  |
 | pr_branch_name_prefix | `[optional]` the prefix of branches created by this action | `false` | `chore/template_sync`  |
 | pr_title | `[optional]` the title of PRs opened by this action. Must be already created. | `false` | `upstream merge template repository`  |
 | pr_labels | `[optional]` comma separated list. [pull request labels][pr-labels]. Must be already created. | `false` | |
@@ -85,8 +90,9 @@ If you have a private template repository.
 #### SSH
 
 You have various options to use ssh keys with GitHub.
-An example are [deployment keys][deployment-keys]. For our use case write permissions are not needed.
-Within the repository where the GitHub action is enabled add a secret (e.q. `SOURCE_REPO_SSH_PRIVATE_KEY`) with the content of your private SSH key. Make sure that the read permissions of that secret fulfil your use case.
+An example are [deployment keys][deployment-keys]. For our use case write permissions are not needed.i
+Within the repository where the GitHub action is enabled add a secret (e.q. `SOURCE_REPO_SSH_PRIVATE_KEY`) with the content of your private SSH key.
+Make sure that the read permissions of that secret fulfil your use case.
 Set the optional `source_repo_ssh_private_key` input parameter.
 
 ```yaml
@@ -110,7 +116,8 @@ jobs:
 
 ## Ignore Files
 
-Create a `.templatesyncignore` file. Just like writing a `.gitignore` file, follow the [glob pattern](https://en.wikipedia.org/wiki/Glob_(programming)) in defining the files and folders that should be excluded from syncing with the template repository.
+Create a `.templatesyncignore` file. Just like writing a `.gitignore` file, follow the [glob pattern](https://en.wikipedia.org/wiki/Glob_(programming))
+in defining the files and folders that should be excluded from syncing with the template repository.
 
 It can also be stored inside `.github` folder.
 
@@ -118,7 +125,8 @@ _Note: It is not possible to sync also the `.templatesyncignore` itself. Any cha
 
 ## Debug
 
-You must create a secret named `ACTIONS_STEP_DEBUG` with the value `true` to see the debug messages set by this command in the log. For more information, see "[Enabling debug logging.][enabling-debug-logging]"
+You must create a secret named `ACTIONS_STEP_DEBUG` with the value `true` to see the debug messages set by this command in the log.
+For more information, see "[Enabling debug logging.][enabling-debug-logging]"
 
 ## DEV
 
