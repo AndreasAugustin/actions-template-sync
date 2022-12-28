@@ -7,7 +7,8 @@ branding:
 inputs:
   github_token:
     description: 'Token for the repo. Can be passed in using $\{{ secrets.GITHUB_TOKEN }}'
-    required: true
+    # TODO(anau)
+    # required: true
   source_repo_path:
     description: 'Repository path of the template'
     required: true
@@ -17,8 +18,9 @@ inputs:
     default: 'main'
   source_repo_ssh_private_key:
     description: '[optional] private ssh key for the source repository. E.q. useful if using a private template repository.'
+  # TODO(anau)
   source_repo_github_token:
-    description: '[optional] Separate github token to interact with the source repository. Using $\{{ inputs.github_token }} by default.'
+     description: '[optional] Separate github token to interact with the source repository. Using $\{{ inputs.github_token }} by default.'
   pr_branch_name_prefix:
     description: '[optional] the prefix of branches created by this action'
     default: 'chore/template_sync'

@@ -64,6 +64,7 @@ You will receive a pull request within your repository if there are some changes
 | source_repo_path | Repository path of the template | `true` | |
 | upstream_branch | The target branch | `true` | `main` |
 | source_repo_ssh_private_key | `[optional]` private ssh key for the source repository. [see](#private-template-repository)| `false` |  |
+| source_repo_github_token | `[optional]` separate github token to interact with the source repository. | `false` | `$\{{ inputs.github_token }}` |
 | pr_branch_name_prefix | `[optional]` the prefix of branches created by this action | `false` | `chore/template_sync`  |
 | pr_title | `[optional]` the title of PRs opened by this action. Must be already created. | `false` | `upstream merge template repository`  |
 | pr_labels | `[optional]` comma separated list. [pull request labels][pr-labels]. Must be already created. | `false` | |
@@ -88,7 +89,8 @@ If you have a private template repository.
 
 #### Using github app
 
-You can create and use a [GitHub App](https://docs.github.com/en/developers/apps/getting-started-with-apps/about-apps#about-github-apps) to handle the access to your private repository. To generate a token for your app you can use a separate action like [tibdex/github-app-token](https://github.com/tibdex/github-app-token).
+You can create and use a [GitHub App][github-app] to handle the access to your private repository.
+To generate a token for your app you can use a separate action like [tibdex/github-app-token][github-app-token].
 
 ```yaml
 jobs:
@@ -142,7 +144,7 @@ jobs:
 
 ## Ignore Files
 
-Create a `.templatesyncignore` file. Just like writing a `.gitignore` file, follow the [glob pattern](https://en.wikipedia.org/wiki/Glob_(programming))
+Create a `.templatesyncignore` file. Just like writing a `.gitignore` file, follow the [glob pattern][glob-pattern]
 in defining the files and folders that should be excluded from syncing with the template repository.
 
 It can also be stored inside `.github` folder.
@@ -211,3 +213,6 @@ specification. Contributions of any kind welcome!
 [pr-labels]: https://docs.github.com/en/issues/using-labels-and-milestones-to-track-work/managing-labels
 [devto-example]: https://dev.to/andreasaugustin/github-actions-template-sync-1g9k
 [github-example]: https://github.com/AndreasAugustin/teaching/blob/main/docs/git/git_action_sync.md
+[github-app]: https://docs.github.com/en/developers/apps/getting-started-with-apps/about-apps#about-github-apps
+[glob-pattern]: https://en.wikipedia.org/wiki/Glob_(programming)
+[github-app-token]: https://github.com/tibdex/github-app-token

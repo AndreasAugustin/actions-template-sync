@@ -7,6 +7,8 @@ on:
   # manual trigger
   workflow_dispatch:
 
+permissions: read-all
+
 jobs:
   repo-sync:
     runs-on: ubuntu-latest
