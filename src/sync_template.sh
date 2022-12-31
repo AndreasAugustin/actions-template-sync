@@ -56,6 +56,12 @@ debug "pull changes from template"
 git pull "${SOURCE_REPO}" --allow-unrelated-histories --squash --strategy=recursive -X theirs
 echo "::endgroup::"
 
+# Check if the Ignore File exists inside .github folder or if it doesn't exist at all
+if [[ -f ".github/${TEMPLATE_SYNC_IGNORE_FILE_PATH}" || ! -f "${TEMPLATE_SYNC_IGNORE_FILE_PATH}" ]]; then
+  debug "using ignore file as in .github folder"
+  TEMPLATE_SYNC_IGNORE_FILE_PATH=".github/${TEMPLATE_SYNC_IGNORE_FILE_PATH}"
+fi
+
 if [ -s "${TEMPLATE_SYNC_IGNORE_FILE_PATH}" ]; then
   echo "::group::restore ignore file"
 	info "restore the ignore file"
@@ -67,14 +73,9 @@ fi
 echo "::group::commit changes"
 git add .
 
-# Check if the Ignore File exists inside .github folder or if it doesn't exist at all
-if [[ -f ".github/${TEMPLATE_SYNC_IGNORE_FILE_PATH}" || ! -f "${TEMPLATE_SYNC_IGNORE_FILE_PATH}" ]]; then
-  debug "using ignore file as in .github folder"
-  TEMPLATE_SYNC_IGNORE_FILE_PATH=".github/${TEMPLATE_SYNC_IGNORE_FILE_PATH}"
-fi
 # we are checking the ignore file if it exists or is empty
 # -s is true if the file contains whitespaces
-if [ -s ${TEMPLATE_SYNC_IGNORE_FILE_PATH} ]; then
+if [ -s "${TEMPLATE_SYNC_IGNORE_FILE_PATH}" ]; then
   debug "unstage files from template sync ignore"
   git reset --pathspec-from-file="${TEMPLATE_SYNC_IGNORE_FILE_PATH}"
 
