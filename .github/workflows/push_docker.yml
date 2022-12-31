@@ -60,7 +60,8 @@ jobs:
           push: false
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-      name: run tests
+      -
+        name: run tests
         run: |
           echo "Install container tools"
           curl -LO https://storage.googleapis.com/container-structure-test/latest/container-structure-test-linux-amd64 \
