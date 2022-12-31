@@ -6,7 +6,7 @@ on:
   # Also run on updates to this repo.
   push:
     branches:
-      - fix/*
+      - main
     tags:
       - 'v*'
     paths-ignore:
