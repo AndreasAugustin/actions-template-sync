@@ -54,7 +54,6 @@ function git_init() {
 	git config --global pull.rebase false
 	git config --global --add safe.directory /github/workspace
 	git lfs install
-	git pull
 
 	echo "::endgroup::"
 }
