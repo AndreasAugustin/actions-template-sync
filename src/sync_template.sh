@@ -40,10 +40,21 @@ debug "new Git HASH ${NEW_TEMPLATE_GIT_HASH}"
 
 echo "::group::Check new changes"
 
+check_branch_remote_existing() {
+  git ls-remote --exit-code --heads origin "${NEW_BRANCH}" || BRANCH_DOES_NOT_EXIST=true
+
+  if [[ "${BRANCH_DOES_NOT_EXIST}" != true ]]; then
+    warn "Git branch '${NEW_BRANCH}' exists in the remote repository"
+    exit 0
+  fi
+}
+
+check_branch_remote_existing
+
 git cat-file -e "${TEMPLATE_REMOTE_GIT_HASH}" || COMMIT_NOT_IN_HIST=true
 if [ "$COMMIT_NOT_IN_HIST" != true ] ; then
     warn "repository is up to date!"
-		exit 0
+    exit 0
 fi
 
 echo "::endgroup::"
