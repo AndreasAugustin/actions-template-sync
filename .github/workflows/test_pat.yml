@@ -13,12 +13,14 @@ jobs:
 
     steps:
       # To use this repository's private action, you must check out the repository
-      - name: Checkout
+      -
+        name: Checkout
         uses: actions/checkout@v3
-      - name: Test action step ssh
+      -
+        name: Test action step PAT
         uses: ./ # Uses an action in the root directory
         with:
           # github_token: ${{ secrets.GITHUB_TOKEN }}
-          source_repo_path: ${{ secrets.SOURCE_REPO_PATH_SSH }} # <owner/repo>, should be within secrets
+          source_repo_path: ${{ secrets.SOURCE_REPO_PATH_TEST }} # <owner/repo>, should be within secrets
           source_repo_github_token: ${{ secrets.SOURCE_REPO_PAT }} # contains the private PAT of the private repository
           is_dry_run: true

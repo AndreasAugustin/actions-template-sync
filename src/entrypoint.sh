@@ -12,10 +12,10 @@ if [[ -z "${GITHUB_TOKEN}" && -z "${SOURCE_REPO_GITHUB_TOKEN}" ]]; then
     exit 1;
 fi
 
-if [[ -z "${SOURCE_REPO_GITHUB_TOKEN}" ]]; then
-  debug "Missing input 'source_repo_github_token: \${{ input.source_repo_github_token }}'. Using github_token as default."
-  SOURCE_REPO_GITHUB_TOKEN="${GITHUB_TOKEN}"
-fi
+# if [[ -z "${SOURCE_REPO_GITHUB_TOKEN}" ]]; then
+#   debug "Missing input 'source_repo_github_token: \${{ input.source_repo_github_token }}'. Using github_token as default."
+#   SOURCE_REPO_GITHUB_TOKEN="${GITHUB_TOKEN}"
+# fi
 
 if [[ -z "${SOURCE_REPO_PATH}" ]]; then
   err "Missing input 'source_repo_path: \${{ input.source_repo_path }}'.";
@@ -24,7 +24,7 @@ fi
 
 SOURCE_REPO_HOSTNAME="${HOSTNAME:-github.com}"
 
-# In case of private template repository this will be overwritten
+# In case of ssh template repository this will be overwritten
 SOURCE_REPO_PREFIX="https://${SOURCE_REPO_HOSTNAME}/"
 
 function ssh_setup() {
@@ -61,14 +61,18 @@ function git_init() {
   git config --global --add safe.directory /github/workspace
   git lfs install
 
-	# TODO(anau) check
-	# gh auth setup-git
-	# git config --global "credential.https://${SOURCE_REPO_HOSTNAME}.helper" "!gh auth git-credential"
-	if [[ -z "${SOURCE_REPO_GITHUB_TOKEN}" ]]; then
-		gh auth setup-git --hostname "${SOURCE_REPO_HOSTNAME}"
-		gh auth login --git-protocol "https" --hostname "${SOURCE_REPO_HOSTNAME}" --with-token <<< "${SOURCE_REPO_GITHUB_TOKEN}"
-	fi
-	echo "::endgroup::"
+  if [[ -n "${SOURCE_REPO_GITHUB_TOKEN}" ]]; then
+      if [[ -z "${GITHUB_TOKEN}" ]]; then
+        export GITHUB_TOKEN_BK="${GITHUB_TOKEN}"
+        unset GITHUB_TOKEN
+      fi
+
+    gh auth login --git-protocol "https" --hostname "${SOURCE_REPO_HOSTNAME}" --with-token <<< "${SOURCE_REPO_GITHUB_TOKEN}"
+    gh auth setup-git --hostname "${SOURCE_REPO_HOSTNAME}"
+    # git config --global "credential.https://${SOURCE_REPO_HOSTNAME}.helper" "!gh auth git-credential"
+    gh auth status
+  fi
+  echo "::endgroup::"
 }
 
 git_init
