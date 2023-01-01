@@ -5,3 +5,4 @@ Dockerfile
 SECURITY.md
 docker-compose.yml
 Makefile
+github/workflows/*
