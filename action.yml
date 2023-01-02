@@ -38,7 +38,6 @@ runs:
   image: 'src/Dockerfile'
   env:
     GITHUB_TOKEN: ${{ inputs.github_token }}
-    SOURCE_REPO_GITHUB_TOKEN: ${{ inputs.source_repo_github_token }}
     SOURCE_REPO_PATH: ${{ inputs.source_repo_path }}
     UPSTREAM_BRANCH: ${{ inputs.upstream_branch }}
     SSH_PRIVATE_KEY_SRC: ${{ inputs.source_repo_ssh_private_key }}
