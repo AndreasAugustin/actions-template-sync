@@ -62,13 +62,9 @@ echo "::endgroup::"
 echo "::group::Pull template"
 debug "create new branch from default branch with name ${NEW_BRANCH}"
 git checkout -b "${NEW_BRANCH}"
-<<<<<<< HEAD
 debug "pull changes from template"
-# TODO(anau) eventually make squash optional
-=======
-echo "::debug::pull changes from template"
 gh auth login --git-protocol "https" --hostname "${SOURCE_REPO_HOSTNAME}" --with-token <<< "${SOURCE_REPO_GITHUB_TOKEN}"
->>>>>>> 42e4d55 (feat(gh-auth): add own source_repo_github_token handling for template repo)
+# TODO(anau) eventually make squash optional
 git pull "${SOURCE_REPO}" --allow-unrelated-histories --squash --strategy=recursive -X theirs
 echo "::endgroup::"
 
@@ -108,16 +104,11 @@ echo "::endgroup::"
 
 push_and_create_pr () {
   if [ "$IS_DRY_RUN" != "true" ]; then
-<<<<<<< HEAD
-		echo "::group::push changes and create PR"
-    debug "push changes"
-=======
     echo "::group::final gh auth login before creating pull request"
     gh auth login --git-protocol "https" --hostname "${SOURCE_REPO_HOSTNAME}" --with-token <<< "${GITHUB_TOKEN}"
     echo "::endgroup::"
 
-    echo "::debug::push changes"
->>>>>>> 42e4d55 (feat(gh-auth): add own source_repo_github_token handling for template repo)
+    echo "::group::push changes and create PR"
     git push --set-upstream origin "${NEW_BRANCH}"
 
     gh pr create \
