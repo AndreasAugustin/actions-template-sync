@@ -67,7 +67,7 @@ function git_init() {
   git lfs install
 
   if [[ -n "${SOURCE_REPO_GITHUB_TOKEN}" ]]; then
-      if [[ -z "${GITHUB_TOKEN}" ]]; then
+      if [[ -n "${GITHUB_TOKEN}" ]]; then
         export GITHUB_TOKEN_BK="${GITHUB_TOKEN}"
         unset GITHUB_TOKEN
       fi
