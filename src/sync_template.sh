@@ -114,7 +114,7 @@ echo "::endgroup::"
 push_and_create_pr () {
   if [ "$IS_DRY_RUN" != "true" ]; then
     echo "::group::final gh auth login before creating pull request"
-    if [[ -z "${GITHUB_TOKEN_BK}" ]]; then
+    if [[ -n "${GITHUB_TOKEN_BK}" ]]; then
         export GITHUB_TOKEN="${GITHUB_TOKEN_BK}"
         gh auth login --git-protocol "https" --hostname "${SOURCE_REPO_HOSTNAME}" --with-token <<< "${GITHUB_TOKEN}"
     fi
