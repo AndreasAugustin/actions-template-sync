@@ -64,7 +64,6 @@ You will receive a pull request within your repository if there are some changes
 | source_repo_path | Repository path of the template | `true` | |
 | upstream_branch | The target branch | `true` | `main` |
 | source_repo_ssh_private_key | `[optional]` private ssh key for the source repository. [see](#private-template-repository)| `false` |  |
-| source_repo_github_token | `[optional]` separate github token to interact with the source repository. | `false` | `$\{{ inputs.github_token }}` |
 | pr_branch_name_prefix | `[optional]` the prefix of branches created by this action | `false` | `chore/template_sync`  |
 | pr_title | `[optional]` the title of PRs opened by this action. Must be already created. | `false` | `upstream merge template repository`  |
 | pr_labels | `[optional]` comma separated list. [pull request labels][pr-labels]. Must be already created. | `false` | |
@@ -106,10 +105,9 @@ jobs:
           private_key: ${{ secrets.PRIVATE_KEY }}
 
       - name: actions-template-sync
-        uses: AndreasAugustin/actions-template-sync@v0.5.0-draft
+        uses: AndreasAugustin/actions-template-sync@v0.5.5-draft
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          source_repo_github_token: ${{ steps.generate_token.outputs.token }}
+          github_token: ${{ steps.generate_token.outputs.token }}
           source_repo_path: <owner/repo>
           upstream_branch: <target_branch> # defaults to main
           pr_labels: <label1>,<label2>[,...] # optional, no default

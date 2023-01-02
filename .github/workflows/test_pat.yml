@@ -20,7 +20,6 @@ jobs:
         name: Test action step PAT
         uses: ./ # Uses an action in the root directory
         with:
-          # github_token: ${{ secrets.GITHUB_TOKEN }}
+          github_token: ${{ secrets.SOURCE_REPO_PAT }}
           source_repo_path: ${{ secrets.SOURCE_REPO_PATH_TEST }} # <owner/repo>, should be within secrets
-          source_repo_github_token: ${{ secrets.SOURCE_REPO_PAT }} # contains the private PAT of the private repository
           is_dry_run: true

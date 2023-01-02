@@ -5,9 +5,9 @@ services:
     build:
       context: .
       target: dev
-    # volumes:
-      #- .:/app/
-      # - ~/.gitconfig:/root/.gitconfig:ro
+    volumes:
+      - .:/app/
+      - ~/.gitconfig:/root/.gitconfig:ro
     environment:
       - SSH_PRIVATE_KEY_SRC
 

@@ -6,20 +6,9 @@ set -x
 # shellcheck source=src/sync_common.sh
 source sync_common.sh
 
-if [[ -z "${GITHUB_TOKEN}" && -z "${SOURCE_REPO_GITHUB_TOKEN}" ]]; then
-# TODO
+if [[ -z "${GITHUB_TOKEN}" ]]; then
     err "Missing input 'github_token: \${{ secrets.GITHUB_TOKEN }}'.";
     exit 1;
-fi
-
-# if [[ -z "${SOURCE_REPO_GITHUB_TOKEN}" ]]; then
-#   debug "Missing input 'source_repo_github_token: \${{ input.source_repo_github_token }}'. Using github_token as default."
-#   SOURCE_REPO_GITHUB_TOKEN="${GITHUB_TOKEN}"
-# fi
-
-if [[ -z "${SOURCE_REPO_GITHUB_TOKEN}" ]]; then
-  echo "::debug::Missing input 'source_repo_github_token: \${{ input.source_repo_github_token }}'. Using github_token as default."
-  SOURCE_REPO_GITHUB_TOKEN="${GITHUB_TOKEN}"
 fi
 
 if [[ -z "${SOURCE_REPO_PATH}" ]]; then
@@ -52,6 +41,10 @@ function ssh_setup() {
 # Forward to /dev/null to swallow the output of the private key
 if [[ -n "${SSH_PRIVATE_KEY_SRC}" ]] &>/dev/null; then
   ssh_setup
+else
+  gh auth login --git-protocol "https" --hostname "${SOURCE_REPO_HOSTNAME}" --with-token <<< "${GITHUB_TOKEN}"
+  gh auth setup-git --hostname "${SOURCE_REPO_HOSTNAME}"
+  gh auth status
 fi
 
 export SOURCE_REPO="${SOURCE_REPO_PREFIX}${SOURCE_REPO_PATH}"
@@ -66,17 +59,6 @@ function git_init() {
   git config --global --add safe.directory /github/workspace
   git lfs install
 
-  if [[ -n "${SOURCE_REPO_GITHUB_TOKEN}" ]]; then
-      if [[ -n "${GITHUB_TOKEN}" ]]; then
-        export GITHUB_TOKEN_BK="${GITHUB_TOKEN}"
-        unset GITHUB_TOKEN
-      fi
-
-    gh auth login --git-protocol "https" --hostname "${SOURCE_REPO_HOSTNAME}" --with-token <<< "${SOURCE_REPO_GITHUB_TOKEN}"
-    gh auth setup-git --hostname "${SOURCE_REPO_HOSTNAME}"
-    # git config --global "credential.https://${SOURCE_REPO_HOSTNAME}.helper" "!gh auth git-credential"
-    gh auth status
-  fi
   echo "::endgroup::"
 }
 

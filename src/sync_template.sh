@@ -32,15 +32,6 @@ if [[ -n "${SRC_SSH_PRIVATEKEY_ABS_PATH}" ]]; then
   export GIT_SSH_COMMAND="ssh -i ${SRC_SSH_PRIVATEKEY_ABS_PATH}"
 fi
 
-#if [[ -n "${SOURCE_REPO_GITHUB_TOKEN}" ]]; then
-#	debug "using github token for source repo"
-	# TODO(anau) check this later
-#	unset GITHUB_TOKEN
-#	gh auth login --git-protocol "https" --hostname "${SOURCE_REPO_HOSTNAME}" --with-token <<< "${SOURCE_REPO_GITHUB_TOKEN}"
-#	gh auth setup-git
-#	sleep 1
-# fi
-
 TEMPLATE_SYNC_IGNORE_FILE_PATH=".templatesyncignore"
 TEMPLATE_REMOTE_GIT_HASH=$(git ls-remote "${SOURCE_REPO}" HEAD | awk '{print $1}')
 NEW_TEMPLATE_GIT_HASH=$(git rev-parse --short "${TEMPLATE_REMOTE_GIT_HASH}")
@@ -113,15 +104,8 @@ echo "::endgroup::"
 
 push_and_create_pr () {
   if [ "$IS_DRY_RUN" != "true" ]; then
-    echo "::group::final gh auth login before creating pull request"
-    if [[ -n "${GITHUB_TOKEN_BK}" ]]; then
-        export GITHUB_TOKEN="${GITHUB_TOKEN_BK}"
-        gh auth login --git-protocol "https" --hostname "${SOURCE_REPO_HOSTNAME}" --with-token <<< "${GITHUB_TOKEN}"
-    fi
 
-    echo "::endgroup::"
-
-		echo "::group::push changes and create PR"
+    echo "::group::push changes and create PR"
     debug "push changes"
     git push --set-upstream origin "${NEW_BRANCH}"
 
