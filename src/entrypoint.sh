@@ -43,8 +43,8 @@ if [[ -n "${SSH_PRIVATE_KEY_SRC}" ]] &>/dev/null; then
   ssh_setup
 else
   # gh auth login --git-protocol "https" --hostname "${SOURCE_REPO_HOSTNAME}"
-  gh auth setup-git --hostname "${SOURCE_REPO_HOSTNAME}"
-  gh auth status
+  git config --global "credential.https://${SOURCE_REPO_HOSTNAME}.helper" "!gh auth git-credential"
+  gh auth login --git-protocol "https" --hostname "${SOURCE_REPO_HOSTNAME}" --with-token <<< "${GITHUB_TOKEN}"
 fi
 
 export SOURCE_REPO="${SOURCE_REPO_PREFIX}${SOURCE_REPO_PATH}"
