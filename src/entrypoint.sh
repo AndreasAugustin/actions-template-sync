@@ -17,6 +17,11 @@ fi
 #   SOURCE_REPO_GITHUB_TOKEN="${GITHUB_TOKEN}"
 # fi
 
+if [[ -z "${SOURCE_REPO_GITHUB_TOKEN}" ]]; then
+  echo "::debug::Missing input 'source_repo_github_token: \${{ input.source_repo_github_token }}'. Using github_token as default."
+  SOURCE_REPO_GITHUB_TOKEN="${GITHUB_TOKEN}"
+fi
+
 if [[ -z "${SOURCE_REPO_PATH}" ]]; then
   err "Missing input 'source_repo_path: \${{ input.source_repo_path }}'.";
   exit 1
