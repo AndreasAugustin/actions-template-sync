@@ -76,7 +76,7 @@ fi
 
 if [ -s "${TEMPLATE_SYNC_IGNORE_FILE_PATH}" ]; then
   echo "::group::restore ignore file"
-	info "restore the ignore file"
+  info "restore the ignore file"
   git reset "${TEMPLATE_SYNC_IGNORE_FILE_PATH}"
   git checkout -- "${TEMPLATE_SYNC_IGNORE_FILE_PATH}"
   echo "::endgroup::"
@@ -96,6 +96,11 @@ if [ -s "${TEMPLATE_SYNC_IGNORE_FILE_PATH}" ]; then
 
   debug "discard all unstaged changes"
   git checkout -- .
+fi
+
+if git diff --quiet && git diff --staged --quiet; then
+  info "nothing to commit"
+  exit 0
 fi
 
 git commit -m "${PR_COMMIT_MSG}"
