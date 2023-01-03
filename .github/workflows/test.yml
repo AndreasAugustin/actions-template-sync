@@ -14,9 +14,11 @@ jobs:
 
     steps:
       # To use this repository's private action, you must check out the repository
-      - name: Checkout
+      -
+        name: Checkout
         uses: actions/checkout@v3
-      - name: Test action step
+      -
+        name: Test action step
         uses: ./ # Uses an action in the root directory
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}

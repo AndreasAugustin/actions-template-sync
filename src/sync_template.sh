@@ -63,6 +63,7 @@ echo "::group::Pull template"
 debug "create new branch from default branch with name ${NEW_BRANCH}"
 git checkout -b "${NEW_BRANCH}"
 debug "pull changes from template"
+
 # TODO(anau) eventually make squash optional
 git pull "${SOURCE_REPO}" --allow-unrelated-histories --squash --strategy=recursive -X theirs
 echo "::endgroup::"
@@ -103,7 +104,8 @@ echo "::endgroup::"
 
 push_and_create_pr () {
   if [ "$IS_DRY_RUN" != "true" ]; then
-		echo "::group::push changes and create PR"
+
+    echo "::group::push changes and create PR"
     debug "push changes"
     git push --set-upstream origin "${NEW_BRANCH}"
 

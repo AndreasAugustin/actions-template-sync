@@ -86,6 +86,33 @@ You can use all [triggers][action-triggers] which are supported for GitHub actio
 
 If you have a private template repository.
 
+#### Using github app
+
+You can create and use a [GitHub App][github-app] to handle the access to your private repository.
+To generate a token for your app you can use a separate action like [tibdex/github-app-token][github-app-token].
+
+```yaml
+jobs:
+  repo-sync:
+    runs-on: ubuntu-latest
+
+    steps:
+     - name: Generate token to read from source repo # see: https://github.com/tibdex/github-app-token
+        id: generate_token
+        uses: tibdex/github-app-token@v1
+        with:
+          app_id: ${{ secrets.APP_ID }}
+          private_key: ${{ secrets.PRIVATE_KEY }}
+
+      - name: actions-template-sync
+        uses: AndreasAugustin/actions-template-sync@v0.5.5-draft
+        with:
+          github_token: ${{ steps.generate_token.outputs.token }}
+          source_repo_path: <owner/repo>
+          upstream_branch: <target_branch> # defaults to main
+          pr_labels: <label1>,<label2>[,...] # optional, no default
+```
+
 #### SSH
 
 You have various options to use ssh keys with GitHub.
@@ -115,7 +142,7 @@ jobs:
 
 ## Ignore Files
 
-Create a `.templatesyncignore` file. Just like writing a `.gitignore` file, follow the [glob pattern](https://en.wikipedia.org/wiki/Glob_(programming))
+Create a `.templatesyncignore` file. Just like writing a `.gitignore` file, follow the [glob pattern][glob-pattern]
 in defining the files and folders that should be excluded from syncing with the template repository.
 
 It can also be stored inside `.github` folder.
@@ -184,3 +211,6 @@ specification. Contributions of any kind welcome!
 [pr-labels]: https://docs.github.com/en/issues/using-labels-and-milestones-to-track-work/managing-labels
 [devto-example]: https://dev.to/andreasaugustin/github-actions-template-sync-1g9k
 [github-example]: https://github.com/AndreasAugustin/teaching/blob/main/docs/git/git_action_sync.md
+[github-app]: https://docs.github.com/en/developers/apps/getting-started-with-apps/about-apps#about-github-apps
+[glob-pattern]: https://en.wikipedia.org/wiki/Glob_(programming)
+[github-app-token]: https://github.com/tibdex/github-app-token

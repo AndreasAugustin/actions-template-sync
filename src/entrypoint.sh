@@ -6,20 +6,21 @@ set -x
 # shellcheck source=src/sync_common.sh
 source sync_common.sh
 
-[ -z "${GITHUB_TOKEN}" ] && {
-  err "Missing input 'github_token: \${{ secrets.GITHUB_TOKEN }}'.";
-  exit 1;
-};
+if [[ -z "${GITHUB_TOKEN}" ]]; then
+    err "Missing input 'github_token: \${{ secrets.GITHUB_TOKEN }}'.";
+    exit 1;
+fi
 
 if [[ -z "${SOURCE_REPO_PATH}" ]]; then
   err "Missing input 'source_repo_path: \${{ input.source_repo_path }}'.";
   exit 1
 fi
 
-SOURCE_REPO_HOSTNAME="${HOSTNAME:-github.com}"
+DEFAULT_REPO_HOSTNAME="github.com"
+SOURCE_REPO_HOSTNAME="${HOSTNAME:-${DEFAULT_REPO_HOSTNAME}}"
 
-# In case of private template repository this will be overwritten
-SOURCE_REPO_PREFIX="https://${GITHUB_ACTOR}:${GITHUB_TOKEN}@${SOURCE_REPO_HOSTNAME}/"
+# In case of ssh template repository this will be overwritten
+SOURCE_REPO_PREFIX="https://${SOURCE_REPO_HOSTNAME}/"
 
 function ssh_setup() {
   echo "::group::ssh setup"
@@ -41,6 +42,8 @@ function ssh_setup() {
 # Forward to /dev/null to swallow the output of the private key
 if [[ -n "${SSH_PRIVATE_KEY_SRC}" ]] &>/dev/null; then
   ssh_setup
+elif [[ "${SOURCE_REPO_HOSTNAME}" != "${DEFAULT_REPO_HOSTNAME}" ]]; then
+  gh auth login --git-protocol "https" --hostname "${SOURCE_REPO_HOSTNAME}" --with-token <<< "${GITHUB_TOKEN}"
 fi
 
 export SOURCE_REPO="${SOURCE_REPO_PREFIX}${SOURCE_REPO_PATH}"
@@ -55,6 +58,8 @@ function git_init() {
   git config --global --add safe.directory /github/workspace
   git lfs install
 
+  gh auth setup-git --hostname "${SOURCE_REPO_HOSTNAME}"
+  gh auth status --hostname "${SOURCE_REPO_HOSTNAME}"
   echo "::endgroup::"
 }
 
