@@ -16,7 +16,8 @@ if [[ -z "${SOURCE_REPO_PATH}" ]]; then
   exit 1
 fi
 
-SOURCE_REPO_HOSTNAME="${HOSTNAME:-github.com}"
+DEFAULT_REPO_HOSTNAME="github.com"
+SOURCE_REPO_HOSTNAME="${HOSTNAME:-${DEFAULT_REPO_HOSTNAME}}"
 
 # In case of ssh template repository this will be overwritten
 SOURCE_REPO_PREFIX="https://${SOURCE_REPO_HOSTNAME}/"
@@ -41,9 +42,8 @@ function ssh_setup() {
 # Forward to /dev/null to swallow the output of the private key
 if [[ -n "${SSH_PRIVATE_KEY_SRC}" ]] &>/dev/null; then
   ssh_setup
-else
-  # gh auth login --git-protocol "https" --hostname "${SOURCE_REPO_HOSTNAME}"
-  git config --global "credential.https://${SOURCE_REPO_HOSTNAME}.helper" "!gh auth git-credential"
+elif [[ "${SOURCE_REPO_HOSTNAME}" != "${DEFAULT_REPO_HOSTNAME}" ]]; then
+  # git config --global "credential.https://${SOURCE_REPO_HOSTNAME}.helper" "!gh auth git-credential"
   gh auth login --git-protocol "https" --hostname "${SOURCE_REPO_HOSTNAME}" --with-token <<< "${GITHUB_TOKEN}"
 fi
 
@@ -59,6 +59,8 @@ function git_init() {
   git config --global --add safe.directory /github/workspace
   git lfs install
 
+  gh auth setup-git --hostname "${SOURCE_REPO_HOSTNAME}"
+  gh auth status --hostname "${SOURCE_REPO_HOSTNAME}"
   echo "::endgroup::"
 }
 
