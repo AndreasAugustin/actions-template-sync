@@ -1,4 +1,4 @@
-FROM alpine:3.17.0
+FROM alpine:3.17.1
 
 ARG GH_CLI_VER=2.21.1
 
