@@ -168,24 +168,29 @@ Following hooks are supported (please check [docs/ARCHITECTURE.md](docs/ARCHITEC
 * `prepush` is executed before the push is executed, right after the commit
 * `prepr` is executed before the PR is done
 
-**Remark** The underlying OS is defined by an alpine container. E.q. for the installation phase you need to use commands like `apk add --update --no-cache python3`
+**Remark** The underlying OS is defined by an alpine container.
+E.q. for the installation phase you need to use commands like `apk add --update --no-cache python3`
 
 Schema and example for the `temlatesync.yml`
 
 ```yml
 hooks:
   install:
-    - apk add --update --no-cache python3
-    - python3 --version
+    commands:
+      - apk add --update --no-cache python3
+      - python3 --version
   prepull:
-    - echo 'hi, we are within the prepull phase'
-    - echo 'maybe you want to do adjustments on the local code'
+    commands:
+      - echo 'hi, we are within the prepull phase'
+      - echo 'maybe you want to do adjustments on the local code'
   prepush:
-    - echo 'hi, we are within the prepush phase'
-    - echo 'maybe you want to add further changes and commits'
+    commands:
+      - echo 'hi, we are within the prepush phase'
+      - echo 'maybe you want to add further changes and commits'
   prepr:
-    - echo 'hi, we are within the prepr phase'
-    - echo 'maybe you want to change the code a bit and do another push before creating the pr'
+    commands:
+      - echo 'hi, we are within the prepr phase'
+      - echo 'maybe you want to change the code a bit and do another push before creating the pr'
 ```
 
 ## Debug
