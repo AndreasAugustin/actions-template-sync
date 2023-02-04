@@ -1,0 +1,11 @@
+# validate
+
+hooks:
+  install:
+    commands:
+      - echo 'hi, we are within the prepush phase'
+
+  prepush:
+    commands:
+      - echo 'hi, we are within the prepush phase'
+      - echo 'maybe you want to add further changes and commits'
