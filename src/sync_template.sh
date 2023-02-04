@@ -32,6 +32,8 @@ if [[ -n "${SRC_SSH_PRIVATEKEY_ABS_PATH}" ]]; then
   export GIT_SSH_COMMAND="ssh -i ${SRC_SSH_PRIVATEKEY_ABS_PATH}"
 fi
 
+cmd_from_yml_file "install"
+
 TEMPLATE_SYNC_IGNORE_FILE_PATH=".templatesyncignore"
 TEMPLATE_REMOTE_GIT_HASH=$(git ls-remote "${SOURCE_REPO}" HEAD | awk '{print $1}')
 NEW_TEMPLATE_GIT_HASH=$(git rev-parse --short "${TEMPLATE_REMOTE_GIT_HASH}")
@@ -58,6 +60,8 @@ if [ "$COMMIT_NOT_IN_HIST" != true ] ; then
 fi
 
 echo "::endgroup::"
+
+cmd_from_yml_file "prepull"
 
 echo "::group::Pull template"
 debug "create new branch from default branch with name ${NEW_BRANCH}"
@@ -108,11 +112,14 @@ git commit -m "${PR_COMMIT_MSG}"
 echo "::endgroup::"
 
 push_and_create_pr () {
+  cmd_from_yml_file "prepush"
   if [ "$IS_DRY_RUN" != "true" ]; then
 
     echo "::group::push changes and create PR"
     debug "push changes"
     git push --set-upstream origin "${NEW_BRANCH}"
+
+    cmd_from_yml_file "prepr"
 
     gh pr create \
       --title "${PR_TITLE}" \
