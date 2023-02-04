@@ -17,6 +17,7 @@ This GitHub action will help you to keep track of the template changes.
 * Sync other public or private repository (e.q. template repositories) with the current repository
 * Ignore files and folders from syncing using a `.templatesyncignore` file
 * many configuration options
+* different lifecycle hooks are supported
 
 ## Usage
 
@@ -70,6 +71,7 @@ You will receive a pull request within your repository if there are some changes
 | pr_commit_msg | `[optional]` commit message in the created pull request | `false` | `chore(template): merge template changes :up:` |
 | hostname | `[optional]` the hostname of the repository | `false` | `github.com` |
 | is_dry_run | `[optional]` set to `true` if you do not want to push the changes and not want to create a PR |  `false` |   |
+| is_allow_hooks | `[optional]` set to `true` if you want to enable lifecycle hooks. Use this with caution! | `false` | `false` |
 
 ### Example
 
@@ -149,6 +151,43 @@ It can also be stored inside `.github` folder.
 
 _Note: It is not possible to sync also the `.templatesyncignore` itself. Any changes from the template repository will be restored automatically._
 
+## Lifecycle hooks
+
+Different lifecycle hooks are supported. You need enable the functionality with the option `is_allow_hooks` and set it to `true`
+:warning: use this functionality with caution. You can use one of the available docker images to test it out. **With great power comes great responsibility**.
+
+* [dockerhub andyaugustin/actions-template-sync][dockerhub-repo]
+* [github andreasaugustin/actions-template-sync][github-repo]
+
+In addition you need a configuration file with the name `templatesync.yml` within the root of the target repository.
+
+Following hooks are supported (please check [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) for a better understanding of the lifecycles).
+
+* `install` is executed after the container has started and after reading and setting up the environment.
+* `prepull` is executed before the code is pulled from the source repository
+* `prepush` is executed before the push is executed, right after the commit
+* `prepr` is executed before the PR is done
+
+**Remark** The underlying OS is defined by an alpine container. E.q. for the installation phase you need to use commands like `apk add --update --no-cache python3`
+
+Schema and example for the `temlatesync.yml`
+
+```yml
+hooks:
+  install:
+    - apk add --update --no-cache python3
+    - python3 --version
+  prepull:
+    - echo 'hi, we are within the prepull phase'
+    - echo 'maybe you want to do adjustments on the local code'
+  prepush:
+    - echo 'hi, we are within the prepush phase'
+    - echo 'maybe you want to add further changes and commits'
+  prepr:
+    - echo 'hi, we are within the prepr phase'
+    - echo 'maybe you want to change the code a bit and do another push before creating the pr'
+```
+
 ## Debug
 
 You must create a secret named `ACTIONS_STEP_DEBUG` with the value `true` to see the debug messages set by this command in the log.
@@ -214,3 +253,5 @@ specification. Contributions of any kind welcome!
 [github-app]: https://docs.github.com/en/developers/apps/getting-started-with-apps/about-apps#about-github-apps
 [glob-pattern]: https://en.wikipedia.org/wiki/Glob_(programming)
 [github-app-token]: https://github.com/tibdex/github-app-token
+[dockerhub-repo]: https://hub.docker.com/r/andyaugustin/actions-template-sync
+[github-repo]: https://github.com/AndreasAugustin/actions-template-sync/pkgs/container/actions-template-sync
