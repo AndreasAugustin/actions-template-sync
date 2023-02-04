@@ -33,6 +33,9 @@ inputs:
     default: 'github.com'
   is_dry_run:
     description: '[optional] set to true if you do not want to push the changes and not want to create a PR'
+  is_allow_hooks:
+    description: '[optional] set to true if you want to allow hooks. Use this functionality with caution!'
+    default: 'false'
 runs:
   using: 'docker'
   image: 'src/Dockerfile'
@@ -47,3 +50,4 @@ runs:
     PR_COMMIT_MSG: ${{ inputs.pr_commit_msg }}
     HOSTNAME: ${{ inputs.hostname }}
     IS_DRY_RUN: ${{ inputs.is_dry_run }}
+    IS_ALLOW_HOOKS: ${{ inputs.is_allow_hooks }}
