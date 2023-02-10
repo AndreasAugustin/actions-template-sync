@@ -14,7 +14,7 @@ This GitHub action will help you to keep track of the template changes.
 
 ## Features
 
-* Sync other public or private repository (e.q. template repositories) with the current repository
+* Sync other public or private repository (e.g. template repositories) with the current repository
 * Ignore files and folders from syncing using a `.templatesyncignore` file
 * many configuration options
 * different lifecycle hooks are supported
@@ -25,7 +25,7 @@ This GitHub action will help you to keep track of the template changes.
 
 starting with version v0.5.2-draft the `templateversionrc` file is not needed anymore. You can delete that file from the target repositories.
 
-### GitHub Actions
+### Public template repository
 
 Add this configuration to your github action
 
@@ -56,33 +56,6 @@ jobs:
 ```
 
 You will receive a pull request within your repository if there are some changes available.
-
-### Configuration parameters
-
-| Variable | Description | Required | `[Default]` |
-|----|----|----|----|
-| github_token | Token for the repo. Can be passed in using `$\{{ secrets.GITHUB_TOKEN }}` | `true` |  |
-| source_repo_path | Repository path of the template | `true` | |
-| upstream_branch | The target branch | `true` | `main` |
-| source_repo_ssh_private_key | `[optional]` private ssh key for the source repository. [see](#private-template-repository)| `false` |  |
-| pr_branch_name_prefix | `[optional]` the prefix of branches created by this action | `false` | `chore/template_sync`  |
-| pr_title | `[optional]` the title of PRs opened by this action. Must be already created. | `false` | `upstream merge template repository`  |
-| pr_labels | `[optional]` comma separated list. [pull request labels][pr-labels]. Must be already created. | `false` | |
-| pr_commit_msg | `[optional]` commit message in the created pull request | `false` | `chore(template): merge template changes :up:` |
-| hostname | `[optional]` the hostname of the repository | `false` | `github.com` |
-| is_dry_run | `[optional]` set to `true` if you do not want to push the changes and not want to create a PR |  `false` |   |
-| is_allow_hooks | `[optional]` set to `true` if you want to enable lifecycle hooks. Use this with caution! | `false` | `false` |
-
-### Example
-
-This repo uses this [template][template] and this action from the [marketplace][marketplace].
-See the definition [here][self-usage].
-
-If you look for a more detailed guide you can have a look at [Dev.to][devto-example] or [GitHub][github-example]
-
-### Trigger
-
-You can use all [triggers][action-triggers] which are supported for GitHub actions
 
 ### Private template repository
 
@@ -142,6 +115,33 @@ jobs:
           source_repo_ssh_private_key: ${{ secrets.SOURCE_REPO_SSH_PRIVATE_KEY }} # contains the private ssh key of the private repository
 ```
 
+### Configuration parameters
+
+| Variable | Description | Required | `[Default]` |
+|----|----|----|----|
+| github_token | Token for the repo. Can be passed in using `$\{{ secrets.GITHUB_TOKEN }}` | `true` |  |
+| source_repo_path | Repository path of the template | `true` | |
+| upstream_branch | The target branch | `true` | `main` |
+| source_repo_ssh_private_key | `[optional]` private ssh key for the source repository. [see](#private-template-repository)| `false` |  |
+| pr_branch_name_prefix | `[optional]` the prefix of branches created by this action | `false` | `chore/template_sync`  |
+| pr_title | `[optional]` the title of PRs opened by this action. Must be already created. | `false` | `upstream merge template repository`  |
+| pr_labels | `[optional]` comma separated list. [pull request labels][pr-labels]. Must be already created. | `false` | |
+| pr_commit_msg | `[optional]` commit message in the created pull request | `false` | `chore(template): merge template changes :up:` |
+| hostname | `[optional]` the hostname of the repository | `false` | `github.com` |
+| is_dry_run | `[optional]` set to `true` if you do not want to push the changes and not want to create a PR |  `false` |   |
+| is_allow_hooks | `[optional]` set to `true` if you want to enable lifecycle hooks. Use this with caution! | `false` | `false` |
+
+### Example
+
+This repo uses this [template][template] and this action from the [marketplace][marketplace].
+See the definition [here][self-usage].
+
+If you look for a more detailed guide you can have a look at [Dev.to][devto-example] or [GitHub][github-example]
+
+### Trigger
+
+You can use all [triggers][action-triggers] which are supported for GitHub actions
+
 ## Ignore Files
 
 Create a `.templatesyncignore` file. Just like writing a `.gitignore` file, follow the [glob pattern][glob-pattern]
@@ -192,6 +192,16 @@ hooks:
       - echo 'hi, we are within the prepr phase'
       - echo 'maybe you want to change the code a bit and do another push before creating the pr'
 ```
+
+## Troubleshooting
+
+- refusing to allow a GitHub App to create or update workflow `.github/workflows/******.yml` without `workflows` permission
+
+This happens because the template repository is trying to overwrite some files inside `.github/workflows/`. Currently a github action can't overwrite these files. To ignore those, simply create a file in the root directory named `.templatesyncignore` with the content `.github/workflows/`.
+
+- pull request create failed: GraphQL: GitHub Actions is not permitted to create or approve pull requests (createPullRequest)
+
+Open your project `Settings > Actions > General` and select the checkbox `Allow Github Actions to create and approve pull requests` under the `Workflow permissions` section.
 
 ## Debug
 
