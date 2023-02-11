@@ -3,7 +3,21 @@
 [![All Contributors](https://img.shields.io/badge/all_contributors-15-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
-![Lint](https://github.com/AndreasAugustin/actions-template-sync/workflows/Lint/badge.svg)
+ [![actions-template-sync](https://github.com/AndreasAugustin/actions-template-sync/actions/workflows/actions_template_sync.yml/badge.svg)](https://github.com/AndreasAugustin/actions-template-sync/actions/workflows/actions_template_sync.yml)
+
+[![Lint](https://github.com/AndreasAugustin/actions-template-sync/actions/workflows/lint.yml/badge.svg)](https://github.com/AndreasAugustin/actions-template-sync/actions/workflows/lint.yml)
+
+[![shellcheck](https://github.com/AndreasAugustin/actions-template-sync/actions/workflows/shellcheck.yml/badge.svg)](https://github.com/AndreasAugustin/actions-template-sync/actions/workflows/shellcheck.yml)
+
+[![test](https://github.com/AndreasAugustin/actions-template-sync/actions/workflows/test.yml/badge.svg)](https://github.com/AndreasAugustin/actions-template-sync/actions/workflows/test.yml)
+
+[![test-hooks](https://github.com/AndreasAugustin/actions-template-sync/actions/workflows/test_hooks.yml/badge.svg)](https://github.com/AndreasAugustin/actions-template-sync/actions/workflows/test_hooks.yml)
+
+[![test-ssh](https://github.com/AndreasAugustin/actions-template-sync/actions/workflows/test_ssh.yml/badge.svg)](https://github.com/AndreasAugustin/actions-template-sync/actions/workflows/test_ssh.yml)
+
+[![push-docker](https://github.com/AndreasAugustin/actions-template-sync/actions/workflows/push_docker.yml/badge.svg)](https://github.com/AndreasAugustin/actions-template-sync/actions/workflows/push_docker.yml)
+
+[![gh-pages-mk-docs](https://github.com/AndreasAugustin/actions-template-sync/actions/workflows/gh_pages_mk_docs.yml/badge.svg)](https://github.com/AndreasAugustin/actions-template-sync/actions/workflows/gh_pages_mk_docs.yml)
 
 It is possible to create repositories within Github with
 [GitHub templates](https://docs.github.com/en/github/creating-cloning-and-archiving-repositories/creating-a-template-repository).
@@ -195,13 +209,16 @@ hooks:
 
 ## Troubleshooting
 
-- refusing to allow a GitHub App to create or update workflow `.github/workflows/******.yml` without `workflows` permission
+* refusing to allow a GitHub App to create or update workflow `.github/workflows/******.yml` without `workflows` permission
 
-This happens because the template repository is trying to overwrite some files inside `.github/workflows/`. Currently a github action can't overwrite these files. To ignore those, simply create a file in the root directory named `.templatesyncignore` with the content `.github/workflows/`.
+This happens because the template repository is trying to overwrite some files inside `.github/workflows/`.
+Currently a github action can't overwrite these files.
+To ignore those, simply create a file in the root directory named `.templatesyncignore` with the content `.github/workflows/`.
 
-- pull request create failed: GraphQL: GitHub Actions is not permitted to create or approve pull requests (createPullRequest)
+* pull request create failed: GraphQL: GitHub Actions is not permitted to create or approve pull requests (createPullRequest)
 
-Open your project `Settings > Actions > General` and select the checkbox `Allow Github Actions to create and approve pull requests` under the `Workflow permissions` section.
+Open your project `Settings > Actions > General` and select the checkbox `Allow Github Actions to create and approve pull requests`
+under the `Workflow permissions` section.
 
 ## Debug
 
