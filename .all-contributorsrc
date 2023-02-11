@@ -144,6 +144,15 @@
         "doc",
         "code"
       ]
+    },
+    {
+      "login": "george-gca",
+      "name": "George",
+      "avatar_url": "https://avatars.githubusercontent.com/u/31376482?v=4",
+      "profile": "https://github.com/george-gca",
+      "contributions": [
+        "question"
+      ]
     }
   ],
   "contributorsPerLine": 7,
