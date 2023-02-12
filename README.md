@@ -32,6 +32,7 @@ This GitHub action will help you to keep track of the template changes.
 * Ignore files and folders from syncing using a `.templatesyncignore` file
 * many configuration options
 * different lifecycle hooks are supported
+* different git provider. Default is GitHub, GitLab is also tested. See [.github/workflows/test_ssh_gitlab.yml] for an example.
 
 ## Usage
 
@@ -109,6 +110,7 @@ An example are [deployment keys][deployment-keys]. For our use case write permis
 Within the repository where the GitHub action is enabled add a secret (e.q. `SOURCE_REPO_SSH_PRIVATE_KEY`) with the content of your private SSH key.
 Make sure that the read permissions of that secret fulfil your use case.
 Set the optional `source_repo_ssh_private_key` input parameter.
+It is also possible to use a different git provider, e.g. GitLab.
 
 ```yaml
 jobs:
@@ -144,6 +146,7 @@ jobs:
 | hostname | `[optional]` the hostname of the repository | `false` | `github.com` |
 | is_dry_run | `[optional]` set to `true` if you do not want to push the changes and not want to create a PR |  `false` |   |
 | is_allow_hooks | `[optional]` set to `true` if you want to enable lifecycle hooks. Use this with caution! | `false` | `false` |
+| is_not_source_github | `[optional]` set to `true` if the source git provider is not GitHub | `false` | `false` |
 
 ### Example
 
