@@ -32,12 +32,9 @@ This GitHub action will help you to keep track of the template changes.
 * Ignore files and folders from syncing using a `.templatesyncignore` file
 * many configuration options
 * different lifecycle hooks are supported
+* different git provider. Default is GitHub, GitLab is also tested. See [.github/workflows/test_ssh_gitlab.yml] for an example.
 
 ## Usage
-
-### Update
-
-starting with version v0.5.2-draft the `templateversionrc` file is not needed anymore. You can delete that file from the target repositories.
 
 ### Public template repository
 
@@ -61,7 +58,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - name: actions-template-sync
-        uses: AndreasAugustin/actions-template-sync@v0.7.0-draft
+        uses: AndreasAugustin/actions-template-sync@v0.7.1-draft
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           source_repo_path: <owner/repo>
@@ -94,7 +91,7 @@ jobs:
           private_key: ${{ secrets.PRIVATE_KEY }}
 
       - name: actions-template-sync
-        uses: AndreasAugustin/actions-template-sync@v0.7.0-draft
+        uses: AndreasAugustin/actions-template-sync@v0.7.1-draft
         with:
           github_token: ${{ steps.generate_token.outputs.token }}
           source_repo_path: <owner/repo>
@@ -109,6 +106,7 @@ An example are [deployment keys][deployment-keys]. For our use case write permis
 Within the repository where the GitHub action is enabled add a secret (e.q. `SOURCE_REPO_SSH_PRIVATE_KEY`) with the content of your private SSH key.
 Make sure that the read permissions of that secret fulfil your use case.
 Set the optional `source_repo_ssh_private_key` input parameter.
+It is also possible to use a different git provider, e.g. GitLab.
 
 ```yaml
 jobs:
@@ -120,7 +118,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - name: actions-template-sync
-        uses: AndreasAugustin/actions-template-sync@v0.7.0-draft
+        uses: AndreasAugustin/actions-template-sync@v0.7.1-draft
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           source_repo_path: ${{ secrets.SOURCE_REPO_PATH }} # <owner/repo>, should be within secrets
@@ -144,6 +142,7 @@ jobs:
 | hostname | `[optional]` the hostname of the repository | `false` | `github.com` |
 | is_dry_run | `[optional]` set to `true` if you do not want to push the changes and not want to create a PR |  `false` |   |
 | is_allow_hooks | `[optional]` set to `true` if you want to enable lifecycle hooks. Use this with caution! | `false` | `false` |
+| is_not_source_github | `[optional]` set to `true` if the source git provider is not GitHub | `false` | `false` |
 
 ### Example
 
@@ -219,6 +218,10 @@ To ignore those, simply create a file in the root directory named `.templatesync
 
 Open your project `Settings > Actions > General` and select the checkbox `Allow Github Actions to create and approve pull requests`
 under the `Workflow permissions` section.
+
+## Release Updates
+
+starting with version v0.5.2-draft the `templateversionrc` file is not needed anymore. You can delete that file from the target repositories.
 
 ## Debug
 

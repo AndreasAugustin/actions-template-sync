@@ -36,6 +36,9 @@ inputs:
   is_allow_hooks:
     description: '[optional] set to true if you want to allow hooks. Use this functionality with caution!'
     default: 'false'
+  is_not_source_github:
+    description: '[optional] set to true if the source repository is not a github related repository. Useful e.q. if the source is GitLab'
+    default: 'false'
 runs:
   using: 'docker'
   image: 'src/Dockerfile'
@@ -51,3 +54,4 @@ runs:
     HOSTNAME: ${{ inputs.hostname }}
     IS_DRY_RUN: ${{ inputs.is_dry_run }}
     IS_ALLOW_HOOKS: ${{ inputs.is_allow_hooks }}
+    IS_NOT_SOURCE_GITHUB: ${{ inputs.is_not_source_github }}
