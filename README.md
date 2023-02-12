@@ -36,10 +36,6 @@ This GitHub action will help you to keep track of the template changes.
 
 ## Usage
 
-### Update
-
-starting with version v0.5.2-draft the `templateversionrc` file is not needed anymore. You can delete that file from the target repositories.
-
 ### Public template repository
 
 Add this configuration to your github action
@@ -62,7 +58,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - name: actions-template-sync
-        uses: AndreasAugustin/actions-template-sync@v0.7.0-draft
+        uses: AndreasAugustin/actions-template-sync@v0.7.1-draft
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           source_repo_path: <owner/repo>
@@ -95,7 +91,7 @@ jobs:
           private_key: ${{ secrets.PRIVATE_KEY }}
 
       - name: actions-template-sync
-        uses: AndreasAugustin/actions-template-sync@v0.7.0-draft
+        uses: AndreasAugustin/actions-template-sync@v0.7.1-draft
         with:
           github_token: ${{ steps.generate_token.outputs.token }}
           source_repo_path: <owner/repo>
@@ -122,7 +118,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - name: actions-template-sync
-        uses: AndreasAugustin/actions-template-sync@v0.7.0-draft
+        uses: AndreasAugustin/actions-template-sync@v0.7.1-draft
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           source_repo_path: ${{ secrets.SOURCE_REPO_PATH }} # <owner/repo>, should be within secrets
@@ -222,6 +218,10 @@ To ignore those, simply create a file in the root directory named `.templatesync
 
 Open your project `Settings > Actions > General` and select the checkbox `Allow Github Actions to create and approve pull requests`
 under the `Workflow permissions` section.
+
+## Release Updates
+
+starting with version v0.5.2-draft the `templateversionrc` file is not needed anymore. You can delete that file from the target repositories.
 
 ## Debug
 
