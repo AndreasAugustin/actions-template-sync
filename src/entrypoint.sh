@@ -58,8 +58,13 @@ function git_init() {
   git config --global --add safe.directory /github/workspace
   git lfs install
 
-  gh auth setup-git --hostname "${SOURCE_REPO_HOSTNAME}"
-  gh auth status --hostname "${SOURCE_REPO_HOSTNAME}"
+  if [[ -n "${IS_NOT_SOURCE_GITHUB}" ]]; then
+    info "the source repository is not located within GitHub."
+  else
+    info "the source repository is located within GitHub."
+    gh auth setup-git --hostname "${SOURCE_REPO_HOSTNAME}"
+    gh auth status --hostname "${SOURCE_REPO_HOSTNAME}"
+  fi
   echo "::endgroup::"
 }
 
