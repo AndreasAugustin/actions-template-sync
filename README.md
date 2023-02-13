@@ -70,9 +70,9 @@ You will receive a pull request within your repository if there are some changes
 
 ### Private template repository
 
-If you have a private template repository.
+If you have a private template repository, there are 2 possibilities.
 
-#### Using github app
+#### 1. Using github app
 
 You can create and use a [GitHub App][github-app] to handle the access to your private repository.
 To generate a token for your app you can use a separate action like [tibdex/github-app-token][github-app-token].
@@ -99,7 +99,7 @@ jobs:
           pr_labels: <label1>,<label2>[,...] # optional, no default
 ```
 
-#### SSH
+#### 2. SSH
 
 You have various options to use ssh keys with GitHub.
 An example are [deployment keys][deployment-keys]. For our use case write permissions are not needed.i
