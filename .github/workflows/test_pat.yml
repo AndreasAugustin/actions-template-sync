@@ -6,7 +6,9 @@ on:
   # manual trigger
   workflow_dispatch:
 
-permissions: read-all
+permissions:
+  id-token: write
+  contents: read # default
 
 jobs:
   test-implementation-job:
