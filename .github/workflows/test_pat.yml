@@ -6,6 +6,8 @@ on:
   # manual trigger
   workflow_dispatch:
 
+permissions: read-all
+
 jobs:
   test-implementation-job:
 
