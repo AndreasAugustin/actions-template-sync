@@ -6,10 +6,6 @@ on:
   # manual trigger
   workflow_dispatch:
 
-permissions:
-  id-token: write
-  contents: read # default
-
 jobs:
   test-implementation-job:
 
