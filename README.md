@@ -32,7 +32,7 @@ This GitHub action will help you to keep track of the template changes.
 * Ignore files and folders from syncing using a `.templatesyncignore` file
 * many configuration options
 * different lifecycle hooks are supported
-* different git provider. Default is GitHub, GitLab is also tested. See [.github/workflows/test_ssh_gitlab.yml] for an example.
+* different git provider. Default is GitHub, GitLab is also tested. See [.github/workflows/test_ssh_gitlab.yml](.github/workflows/test_ssh_gitlab.yml) for an example.
 
 ## Usage
 
