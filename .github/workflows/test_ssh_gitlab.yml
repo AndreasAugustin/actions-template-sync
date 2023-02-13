@@ -1,7 +1,7 @@
 name: test-ssh-gitlab
 
 on:
-  pull_request:
+  # pull_request:
   push:
   # manual trigger
   workflow_dispatch:
