@@ -37,9 +37,11 @@ This GitHub action will help you to keep track of the template changes.
 
 ## Usage
 
+Usage changes depending on whether the template repository is public or private, regardless of the visibility of current repository.
+
 ### Public template repository
 
-Add this configuration to your github action
+Add this configuration to a github action in the current repository:
 
 ```yaml
 # File: .github/workflows/template-sync.yml
@@ -67,15 +69,15 @@ jobs:
           pr_labels: <label1>,<label2>[,...] # optional, no default
 ```
 
-You will receive a pull request within your repository if there are some changes available.
+You will receive a pull request within your repository if there are some changes available in the template.
 
 ### Private template repository
 
-If you have a private template repository.
+If your current repository was created from a private template, there are 2 possibilities.
 
-#### Using github app
+#### 1. Using github app
 
-You can create and use a [GitHub App][github-app] to handle the access to your private repository.
+You can create and use a [GitHub App][github-app] to handle the access to the private template repository.
 To generate a token for your app you can use a separate action like [tibdex/github-app-token][github-app-token].
 
 ```yaml
@@ -100,7 +102,7 @@ jobs:
           pr_labels: <label1>,<label2>[,...] # optional, no default
 ```
 
-#### SSH
+#### 2. SSH
 
 You have various options to use ssh keys with GitHub.
 An example are [deployment keys][deployment-keys]. For our use case write permissions are not needed.
