@@ -58,7 +58,7 @@ function git_init() {
   git config --global --add safe.directory /github/workspace
   git lfs install
 
-  if [[ -n "${IS_NOT_SOURCE_GITHUB}" ]]; then
+  if [[ "${IS_NOT_SOURCE_GITHUB}" == 'true' ]]; then
     info "the source repository is not located within GitHub."
     ssh-keyscan -t rsa "${SOURCE_REPO_HOSTNAME}" >> /root/.ssh/known_hosts
   else
