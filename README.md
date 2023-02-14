@@ -15,6 +15,8 @@
 
 [![test-ssh](https://github.com/AndreasAugustin/actions-template-sync/actions/workflows/test_ssh.yml/badge.svg)](https://github.com/AndreasAugustin/actions-template-sync/actions/workflows/test_ssh.yml)
 
+[![test-ssh-gitlab](https://github.com/AndreasAugustin/actions-template-sync/actions/workflows/test_ssh_gitlab.yml/badge.svg)](https://github.com/AndreasAugustin/actions-template-sync/actions/workflows/test_ssh_gitlab.yml)
+
 [![push-docker](https://github.com/AndreasAugustin/actions-template-sync/actions/workflows/push_docker.yml/badge.svg)](https://github.com/AndreasAugustin/actions-template-sync/actions/workflows/push_docker.yml)
 
 [![gh-pages-mk-docs](https://github.com/AndreasAugustin/actions-template-sync/actions/workflows/gh_pages_mk_docs.yml/badge.svg)](https://github.com/AndreasAugustin/actions-template-sync/actions/workflows/gh_pages_mk_docs.yml)
