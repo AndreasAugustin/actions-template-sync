@@ -148,7 +148,7 @@ jobs:
 
 #### 3. PAT
 
-:warn: when the source repository is private using PATs, also the target repository must be private.
+:warning: when the source repository is private using PATs, also the target repository must be private.
 Else it won't work.
 
 [Personal access token][github-pat] are an alternative to using passwords for authentication to GitHubYou can add a kind
