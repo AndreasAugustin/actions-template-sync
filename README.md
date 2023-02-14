@@ -73,7 +73,7 @@ You will receive a pull request within your repository if there are some changes
 
 ### Private template repository
 
-If your current repository was created from a private template, there are 2 possibilities.
+If your current repository was created from a private template, there are several possibilities.
 
 #### 1. Using github app
 
@@ -129,6 +129,55 @@ jobs:
           upstream_branch: ${{ secrets.TARGET_BRANCH }} #<target_branch> # defaults to main
           pr_labels: <label1>,<label2>[,...] # optional, no default
           source_repo_ssh_private_key: ${{ secrets.SOURCE_REPO_SSH_PRIVATE_KEY }} # contains the private ssh key of the private repository
+```
+
+#### 3. PAT
+
+:warn: when the source repository is private using PATs, also the target repository must be private.
+Else it won't work.
+
+[Personal access token][github-pat] are an alternative to using passwords for authentication to GitHubYou can add a kind
+of password to your github account. You need to set the scopes
+
+* `repo` -> all
+* `read:org`
+
+![pat-scopes](docs/assets/pat_needed_scopes.png)
+
+Furthermore you need to set the access within the source repository to allow github actions within the target repository.
+As mentioned before (you can see the note in the image) you need to set the target repository to private.
+settings -> actions -> general.
+
+![pat-srouce-repo-access](docs/assets/pat_needed_access_source_repo.png)
+
+example workflow definition
+
+```yml
+name: actions-template-sync
+
+on:
+  # cronjob trigger At 00:00 on day-of-month 1. https://crontab.guru/every-month
+  schedule:
+  - cron:  "0 0 1 * *"
+  # manual trigger
+  workflow_dispatch:
+
+jobs:
+  test-implementation-job:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      # To use this repository's private action, you must check out the repository
+      -
+        name: Checkout
+        uses: actions/checkout@v3
+      -
+        name: Test action step PAT
+        uses: AndreasAugustin/actions-template-sync@v0.7.2-draft
+        with:
+          github_token: ${{ secrets.SOURCE_REPO_PAT }}
+          source_repo_path: ${{ secrets.SOURCE_REPO_PATH }} # <owner/repo>, should be within secrets
 ```
 
 ### Configuration parameters
@@ -297,3 +346,4 @@ specification. Contributions of any kind welcome!
 [github-app-token]: https://github.com/tibdex/github-app-token
 [dockerhub-repo]: https://hub.docker.com/r/andyaugustin/actions-template-sync
 [github-repo]: https://github.com/AndreasAugustin/actions-template-sync/pkgs/container/actions-template-sync
+[github-pat]: https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token
