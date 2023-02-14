@@ -27,7 +27,8 @@ This is a nice approach to have some boilerplate within your repository.
 Over the time the template repository will get some code changes.
 The problem is that the already created repositories won't know about those changes.
 This GitHub action will help you to keep track of the template changes.
-In addition it is possible to sync all other git repositories. This can help you e.g. for migration from another git provider to GitHub or if you want to mirror git repositories.
+In addition it is possible to sync all other git repositories.
+This can help you e.g. for migration from another git provider to GitHub or if you want to mirror git repositories.
 
 ## Features
 
