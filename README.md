@@ -19,20 +19,35 @@
 
 [![gh-pages-mk-docs](https://github.com/AndreasAugustin/actions-template-sync/actions/workflows/gh_pages_mk_docs.yml/badge.svg)](https://github.com/AndreasAugustin/actions-template-sync/actions/workflows/gh_pages_mk_docs.yml)
 
+## abstract
+
 It is possible to create repositories within Github with
 [GitHub templates](https://docs.github.com/en/github/creating-cloning-and-archiving-repositories/creating-a-template-repository).
 This is a nice approach to have some boilerplate within your repository.
 Over the time the template repository will get some code changes.
 The problem is that the already created repositories won't know about those changes.
 This GitHub action will help you to keep track of the template changes.
+In addition it is possible to sync all other git repositories.
+This can help you e.g. for migration from another git provider to GitHub or if you want to mirror git repositories.
 
 ## Features
+
+```mermaid
+flowchart LR
+    github_source("<b>GitHub</b> source repository <b>[private|public]</b>")
+    gitlab_source("<b>GitLab</b> source repository <b>[private|public]</b>")
+    any_source("<b>Any</b> git provider <b>[private|public]</b>")
+    github_target{{"<b>GitHub</b> target repository <b>[private|public]</b>"}}
+    github_source --> |"supported: [ssh|pat|github app]"| github_target
+    gitlab_source --> |"supported: [ssh]"| github_target
+    any_source --> |"supported: [ssh]"| github_target
+```
 
 * Sync other public or private repository (e.g. template repositories) with the current repository
 * Ignore files and folders from syncing using a `.templatesyncignore` file
 * many configuration options
 * different lifecycle hooks are supported
-* different git provider. Default is GitHub, GitLab is also tested.
+* different git provider. Default is GitHub, GitLab is also tested with ssh.
   See [.github/workflows/test_ssh_gitlab.yml](.github/workflows/test_ssh_gitlab.yml) for an example.
 
 ## Usage
