@@ -53,9 +53,10 @@ flowchart LR
 * Sync other public or private repository (e.g. template repositories) with the current repository
 * Ignore files and folders from syncing using a `.templatesyncignore` file
 * many configuration options
-* different lifecycle hooks are supported
-* different git provider. Default is GitHub, GitLab is also tested with ssh.
+* different lifecycle hooks are supported. This opens the possibility to inject custom code into the workflow with a yaml definition file.
+* different git provider like GitLab, Gittea,.. as source are supported (with ssh).
   See [.github/workflows/test_ssh_gitlab.yml](.github/workflows/test_ssh_gitlab.yml) for an example.
+* It is not necesarly needed that source and target repository have same base history. Because of that reason it is possible to merge 2 total different repositories with the help of the action.
 
 ## Usage
 
