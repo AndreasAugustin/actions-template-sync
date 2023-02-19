@@ -23,7 +23,7 @@
 
 ## abstract
 
-Synchronise git repositories in an automated manner. Different git providers liek GitHub (enterprise), GitLab,.. are supported as the source provider.
+Synchronise git repositories in an automated manner. Different git providers like GitHub (enterprise), GitLab,.. are supported as the source provider.
 This can help you e.g. for migration from another git provider to GitHub or if you want to mirror git repositories.
 
 ### History
