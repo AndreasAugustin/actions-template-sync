@@ -2,7 +2,7 @@
 
 ## abstract
 
-within this section you will find some
+within this section you will find some information about the code flow
 
 ## Code
 
@@ -12,7 +12,7 @@ The architecture and logic within the code:
 flowchart TD
 Exit[Exit]
 Start[Start]
-GitHubActionEnv{Read GitHubAction env}
+GitHubActionEnv{"fa:fa-github Read GitHubAction env"}
 
 style Start fill:#f9f,stroke:#333,stroke-width:4px
 style Exit fill:#bbf,stroke:#f66,stroke-width:2px,color:#fff,stroke-dasharray: 5 5
@@ -26,17 +26,18 @@ EnvCheckSync{Required environment variables exists}
 SshConfigureSync[Eventually configure SSH variables]
 SetVariablesSync[Set the needed variables, e.q. with reading remote repository]
 CheckCommitLocalExistent{"Check if source commit hash is present in target repo"}
-GitCheckoutSync["Create git branch <branch_prefix_git_hash>"]
+GitCheckoutSync["fa:fa-code-branch Create git branch <branch_prefix_git_hash>"]
 GitPullSync["Pull from remote repository"]
 CheckIgnoreFileExistsSync{"Check if .templatesyncignore file exists\n(First inside .github folder, then in root)"}
 ResetChangesSync["Reset the changes listed within the ignore file"]
-GitCommitSync["Commit the changes"]
+GitCommitSync["fa:fa-code-commit Commit the changes"]
 
 CheckIsDryRun{"Check if is_dry_run is set to true"}
 GitPushSync["Push the changes to GitHub"]
-GitPullRequestSync["Create a pull request on GitHub"]
+GitPullRequestSync["fa:fa-code-pull-request Create a pull request on GitHub"]
+Hook{{"hooks, <b>prepush | prepush | prepr</b>"}}
 
-subgraph githubactions["GitHubActions"]
+subgraph githubactions["fa:fa-github GitHubActions"]
 
 Start --> GitHubActionEnv
 GitHubActionEnv -->|issues| Exit
