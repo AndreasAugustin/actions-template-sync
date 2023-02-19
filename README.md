@@ -23,34 +23,41 @@
 
 ## abstract
 
+Synchronise git repositories in an automated manner. Different git providers liek GitHub (enterprise), GitLab,.. are supported as the source provider.
+This can help you e.g. for migration from another git provider to GitHub or if you want to mirror git repositories.
+
+### History
+
 It is possible to create repositories within Github with
 [GitHub templates](https://docs.github.com/en/github/creating-cloning-and-archiving-repositories/creating-a-template-repository).
 This is a nice approach to have some boilerplate within your repository.
 Over the time the template repository will get some code changes.
 The problem is that the already created repositories won't know about those changes.
 This GitHub action will help you to keep track of the template changes.
-In addition it is possible to sync all other git repositories.
-This can help you e.g. for migration from another git provider to GitHub or if you want to mirror git repositories.
+The initial author of this repository faced that issue several times and decided to write a github action to face that issue.
+Because of the nice community, several feature requests helped to go on with development of the action. Now several other features are supported.
 
 ## Features
 
 ```mermaid
 flowchart LR
-    github_source("<b>GitHub</b> source repository <b>[private|public]</b>")
-    gitlab_source("<b>GitLab</b> source repository <b>[private|public]</b>")
-    any_source("<b>Any</b> git provider <b>[private|public]</b>")
-    github_target{{"<b>GitHub</b> target repository <b>[private|public]</b>"}}
-    github_source --> |"supported: [ssh|pat|github app]"| github_target
-    gitlab_source --> |"supported: [ssh]"| github_target
-    any_source --> |"supported: [ssh]"| github_target
+    github_source("fa:fa-github <b>GitHub</b> source repository <b>[private|public]</b>")
+    gitlab_source("fa:fa-gitlab <b>GitLab</b> source repository <b>[private|public]</b>")
+    any_source("fa:fa-git <b>Any</b> git provider <b>[private|public]</b>")
+    github_target{{"fa:fa-github <b>GitHub</b> target repository <b>[private|public]</b>"}}
+    github_source --> |"<b>ssh | PAT | github app</b>"| github_target
+    gitlab_source --> |"<b>ssh</b>"| github_target
+    any_source --> |"<b>ssh</b>"| github_target
 ```
 
 * Sync other public or private repository (e.g. template repositories) with the current repository
 * Ignore files and folders from syncing using a `.templatesyncignore` file
 * many configuration options
-* different lifecycle hooks are supported
-* different git provider. Default is GitHub, GitLab is also tested with ssh.
+* different lifecycle hooks are supported. This opens the possibility to inject custom code into the workflow with a yaml definition file.
+* different git provider like GitLab, Gittea,.. as source are supported (with ssh).
   See [.github/workflows/test_ssh_gitlab.yml](.github/workflows/test_ssh_gitlab.yml) for an example.
+* It is not necesarly needed that source and target repository have same base history.
+  Because of that reason it is possible to merge 2 total different repositories with the help of the action.
 
 ## Usage
 
