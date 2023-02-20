@@ -1,7 +1,7 @@
 #! /usr/bin/env bash
 set -e
 # set -u
-set -x
+# set -x
 
 # shellcheck source=src/sync_common.sh
 source sync_common.sh
