@@ -2,7 +2,7 @@
 
 set -e
 # set -u
-set -x
+# set -x
 
 # shellcheck source=src/sync_template.sh
 source sync_common.sh
