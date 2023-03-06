@@ -1,0 +1,26 @@
+# This CITATION.cff file was generated with cffinit.
+# Visit https://bit.ly/cffinit to generate yours today!
+
+cff-version: 1.2.0
+title: github-action-template-sync
+message: >-
+  If you use this software, please cite it using the
+  metadata from this file.
+type: software
+authors:
+  - given-names: Andreas
+    family-names: Augustin
+    orcid: 'https://orcid.org/0009-0003-8658-2370'
+repository-code: 'https://github.com/AndreasAugustin/actions-template-sync'
+url: 'https://andreasaugustin.github.io/actions-template-sync/'
+abstract: >-
+  Synchronise git repositories in an automated manner.
+  Different git providers like GitHub (enterprise),
+  GitLab,.. are supported as the source provider. This can
+  help you e.g. for migration from another git provider to
+  GitHub or if you want to mirror git repositories.
+keywords:
+  - github
+  - repo-sync
+license: MIT
+version: v0.7.3
