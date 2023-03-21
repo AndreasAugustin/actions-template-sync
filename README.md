@@ -220,6 +220,9 @@ jobs:
 | is_dry_run | `[optional]` set to `true` if you do not want to push the changes and not want to create a PR |  `false` |   |
 | is_allow_hooks | `[optional]` set to `true` if you want to enable lifecycle hooks. Use this with caution! | `false` | `false` |
 | is_not_source_github | `[optional]` set to `true` if the source git provider is not GitHub | `false` | `false` |
+| git_user_name | `[optional]` set the committer git user.name for the merge commit | `false` | `${GITHUB_ACTOR}` |
+| git_user_email | `[optional]` set the committer git user.email for the merge commit | `false` | `github-action@actions-template-sync.noreply.${SOURCE_REPO_HOSTNAME}` |
+| git_remote_pull_params |`[optional]` set the pull parameters for the remote repository | `false` | `--allow-unrelated-histories --squash --strategy=recursive -X theirs` |
 
 ### Example
 

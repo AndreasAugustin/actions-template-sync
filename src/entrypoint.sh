@@ -18,6 +18,8 @@ fi
 
 DEFAULT_REPO_HOSTNAME="github.com"
 SOURCE_REPO_HOSTNAME="${HOSTNAME:-${DEFAULT_REPO_HOSTNAME}}"
+GIT_USER_NAME="${GIT_USER_NAME:-${GITHUB_ACTOR}}"
+GIT_USER_EMAIL="${GIT_USER_EMAIL:-github-action@actions-template-sync.noreply.${SOURCE_REPO_HOSTNAME}}"
 
 # In case of ssh template repository this will be overwritten
 SOURCE_REPO_PREFIX="https://${SOURCE_REPO_HOSTNAME}/"
@@ -52,8 +54,8 @@ function git_init() {
   echo "::group::git init"
   info "set git global configuration"
 
-  git config --global user.email "github-action@actions-template-sync.noreply.${SOURCE_REPO_HOSTNAME}"
-  git config --global user.name "${GITHUB_ACTOR}"
+  git config --global user.email "${GIT_USER_EMAIL}"
+  git config --global user.name "${GIT_USER_NAME}"
   git config --global pull.rebase false
   git config --global --add safe.directory /github/workspace
   git lfs install
