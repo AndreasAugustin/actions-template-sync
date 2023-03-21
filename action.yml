@@ -39,6 +39,12 @@ inputs:
   is_not_source_github:
     description: '[optional] set to true if the source repository is not a github related repository. Useful e.q. if the source is GitLab'
     default: 'false'
+  git_user_name:
+    description: '[optional] set the committer git user.name for the merge commit'
+  git_user_email:
+    description: '[optional] set the committer git user.email for the merge commit'
+  git_remote_pull_params:
+    description: '[optional] set the pull parameters for the remote repository'
 runs:
   using: 'docker'
   image: 'src/Dockerfile'
@@ -55,3 +61,6 @@ runs:
     IS_DRY_RUN: ${{ inputs.is_dry_run }}
     IS_ALLOW_HOOKS: ${{ inputs.is_allow_hooks }}
     IS_NOT_SOURCE_GITHUB: ${{ inputs.is_not_source_github }}
+    GIT_USER_NAME: ${{ inputs.git_user_name }}
+    GIT_USER_EMAIL: ${{ inputs.git_user_email }}
+    GIT_REMOTE_PULL_PARAMS: ${{ inputs.git_remote_pull_params }}

@@ -32,6 +32,8 @@ if [[ -n "${SRC_SSH_PRIVATEKEY_ABS_PATH}" ]]; then
   export GIT_SSH_COMMAND="ssh -i ${SRC_SSH_PRIVATEKEY_ABS_PATH}"
 fi
 
+GIT_REMOTE_PULL_PARAMS="${GIT_REMOTE_PULL_PARAMS:---allow-unrelated-histories --squash --strategy=recursive -X theirs}"
+
 cmd_from_yml_file "install"
 
 TEMPLATE_SYNC_IGNORE_FILE_PATH=".templatesyncignore"
@@ -68,8 +70,7 @@ debug "create new branch from default branch with name ${NEW_BRANCH}"
 git checkout -b "${NEW_BRANCH}"
 debug "pull changes from template"
 
-# TODO(anau) eventually make squash optional
-git pull "${SOURCE_REPO}" --allow-unrelated-histories --squash --strategy=recursive -X theirs
+eval "git pull ${SOURCE_REPO} ${GIT_REMOTE_PULL_PARAMS}"
 echo "::endgroup::"
 
 # Check if the Ignore File exists inside .github folder or if it doesn't exist at all
