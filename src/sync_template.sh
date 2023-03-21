@@ -32,7 +32,7 @@ if [[ -n "${SRC_SSH_PRIVATEKEY_ABS_PATH}" ]]; then
   export GIT_SSH_COMMAND="ssh -i ${SRC_SSH_PRIVATEKEY_ABS_PATH}"
 fi
 
-GIT_REMOTE_PULL_PARAMS=( "${GIT_REMOTE_PULL_PARAMS:---allow-unrelated-histories --squash --strategy=recursive -X theirs}" )
+GIT_REMOTE_PULL_PARAMS=( "${GIT_REMOTE_PULL_PARAMS:- --allow-unrelated-histories --squash --strategy=recursive -X theirs}" )
 
 cmd_from_yml_file "install"
 
