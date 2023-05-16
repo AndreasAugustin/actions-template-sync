@@ -103,6 +103,7 @@ If your current repository was created from a private template, there are severa
 
 You can create and use a [GitHub App][github-app] to handle the access to the private template repository.
 To generate a token for your app you can use a separate action like [tibdex/github-app-token][github-app-token].
+You have to setup the checkout step with the generated token as well.
 
 ```yaml
 jobs:
@@ -116,7 +117,10 @@ jobs:
         with:
           app_id: ${{ secrets.APP_ID }}
           private_key: ${{ secrets.PRIVATE_KEY }}
-
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          token: ${{ steps.generate_token.outputs.token }}
       - name: actions-template-sync
         uses: AndreasAugustin/actions-template-sync@v0.8.0
         with:
