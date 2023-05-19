@@ -175,6 +175,15 @@
       "contributions": [
         "ideas"
       ]
+    },
+    {
+      "login": "marvin-belonio",
+      "name": "Marvin Osswald",
+      "avatar_url": "https://avatars.githubusercontent.com/u/88089002?v=4",
+      "profile": "https://github.com/marvin-belonio",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
