@@ -17,14 +17,14 @@ if [[ -z "${SOURCE_REPO}" ]]; then
   exit 1;
 fi
 
-if [[ -z "${UPSTREAM_BRANCH}" ]]; then
-  err "Missing env variable 'UPSTREAM_BRANCH'";
-  exit 1;
-fi
-
 if ! [ -x "$(command -v gh)" ]; then
   err "github-cli gh is not installed. 'https://github.com/cli/cli'";
   exit 1;
+fi
+
+if [[ -z "${UPSTREAM_BRANCH}" ]]; then
+  UPSTREAM_BRANCH="$(git remote show origin | awk '/HEAD branch/ {print $NF}')"
+  info "Missing env variable 'UPSTREAM_BRANCH' setting to remote default ${UPSTREAM_BRANCH}";
 fi
 
 if [[ -n "${SRC_SSH_PRIVATEKEY_ABS_PATH}" ]]; then

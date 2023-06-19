@@ -214,7 +214,7 @@ jobs:
 |----|----|----|----|
 | github_token | Token for the repo. Can be passed in using `$\{{ secrets.GITHUB_TOKEN }}` | `true` |  |
 | source_repo_path | Repository path of the template | `true` | |
-| upstream_branch | The target branch | `true` | `main` |
+| upstream_branch | The target branch | `false` | `<The_remote_default>` |
 | source_repo_ssh_private_key | `[optional]` private ssh key for the source repository. [see](#private-template-repository)| `false` |  |
 | pr_branch_name_prefix | `[optional]` the prefix of branches created by this action | `false` | `chore/template_sync`  |
 | pr_title | `[optional]` the title of PRs opened by this action. Must be already created. | `false` | `upstream merge template repository`  |
@@ -305,7 +305,8 @@ under the `Workflow permissions` section.
 
 ## Release Updates
 
-starting with version v0.5.2-draft the `templateversionrc` file is not needed anymore. You can delete that file from the target repositories.
+* :warning: starting with version v1.0.0 the `upstream_branch` variable default ist not `main` anymore. It is now set to the remote default branch.
+* starting with version v0.5.2-draft the `templateversionrc` file is not needed anymore. You can delete that file from the target repositories.
 
 ## Debug
 
