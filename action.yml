@@ -1,6 +1,6 @@
-name: 'actions-template-sync'
-description: 'Synchronises changes of the template repository'
-author: 'AndreasAugustin'
+name: "actions-template-sync"
+description: "Synchronises changes of the template repository"
+author: "AndreasAugustin"
 branding:
   icon: cloud
   color: green
@@ -9,45 +9,43 @@ inputs:
     description: 'Token for the repo. Can be passed in using $\{{ secrets.GITHUB_TOKEN }}'
     required: true
   source_repo_path:
-    description: 'Repository path of the template'
+    description: "Repository path of the template"
     required: true
   upstream_branch:
-    description: 'The target branch'
-    required: true
-    default: 'main'
+    description: "The target branch"
   source_repo_ssh_private_key:
-    description: '[optional] private ssh key for the source repository. E.q. useful if using a private template repository.'
+    description: "[optional] private ssh key for the source repository. E.q. useful if using a private template repository."
   pr_branch_name_prefix:
-    description: '[optional] the prefix of branches created by this action'
-    default: 'chore/template_sync'
+    description: "[optional] the prefix of branches created by this action"
+    default: "chore/template_sync"
   pr_title:
-    description: '[optional] the title of PRs opened by this action'
-    default: 'upstream merge template repository'
+    description: "[optional] the title of PRs opened by this action"
+    default: "upstream merge template repository"
   pr_labels:
-    description: '[optional] comma separated list of pull request labels'
+    description: "[optional] comma separated list of pull request labels"
   pr_commit_msg:
-    description: '[optional] the commit message of the template merge'
-    default: 'chore(template): merge template changes :up:'
+    description: "[optional] the commit message of the template merge"
+    default: "chore(template): merge template changes :up:"
   hostname:
-    description: '[optional] the hostname of the GitHub repository'
-    default: 'github.com'
+    description: "[optional] the hostname of the GitHub repository"
+    default: "github.com"
   is_dry_run:
-    description: '[optional] set to true if you do not want to push the changes and not want to create a PR'
+    description: "[optional] set to true if you do not want to push the changes and not want to create a PR"
   is_allow_hooks:
-    description: '[optional] set to true if you want to allow hooks. Use this functionality with caution!'
-    default: 'false'
+    description: "[optional] set to true if you want to allow hooks. Use this functionality with caution!"
+    default: "false"
   is_not_source_github:
-    description: '[optional] set to true if the source repository is not a github related repository. Useful e.q. if the source is GitLab'
-    default: 'false'
+    description: "[optional] set to true if the source repository is not a github related repository. Useful e.q. if the source is GitLab"
+    default: "false"
   git_user_name:
-    description: '[optional] set the committer git user.name for the merge commit'
+    description: "[optional] set the committer git user.name for the merge commit"
   git_user_email:
-    description: '[optional] set the committer git user.email for the merge commit'
+    description: "[optional] set the committer git user.email for the merge commit"
   git_remote_pull_params:
-    description: '[optional] set the pull parameters for the remote repository'
+    description: "[optional] set the pull parameters for the remote repository"
 runs:
-  using: 'docker'
-  image: 'src/Dockerfile'
+  using: "docker"
+  image: "src/Dockerfile"
   env:
     GITHUB_TOKEN: ${{ inputs.github_token }}
     SOURCE_REPO_PATH: ${{ inputs.source_repo_path }}
