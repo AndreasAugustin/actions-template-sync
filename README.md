@@ -322,7 +322,7 @@ There are other great tools available within GitHub. Here you can find a compari
 | GitHub action | :heavy_check_mark: | :heavy_check_mark: | :x: | :heavy_check_mark: |
 | hooks | :heavy_check_mark: | :x: | :x: | :x: |
 | available docker image | :heavy_check_mark: | :x: | :x: | :heavy_check_mark: |
-| sync between private and public repo | :heavy_check_mark: `PAT|ssh|Github app` | :heavy_check_mark: `PAT|ssh` | :x: local repos | :heavy_check_mark: `PAT` |
+| sync between private and public repo | :heavy_check_mark: `PAT|ssh|Github app` | :heavy_check_mark: `PAT|ssh` |:x: local repos | :heavy_check_mark: `PAT` |
 | sync between 2 private repos | :heavy_check_mark: `PAT|ssh|Github app` | :heavy_check_mark: `PAT|ssh` | :x: local repos | :heavy_check_mark: `PAT` |
 | sync between 2 public repos | :heavy_check_mark: | :heavy_check_mark: | :x: local repos | :heavy_check_mark: |
 | two way sync | :x: | :heavy_check_mark: | :x: | :x: |
