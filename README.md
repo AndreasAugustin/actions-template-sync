@@ -313,6 +313,25 @@ under the `Workflow permissions` section.
 You must create a secret named `ACTIONS_STEP_DEBUG` with the value `true` to see the debug messages set by this command in the log.
 For more information, see "[Enabling debug logging.][enabling-debug-logging]"
 
+## Comparison with other tools
+
+There are other great tools available within GitHub. Here you can find a comparison.
+
+| **feature** | **actions-template-sync** |[repo-sync][other-repo-sync]| [git-repo-sync][other-git-repo-sync] | [action-template-repository-sync][other-action-template-repository-sync] |
+| ----------- | ------------------------- | -------------------------- | ------------------------------------ | --------------------------------- |
+| GitHub action | :heavy_check_mark: | :heavy_check_mark: | :x: | :heavy_check_mark: |
+| hooks | :heavy_check_mark: | :x: | :x: | :x: |
+| available docker image | :heavy_check_mark: | :x: | :x: | :heavy_check_mark: |
+| sync between private and public repo | :heavy_check_mark: `PAT|ssh|Github app` | :heavy_check_mark: `PAT|ssh` | :x: local repos | :heavy_check_mark: `PAT` |
+| sync between 2 private repos | :heavy_check_mark: `PAT|ssh|Github app` | :heavy_check_mark: `PAT|ssh` | :x: local repos | :heavy_check_mark: `PAT` |
+| sync between 2 public repos | :heavy_check_mark: | :heavy_check_mark: | :x: local repos | :heavy_check_mark: |
+| two way sync | :x: | :heavy_check_mark: | :x: | :x: |
+| Sync from a third-party repo to a Github repo | :heavy_check_mark: | :heavy_check_mark: | :x: local repos | :x: |
+| dry run | :heavy_check_mark: | :x: | :x: | :heavy_check_mark:  |
+| ignore files | :heavy_check_mark: | :x: | :x: | :heavy_check_mark: |
+| creates a PR | :heavy_check_mark: | :heavy_check_mark: | :x: | :heavy_check_mark: |
+| remarks | The action is placed within the target repositories | The action is placed within the target repositories | CLI meant for local use | The action will be based within the base repository with a list of dependent repositories |
+
 ## DEV
 
 The development environment targets are located in the [Makefile](Makefile)
@@ -382,3 +401,6 @@ specification. Contributions of any kind welcome!
 [dockerhub-repo]: https://hub.docker.com/r/andyaugustin/actions-template-sync
 [github-repo]: https://github.com/AndreasAugustin/actions-template-sync/pkgs/container/actions-template-sync
 [github-pat]: https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token
+[other-repo-sync]: https://github.com/repo-sync/repo-sync
+[other-git-repo-sync]: https://github.com/it3xl/git-repo-sync
+[other-action-template-repository-sync]: https://github.com/it3xl/git-repo-sync
