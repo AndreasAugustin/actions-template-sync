@@ -31,11 +31,11 @@ This can help you e.g. for migration from another git provider to GitHub or if y
 It is possible to create repositories within Github with
 [GitHub templates](https://docs.github.com/en/github/creating-cloning-and-archiving-repositories/creating-a-template-repository).
 This is a nice approach to have some boilerplate within your repository.
-Over the time the template repository will get some code changes.
+Over time, the template repository will get some code changes.
 The problem is that the already created repositories won't know about those changes.
 This GitHub action will help you to keep track of the template changes.
-The initial author of this repository faced that issue several times and decided to write a github action to face that issue.
-Because of the nice community, several feature requests helped to go on with development of the action. Now several other features are supported.
+The initial author of this repository faced that issue several times and decided to write a GitHub action to face that issue.
+Because of the nice community, several feature requests helped to go on with the development of the action. Now several other features are supported.
 
 ## Features
 
@@ -56,16 +56,16 @@ flowchart LR
 * different lifecycle hooks are supported. This opens the possibility to inject custom code into the workflow with a yaml definition file.
 * different git provider like GitLab, Gittea,.. as source are supported (with ssh).
   See [.github/workflows/test_ssh_gitlab.yml](.github/workflows/test_ssh_gitlab.yml) for an example.
-* It is not necesarly needed that source and target repository have same base history.
-  Because of that reason it is possible to merge 2 total different repositories with the help of the action.
+* It is not necessarily needed that source and target repository have the same base history.
+  Because of that reason, it is possible to merge 2 totally different repositories with the help of the action.
 
 ## Usage
 
-Usage changes depending on whether the template repository is public or private, regardless of the visibility of current repository.
+Usage changes depending on whether the template repository is public or private, regardless of the visibility of the current repository.
 
 ### Public template repository
 
-Add this configuration to a github action in the current repository:
+Add this configuration to a GitHub action in the current repository:
 
 ```yaml
 # File: .github/workflows/template-sync.yml
@@ -99,11 +99,11 @@ You will receive a pull request within your repository if there are some changes
 
 If your current repository was created from a private template, there are several possibilities.
 
-#### 1. Using github app
+#### 1. Using a GitHub app
 
-You can create and use a [GitHub App][github-app] to handle the access to the private template repository.
+You can create and use a [GitHub App][github-app] to handle access to the private template repository.
 To generate a token for your app you can use a separate action like [tibdex/github-app-token][github-app-token].
-You have to setup the checkout step with the generated token as well.
+You have to set up the checkout step with the generated token as well.
 
 ```yaml
 jobs:
@@ -130,13 +130,13 @@ jobs:
           pr_labels: <label1>,<label2>[,...] # optional, no default
 ```
 
-#### 2. SSH
+#### 2. Using SSH
 
 You have various options to use ssh keys with GitHub.
-An example are [deployment keys][deployment-keys]. For our use case write permissions are not needed.
+An example is [deployment keys][deployment-keys]. For our use case, write permissions are not needed.
 Within the current repository, where the GitHub action is enabled, add a secret
 (e.q. `SOURCE_REPO_SSH_PRIVATE_KEY`) with the content of your private SSH key.
-Make sure that the read permissions of that secret fulfil your use case.
+Make sure that the read permissions of that secret fulfill your use case.
 Set the optional `source_repo_ssh_private_key` input parameter.
 It is also possible to use a different git provider, e.g. GitLab.
 
@@ -159,24 +159,24 @@ jobs:
           source_repo_ssh_private_key: ${{ secrets.SOURCE_REPO_SSH_PRIVATE_KEY }} # contains the private ssh key of the private repository
 ```
 
-#### 3. PAT
+#### 3. Using a PAT
 
 :warning: when the source repository is private using PATs, also the target repository must be private.
 Else it won't work.
 
-[Personal access token][github-pat] are an alternative to using passwords for authentication to GitHubYou can add a kind
-of password to your github account. You need to set the scopes
+[Personal access token][github-pat] is an alternative to using passwords for authentication to GitHub. You can add a kind
+of password to your GitHub account. You need to set the scopes.
 
 * `repo` -> all
 * `read:org`
 
 ![pat-scopes](docs/assets/pat_needed_scopes.png)
 
-Furthermore you need to set the access within the source repository to allow github actions within the target repository.
+Furthermore, you need to set the access within the source repository to allow GitHub actions within the target repository.
 As mentioned before (you can see the note in the image) you need to set the target repository to private.
 settings -> actions -> general.
 
-![pat-srouce-repo-access](docs/assets/pat_needed_access_source_repo.png)
+![pat-source-repo-access](docs/assets/pat_needed_access_source_repo.png)
 
 example workflow definition
 
@@ -250,22 +250,22 @@ _Note: It is not possible to sync also the `.templatesyncignore` itself. Any cha
 
 ## Lifecycle hooks
 
-Different lifecycle hooks are supported. You need enable the functionality with the option `is_allow_hooks` and set it to `true`
+Different lifecycle hooks are supported. You need to enable the functionality with the option `is_allow_hooks` and set it to `true`
 :warning: use this functionality with caution. You can use one of the available docker images to test it out. **With great power comes great responsibility**.
 
 * [dockerhub andyaugustin/actions-template-sync][dockerhub-repo]
 * [github andreasaugustin/actions-template-sync][github-repo]
 
-In addition you need a configuration file with the name `templatesync.yml` within the root of the target repository.
+In addition, you need a configuration file with the name `templatesync.yml` within the root of the target repository.
 
-Following hooks are supported (please check [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) for a better understanding of the lifecycles).
+The following hooks are supported (please check [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) for a better understanding of the lifecycles).
 
 * `install` is executed after the container has started and after reading and setting up the environment.
 * `prepull` is executed before the code is pulled from the source repository
 * `prepush` is executed before the push is executed, right after the commit
 * `prepr` is executed before the PR is done
 
-**Remark** The underlying OS is defined by an alpine container.
+**Remark** The underlying OS is defined by an Alpine container.
 E.q. for the installation phase you need to use commands like `apk add --update --no-cache python3`
 
 Schema and example for the `temlatesync.yml`
@@ -295,17 +295,17 @@ hooks:
 * refusing to allow a GitHub App to create or update workflow `.github/workflows/******.yml` without `workflows` permission
 
 This happens because the template repository is trying to overwrite some files inside `.github/workflows/`.
-Currently a github action can't overwrite these files.
+A GitHub action currently can't overwrite these files.
 To ignore those, simply create a file in the root directory named `.templatesyncignore` with the content `.github/workflows/`.
 
 * pull request create failed: GraphQL: GitHub Actions is not permitted to create or approve pull requests (createPullRequest)
 
-Open your project `Settings > Actions > General` and select the checkbox `Allow Github Actions to create and approve pull requests`
+Open your project `Settings > Actions > General` and select the checkbox `Allow GitHub Actions to create and approve pull requests`
 under the `Workflow permissions` section.
 
 ## Release Updates
 
-* :warning: starting with version v1.0.0 the `upstream_branch` variable default ist not `main` anymore. It is now set to the remote default branch.
+* :warning: starting with version v1.0.0 the `upstream_branch` variable default is not `main` anymore. It is now set to the remote default branch.
 * starting with version v0.5.2-draft the `templateversionrc` file is not needed anymore. You can delete that file from the target repositories.
 
 ## Debug
@@ -340,7 +340,7 @@ The development environment targets are located in the [Makefile](Makefile)
 make help
 ```
 
-For some architectural notes please have a look into [docs](./docs/README.md)
+For some architectural notes please have a look at the [docs](./docs/README.md)
 
 ## Contributors ✨
 
@@ -384,7 +384,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 This project follows the [all-contributors](https://github.com/all-contributors/all-contributors)
-specification. Contributions of any kind welcome!
+specification. Contributions of any kind are welcome!
 
 [enabling-debug-logging]: https://docs.github.com/en/actions/managing-workflow-runs/enabling-debug-logging
 [deployment-keys]: https://docs.github.com/en/developers/overview/managing-deploy-keys#deploy-keys
