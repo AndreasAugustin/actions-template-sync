@@ -200,11 +200,13 @@ jobs:
       -
         name: Checkout
         uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.CUSTOM_GITHUB_PAT }}
       -
         name: Test action step PAT
         uses: AndreasAugustin/actions-template-sync@v1.0.0-draft
         with:
-          github_token: ${{ secrets.SOURCE_REPO_PAT }}
+          github_token: ${{ secrets.CUSTOM_GITHUB_PAT }}
           source_repo_path: ${{ secrets.SOURCE_REPO_PATH }} # <owner/repo>, should be within secrets
 ```
 
