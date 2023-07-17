@@ -85,7 +85,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - name: actions-template-sync
-        uses: AndreasAugustin/actions-template-sync@v1.0.0-draft
+        uses: AndreasAugustin/actions-template-sync@v1.1.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           source_repo_path: <owner/repo>
@@ -122,7 +122,7 @@ jobs:
         with:
           token: ${{ steps.generate_token.outputs.token }}
       - name: actions-template-sync
-        uses: AndreasAugustin/actions-template-sync@v1.0.0-draft
+        uses: AndreasAugustin/actions-template-sync@v1.1.0
         with:
           github_token: ${{ steps.generate_token.outputs.token }}
           source_repo_path: <owner/repo>
@@ -150,7 +150,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - name: actions-template-sync
-        uses: AndreasAugustin/actions-template-sync@v1.0.0-draft
+        uses: AndreasAugustin/actions-template-sync@v1.1.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           source_repo_path: ${{ secrets.SOURCE_REPO_PATH }} # <owner/repo>, should be within secrets
@@ -204,7 +204,7 @@ jobs:
           token: ${{ secrets.CUSTOM_GITHUB_PAT }}
       -
         name: Test action step PAT
-        uses: AndreasAugustin/actions-template-sync@v1.0.0-draft
+        uses: AndreasAugustin/actions-template-sync@v1.1.0
         with:
           github_token: ${{ secrets.CUSTOM_GITHUB_PAT }}
           source_repo_path: ${{ secrets.SOURCE_REPO_PATH }} # <owner/repo>, should be within secrets
@@ -221,6 +221,7 @@ jobs:
 | pr_branch_name_prefix | `[optional]` the prefix of branches created by this action | `false` | `chore/template_sync`  |
 | pr_title | `[optional]` the title of PRs opened by this action. Must be already created. | `false` | `upstream merge template repository`  |
 | pr_labels | `[optional]` comma separated list. [pull request labels][pr-labels]. Must be already created. | `false` | |
+| pr_reviewers | `[optional]` comma separated list of pull request reviewers. | `false` | |
 | pr_commit_msg | `[optional]` commit message in the created pull request | `false` | `chore(template): merge template changes :up:` |
 | hostname | `[optional]` the hostname of the repository | `false` | `github.com` |
 | is_dry_run | `[optional]` set to `true` if you do not want to push the changes and not want to create a PR |  `false` |   |
