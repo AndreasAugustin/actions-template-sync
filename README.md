@@ -10,7 +10,7 @@
 [![shellcheck](https://github.com/AndreasAugustin/actions-template-sync/actions/workflows/shellcheck.yml/badge.svg)](https://github.com/AndreasAugustin/actions-template-sync/actions/workflows/shellcheck.yml)
 
 [![test](https://github.com/AndreasAugustin/actions-template-sync/actions/workflows/test.yml/badge.svg)](https://github.com/AndreasAugustin/actions-template-sync/actions/workflows/test.yml)
-
+sadf
 [![test-hooks](https://github.com/AndreasAugustin/actions-template-sync/actions/workflows/test_hooks.yml/badge.svg)](https://github.com/AndreasAugustin/actions-template-sync/actions/workflows/test_hooks.yml)
 
 [![test-ssh](https://github.com/AndreasAugustin/actions-template-sync/actions/workflows/test_ssh.yml/badge.svg)](https://github.com/AndreasAugustin/actions-template-sync/actions/workflows/test_ssh.yml)
