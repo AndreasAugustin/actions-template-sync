@@ -125,8 +125,9 @@ push_and_create_pr () {
     gh pr create \
       --title "${PR_TITLE}" \
       --body "Merge ${SOURCE_REPO_PATH} ${NEW_TEMPLATE_GIT_HASH}" \
-      -B "${UPSTREAM_BRANCH}" \
-      -l "${PR_LABELS}"
+      --base "${UPSTREAM_BRANCH}" \
+      --label "${PR_LABELS}" \
+      --reviewer "${{ PR_REVIEWERS }}"
     echo "::endgroup::"
   else
     warn "dry_run option is set to off. Skipping push changes and skip create pr"
