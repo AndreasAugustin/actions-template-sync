@@ -1,7 +1,7 @@
 #######################################
 # image for dev build environment
 ######################################
-FROM alpine:3.18.2 as dev
+FROM alpine:3.18.3 as dev
 
 ARG GH_CLI_VER=2.21.1
 
