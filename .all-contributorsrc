@@ -195,6 +195,15 @@
         "bug",
         "code"
       ]
+    },
+    {
+      "login": "aairey",
+      "name": "Andy Airey",
+      "avatar_url": "https://avatars.githubusercontent.com/u/7644094?v=4",
+      "profile": "https://blog.airey.be",
+      "contributions": [
+        "bug"
+      ]
     }
   ],
   "contributorsPerLine": 7,
