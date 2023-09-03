@@ -83,7 +83,7 @@ if [ -s "${TEMPLATE_SYNC_IGNORE_FILE_PATH}" ]; then
   echo "::group::restore ignore file"
   info "restore the ignore file"
   git reset "${TEMPLATE_SYNC_IGNORE_FILE_PATH}"
-  git checkout -- "${TEMPLATE_SYNC_IGNORE_FILE_PATH}"
+  git checkout -- "${TEMPLATE_SYNC_IGNORE_FILE_PATH}" || warn "not able to checkout the former .templatesyncignore file. Most likely the file was not present"
   echo "::endgroup::"
 fi
 
