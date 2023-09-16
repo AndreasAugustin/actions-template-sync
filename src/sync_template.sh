@@ -70,7 +70,14 @@ debug "create new branch from default branch with name ${NEW_BRANCH}"
 git checkout -b "${NEW_BRANCH}"
 debug "pull changes from template"
 
-eval "git pull ${SOURCE_REPO} ${GIT_REMOTE_PULL_PARAMS}"
+eval "git pull ${SOURCE_REPO} ${GIT_REMOTE_PULL_PARAMS}" || PULL_HAS_ISSUES=true
+
+if [ "$PULL_HAS_ISSUES" == true ] ; then
+    warn "There had been some git pull issues."
+    warn "Maybe a merge issue."
+    warn "We go on but it is likely that you need to fix merge issues within the created PR."
+fi
+
 echo "::endgroup::"
 
 # Check if the Ignore File exists inside .github folder or if it doesn't exist at all
