@@ -85,7 +85,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - name: actions-template-sync
-        uses: AndreasAugustin/actions-template-sync@v1.1.2
+        uses: AndreasAugustin/actions-template-sync@v1.1.3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           source_repo_path: <owner/repo>
@@ -122,7 +122,7 @@ jobs:
         with:
           token: ${{ steps.generate_token.outputs.token }}
       - name: actions-template-sync
-        uses: AndreasAugustin/actions-template-sync@v1.1.2
+        uses: AndreasAugustin/actions-template-sync@v1.1.3
         with:
           github_token: ${{ steps.generate_token.outputs.token }}
           source_repo_path: <owner/repo>
@@ -150,7 +150,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - name: actions-template-sync
-        uses: AndreasAugustin/actions-template-sync@v1.1.2
+        uses: AndreasAugustin/actions-template-sync@v1.1.3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           source_repo_path: ${{ secrets.SOURCE_REPO_PATH }} # <owner/repo>, should be within secrets
