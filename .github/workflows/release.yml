@@ -31,3 +31,14 @@ jobs:
       packages: write
     uses: ./.github/workflows/push_docker.yml
     secrets: inherit
+  call_release_test_docker_images:
+    if: ${{ needs.release_please.outputs.release_created }}
+    needs:
+      - call_push_docker
+      - call_release_please
+    permissions:
+      packages: read
+    uses: ./.github/workflows/release_test_docker_images.yml
+    with:
+      tag: ${{ needs.release_please.outputs.tag_name }}
+    secrets: inherit

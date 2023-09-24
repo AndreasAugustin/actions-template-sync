@@ -1,0 +1,63 @@
+name: release-test-docker-images
+
+on:
+  workflow_call:
+    inputs:
+      tag:
+        description: "The docker image tag"
+        required: true
+        type: string
+    secrets:
+      DOCKERHUB_USERNAME:
+        description: "The dockerhub username"
+        required: true
+      DOCKERHUB_TOKEN:
+        description: "The dockerhub token"
+        required: true
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "The docker image tag"
+        required: true
+        type: string
+
+permissions:
+  packages: read
+
+jobs:
+  test-docker-images:
+    strategy:
+      matrix:
+        docker-image:
+          - ghcr.io/andreasaugustin/actions-template-sync
+          - andyaugustin/actions-template-sync
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          lfs: true
+          fetch-depth: 0
+      - name: Login to DockerHub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Login to GHCR
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: pull image
+        run: |
+          docker pull ${{ matrix.docker-image }}:${{ inputs.tag }}
+      - name: run tests
+        run: |
+          echo "Install container tools"
+          curl -LO https://storage.googleapis.com/container-structure-test/latest/container-structure-test-linux-amd64 \
+            && chmod +x container-structure-test-linux-amd64 \
+            && sudo mv container-structure-test-linux-amd64 /usr/local/bin/container-structure-test
+          echo "Run tests"
+          container-structure-test test \
+            --image ${{ matrix.docker-image }}:${{ inputs.tag }} \
+            --config src/test-config.yaml

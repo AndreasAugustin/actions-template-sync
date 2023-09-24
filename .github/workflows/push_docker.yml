@@ -1,8 +1,25 @@
 name: push-docker
 
 on:
-  workflow_dispatch:
   workflow_call:
+    inputs:
+      tag:
+        description: "The docker image tag"
+        required: true
+        type: string
+    secrets:
+      DOCKERHUB_USERNAME:
+        description: "The dockerhub username"
+        required: true
+      DOCKERHUB_TOKEN:
+        description: "The dockerhub token"
+        required: true
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "The docker image tag"
+        required: true
+        type: string
 
 jobs:
   build_and_push:
@@ -43,7 +60,7 @@ jobs:
         with:
           context: ./src/
           push: ${{ github.event_name != 'pull_request' }}
-          tags: ${{ steps.meta.outputs.tags }}
+          tags: ${{ inputs.tag }} #${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
       - name: Docker Hub Description
         uses: peter-evans/dockerhub-description@v3
@@ -51,15 +68,5 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
           repository: andyAugustin/${{ matrix.variant }}
-          # readme-filepath: ./images/${{ matrix.variant }}/README.md
-          # short-description: See https://github.com/${{ github.repository }}/images/${{ matrix.variant }} for the source.
-      - name: run tests
-        run: |
-          echo "Install container tools"
-          curl -LO https://storage.googleapis.com/container-structure-test/latest/container-structure-test-linux-amd64 \
-            && chmod +x container-structure-test-linux-amd64 \
-            && sudo mv container-structure-test-linux-amd64 /usr/local/bin/container-structure-test
-          echo "Run tests"
-          container-structure-test test \
-            --image ghcr.io/andreasaugustin/${{ matrix.variant }}:${{ steps.meta.outputs.version }} \
-            --config src/test-config.yaml
+          readme-filepath: ./docs/DOCKER.md
+          short-description: See https://github.com/${{ github.repository }} to have a look into the source code.
