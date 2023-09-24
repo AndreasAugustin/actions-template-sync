@@ -55,7 +55,8 @@ jobs:
           images: |
             andyAugustin/${{ matrix.variant }}
             ghcr.io/AndreasAugustin/${{ matrix.variant }}
-          tags: ${{ inputs.tag }},latest
+          tags: |
+            type=semver,pattern={{version}},value=${{ inputs.tag }}
       - name: Build and push ${{ matrix.variant }}
         uses: docker/build-push-action@v3
         with:
