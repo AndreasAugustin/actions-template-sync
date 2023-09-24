@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.4](https://github.com/AndreasAugustin/actions-template-sync/compare/v1.1.3...v1.1.4) (2023-09-24)
+
+
+### Bug Fixes
+
+* **docs:** :bug: ([#387](https://github.com/AndreasAugustin/actions-template-sync/issues/387)) fix missing documentation about .templatesyncignore paths ([3130f5b](https://github.com/AndreasAugustin/actions-template-sync/commit/3130f5bc62a6f98ece2c209994283520fe3ca811))
+
 ## [1.1.3](https://github.com/AndreasAugustin/actions-template-sync/compare/v1.1.2...v1.1.3) (2023-09-16)
 
 
