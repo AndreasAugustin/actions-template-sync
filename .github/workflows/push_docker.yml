@@ -60,7 +60,7 @@ jobs:
         with:
           context: ./src/
           push: ${{ github.event_name != 'pull_request' }}
-          tags: ${{ inputs.tag }} #${{ steps.meta.outputs.tags }}
+          tags: andreasaugustin/${{ matrix.variant }}:${{ inputs.tag }} #${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
       - name: Docker Hub Description
         uses: peter-evans/dockerhub-description@v3
