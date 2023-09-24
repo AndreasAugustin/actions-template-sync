@@ -2,10 +2,11 @@ name: test
 
 on:
   push:
-    branches:
-      - "!main"
-  pull_request:
+  #   branches:
+  #     - "!main"
+  # pull_request:
   workflow_call:
+  workflow_dispatch:
 
 jobs:
   test-implementation-job:
