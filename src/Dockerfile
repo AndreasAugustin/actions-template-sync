@@ -1,6 +1,6 @@
 FROM alpine:3.18.3
 
-ARG GH_CLI_VER=2.21.1
+ARG GH_CLI_VER=2.34.0
 
 # TODO(anau) change user
 ARG GITHUB_URL="https://github.com/AndreasAugustin/actions-template-sync"

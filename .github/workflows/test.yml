@@ -1,9 +1,11 @@
 name: test
 
 on:
-  pull_request:
   push:
-  # manual trigger
+  #   branches:
+  #     - "!main"
+  # pull_request:
+  workflow_call:
   workflow_dispatch:
 
 jobs:

@@ -1,9 +1,14 @@
 name: release-please
 
 on:
-  push:
-    branches:
-      - main
+  workflow_call:
+    outputs:
+      release_created:
+        description: "Set if the release has been created"
+        value: ${{ jobs.release-please.outputs.release_created }}
+      tag_name:
+        description: "The tag name"
+        value: ${{ jobs.release-please.outputs.tag_name }}
   workflow_dispatch:
 
 permissions:
