@@ -251,6 +251,14 @@ It can also be stored inside `.github` folder.
 
 _Note: It is not possible to sync also the `.templatesyncignore` itself. Any changes from the template repository will be restored automatically._
 
+**Remark** reading the [gitglossary][git-glossary] (_pathspec_ section) you see a slight difference to the `.gitignore` file when you like to disable files.
+E.g. when you like to disable the sync for all files with exceptions, you need to do smth like
+
+```txt
+:!newfile-1.txt
+*
+```
+
 ## Lifecycle hooks
 
 Different lifecycle hooks are supported. You need to enable the functionality with the option `is_allow_hooks` and set it to `true`
@@ -410,3 +418,4 @@ specification. Contributions of any kind are welcome!
 [other-repo-sync]: https://github.com/repo-sync/repo-sync
 [other-git-repo-sync]: https://github.com/it3xl/git-repo-sync
 [other-action-template-repository-sync]: https://github.com/it3xl/git-repo-sync
+[git-glossary]: https://git-scm.com/docs/gitglossary
