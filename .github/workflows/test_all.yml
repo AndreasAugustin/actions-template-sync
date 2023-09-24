@@ -10,7 +10,7 @@ on:
 
 jobs:
   call_test_hooks:
-    uses: ./.github/workflow/test_hooks.yml
+    uses: ./.github/workflows/test_hooks.yml
     secrets: inherit
   call_test_ssh_gitlab:
     uses: ./.github/workflows/test_ssh_gitlab.yml
