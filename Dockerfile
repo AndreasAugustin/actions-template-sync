@@ -3,7 +3,7 @@
 ######################################
 FROM alpine:3.18.3 as dev
 
-ARG GH_CLI_VER=2.21.1
+ARG GH_CLI_VER=2.34.0
 
 # install packages
 RUN apk add --update --no-cache bash make git zsh curl tmux musl openssh git-lfs vim yq
