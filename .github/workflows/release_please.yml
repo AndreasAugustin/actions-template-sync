@@ -5,10 +5,10 @@ on:
     outputs:
       release_created:
         description: "Set if the release has been created"
-        value: ${{ jobs.release-please.outputs.release_created }}
+        value: ${{ jobs.release_please.outputs.release_created }}
       tag_name:
         description: "The tag name"
-        value: ${{ jobs.release-please.outputs.tag_name }}
+        value: ${{ jobs.release_please.outputs.tag_name }}
   workflow_dispatch:
 
 permissions:
@@ -16,10 +16,10 @@ permissions:
   pull-requests: write
 
 jobs:
-  release-please:
+  release_please:
     runs-on: ubuntu-latest
     steps:
       - uses: google-github-actions/release-please-action@v3
         with:
           release-type: simple
-          package-name: release-please-action
+          package-name: actions-template-sync
