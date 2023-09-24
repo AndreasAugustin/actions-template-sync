@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.8](https://github.com/AndreasAugustin/actions-template-sync/compare/v1.1.7...v1.1.8) (2023-09-24)
+
+
+### Bug Fixes
+
+* **ci:** :bug: issues within ci ([2793a56](https://github.com/AndreasAugustin/actions-template-sync/commit/2793a56cecdd0000c25e0a81972d78a45fbb4d97))
+
 ## [1.1.7](https://github.com/AndreasAugustin/actions-template-sync/compare/v1.1.6...v1.1.7) (2023-09-24)
 
 
