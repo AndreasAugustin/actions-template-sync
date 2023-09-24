@@ -231,6 +231,10 @@ jobs:
 | git_user_email | `[optional]` set the committer git user.email | `false` | `github-action@actions-template-sync.noreply.${SOURCE_REPO_HOSTNAME}` |
 | git_remote_pull_params |`[optional]` set remote pull parameters | `false` | `--allow-unrelated-histories --squash --strategy=recursive -X theirs` |
 
+### Docker
+
+There are docker images available. Please checkout [How to use docker](docs/DOCKER.md) for details.
+
 ### Example
 
 This repo uses this [template][template] and this action from the [marketplace][marketplace].
@@ -251,7 +255,8 @@ It can also be stored inside `.github` folder.
 
 _Note: It is not possible to sync also the `.templatesyncignore` itself. Any changes from the template repository will be restored automatically._
 
-**Remark** reading the [gitglossary][git-glossary] (_pathspec_ section) you see a slight difference to the `.gitignore` file when you like to disable files.
+**Remark** reading the [gitglossary][git-glossary] (_pathspec_ section) you see a slight difference to the `.gitignore` file
+when you like to disable files you need to use `:!`.
 E.g. when you like to disable the sync for all files with exceptions, you need to do smth like
 
 ```txt

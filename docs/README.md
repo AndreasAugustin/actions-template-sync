@@ -16,3 +16,4 @@ flowchart LR
 ```
 
 - [architecture](./ARCHITECTURE.md)
+- [how to use the docker images](./DOCKER.md)

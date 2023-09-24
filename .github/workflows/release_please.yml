@@ -18,8 +18,12 @@ permissions:
 jobs:
   release_please:
     runs-on: ubuntu-latest
+    outputs:
+      release_created: ${{ steps.release_please.outputs.release_created }}
+      tag_name: ${{ steps.release_please.outputs.tag_name }}
     steps:
       - uses: google-github-actions/release-please-action@v3
+        id: release_please
         with:
           release-type: simple
           package-name: actions-template-sync
