@@ -12,6 +12,7 @@ jobs:
     uses: ./.github/workflows/lint.yml
   call_test_all:
     uses: ./.github/workflows/test_all.yml
+    secrets: inherit
   call_release_please:
     needs:
       - call_shellcheck
