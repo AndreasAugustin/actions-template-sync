@@ -1,0 +1,19 @@
+name: test-all
+
+on:
+  push:
+    branches:
+      - "!main"
+  # pull_request:
+  workflow_call:
+  workflow_dispatch:
+
+jobs:
+  call_test_hooks:
+    uses: ./.github/workflow/test_hooks.yml
+  call_test_ssh_gitlab:
+    uses: ./.github/workflows/test_ssh_gitlab.yml
+  call_test_ssh:
+    uses: ./.github/workflows/test_ssh.yml
+  call_test:
+    uses: ./.github/workflows/test.yml

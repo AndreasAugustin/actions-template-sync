@@ -2,6 +2,10 @@ name: shellcheck
 
 on:
   push:
+    branches:
+      - "!main"
+  pull_request:
+  workflow_call:
   workflow_dispatch:
 
 jobs:
@@ -9,6 +13,6 @@ jobs:
     name: Shellcheck
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
-    - name: Run shellcheck in container
-      run: make shellcheck
+      - uses: actions/checkout@v3
+      - name: Run shellcheck in container
+        run: make shellcheck

@@ -1,23 +1,22 @@
 name: test-ssh-gitlab
 
 on:
-  # pull_request:
   push:
-  # manual trigger
+  #   branches:
+  #     - "!main"
+  # pull_request:
+  workflow_call:
   workflow_dispatch:
 
 jobs:
   test-implementation-job:
-
     runs-on: ubuntu-latest
 
     steps:
       # To use this repository's private action, you must check out the repository
-      -
-        name: Checkout
+      - name: Checkout
         uses: actions/checkout@v3
-      -
-        name: Test action step ssh
+      - name: Test action step ssh
         if: github.repository_owner == 'AndreasAugustin'
         uses: ./ # Uses an action in the root directory
         with:
