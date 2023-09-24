@@ -30,6 +30,8 @@ jobs:
       contents: read
       packages: write
     uses: ./.github/workflows/push_docker.yml
+    with:
+      tag: ${{ needs.release_please.outputs.tag_name }}
     secrets: inherit
   call_release_test_docker_images:
     if: ${{ needs.release_please.outputs.release_created }}
