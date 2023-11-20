@@ -30,7 +30,7 @@ WORKDIR /app
 #######################################
 # image for creating the documentation
 ######################################
-FROM node:21.1.0-alpine as docs
+FROM node:21.2.0-alpine as docs
 
 # install packages
 RUN apk add --update --no-cache bash make git zsh curl tmux
