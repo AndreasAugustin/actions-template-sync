@@ -58,7 +58,7 @@ jobs:
           tags: |
             type=semver,pattern={{raw}},value=${{ inputs.tag }}
       - name: Build and push ${{ matrix.variant }}
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@v5
         with:
           context: ./src/
           push: ${{ github.event_name != 'pull_request' }}
