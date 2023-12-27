@@ -83,11 +83,14 @@ jobs:
     steps:
       # To use this repository's private action, you must check out the repository
       - name: Checkout
-        uses: actions/checkout@v3
-      - name: actions-template-sync
-        uses: AndreasAugustin/actions-template-sync@v1.1.3
+        uses: actions/checkout@v4
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.CUSTOM_GITHUB_PAT }}
+
+      - name: actions-template-sync
+        uses: AndreasAugustin/actions-template-sync@v1.1.8
+        with:
+          github_token: ${{ secrets.CUSTOM_GITHUB_PAT }}
           source_repo_path: <owner/repo>
           upstream_branch: <target_branch> # defaults to main
           pr_labels: <label1>,<label2>[,...] # optional, no default
@@ -117,12 +120,14 @@ jobs:
         with:
           app_id: ${{ secrets.APP_ID }}
           private_key: ${{ secrets.PRIVATE_KEY }}
+
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           token: ${{ steps.generate_token.outputs.token }}
+
       - name: actions-template-sync
-        uses: AndreasAugustin/actions-template-sync@v1.1.3
+        uses: AndreasAugustin/actions-template-sync@v1.1.8
         with:
           github_token: ${{ steps.generate_token.outputs.token }}
           source_repo_path: <owner/repo>
@@ -148,11 +153,14 @@ jobs:
     steps:
       # To use this repository's private action, you must check out the repository
       - name: Checkout
-        uses: actions/checkout@v3
-      - name: actions-template-sync
-        uses: AndreasAugustin/actions-template-sync@v1.1.3
+        uses: actions/checkout@v4
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.CUSTOM_GITHUB_PAT }}
+
+      - name: actions-template-sync
+        uses: AndreasAugustin/actions-template-sync@v1.1.8
+        with:
+          github_token: ${{ secrets.CUSTOM_GITHUB_PAT }}
           source_repo_path: ${{ secrets.SOURCE_REPO_PATH }} # <owner/repo>, should be within secrets
           upstream_branch: ${{ secrets.TARGET_BRANCH }} #<target_branch> # defaults to main
           pr_labels: <label1>,<label2>[,...] # optional, no default
@@ -197,14 +205,13 @@ jobs:
 
     steps:
       # To use this repository's private action, you must check out the repository
-      -
-        name: Checkout
-        uses: actions/checkout@v3
+      - name: Checkout
+        uses: actions/checkout@v4
         with:
           token: ${{ secrets.CUSTOM_GITHUB_PAT }}
-      -
-        name: Test action step PAT
-        uses: AndreasAugustin/actions-template-sync@v1.1.0
+
+      - name: Test action step PAT
+        uses: AndreasAugustin/actions-template-sync@v1.1.8
         with:
           github_token: ${{ secrets.CUSTOM_GITHUB_PAT }}
           source_repo_path: ${{ secrets.SOURCE_REPO_PATH }} # <owner/repo>, should be within secrets
