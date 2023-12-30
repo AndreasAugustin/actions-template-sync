@@ -85,12 +85,15 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          token: ${{ secrets.CUSTOM_GITHUB_PAT }}
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: actions-template-sync
         uses: AndreasAugustin/actions-template-sync@v1.1.8
+        permissions:
+          content: write
+          pull-requests: write
         with:
-          github_token: ${{ secrets.CUSTOM_GITHUB_PAT }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
           source_repo_path: <owner/repo>
           upstream_branch: <target_branch> # defaults to main
           pr_labels: <label1>,<label2>[,...] # optional, no default
@@ -155,12 +158,15 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          token: ${{ secrets.CUSTOM_GITHUB_PAT }}
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: actions-template-sync
         uses: AndreasAugustin/actions-template-sync@v1.1.8
+        permissions:
+          content: write
+          pull-requests: write
         with:
-          github_token: ${{ secrets.CUSTOM_GITHUB_PAT }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
           source_repo_path: ${{ secrets.SOURCE_REPO_PATH }} # <owner/repo>, should be within secrets
           upstream_branch: ${{ secrets.TARGET_BRANCH }} #<target_branch> # defaults to main
           pr_labels: <label1>,<label2>[,...] # optional, no default
