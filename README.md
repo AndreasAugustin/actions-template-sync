@@ -79,13 +79,20 @@ on:
 jobs:
   repo-sync:
     runs-on: ubuntu-latest
+    # https://docs.github.com/en/actions/using-jobs/assigning-permissions-to-jobs
+    permissions:
+      contents: write
+      pull-requests: write
 
     steps:
       # To use this repository's private action, you must check out the repository
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
       - name: actions-template-sync
-        uses: AndreasAugustin/actions-template-sync@v1.1.3
+        uses: AndreasAugustin/actions-template-sync@v1.1.8
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           source_repo_path: <owner/repo>
@@ -117,12 +124,14 @@ jobs:
         with:
           app_id: ${{ secrets.APP_ID }}
           private_key: ${{ secrets.PRIVATE_KEY }}
+
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           token: ${{ steps.generate_token.outputs.token }}
+
       - name: actions-template-sync
-        uses: AndreasAugustin/actions-template-sync@v1.1.3
+        uses: AndreasAugustin/actions-template-sync@v1.1.8
         with:
           github_token: ${{ steps.generate_token.outputs.token }}
           source_repo_path: <owner/repo>
@@ -144,13 +153,20 @@ It is also possible to use a different git provider, e.g. GitLab.
 jobs:
   repo-sync:
     runs-on: ubuntu-latest
+    # https://docs.github.com/en/actions/using-jobs/assigning-permissions-to-jobs
+    permissions:
+      contents: write
+      pull-requests: write
 
     steps:
       # To use this repository's private action, you must check out the repository
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
       - name: actions-template-sync
-        uses: AndreasAugustin/actions-template-sync@v1.1.3
+        uses: AndreasAugustin/actions-template-sync@v1.1.8
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           source_repo_path: ${{ secrets.SOURCE_REPO_PATH }} # <owner/repo>, should be within secrets
@@ -197,14 +213,13 @@ jobs:
 
     steps:
       # To use this repository's private action, you must check out the repository
-      -
-        name: Checkout
-        uses: actions/checkout@v3
+      - name: Checkout
+        uses: actions/checkout@v4
         with:
           token: ${{ secrets.CUSTOM_GITHUB_PAT }}
-      -
-        name: Test action step PAT
-        uses: AndreasAugustin/actions-template-sync@v1.1.0
+
+      - name: Test action step PAT
+        uses: AndreasAugustin/actions-template-sync@v1.1.8
         with:
           github_token: ${{ secrets.CUSTOM_GITHUB_PAT }}
           source_repo_path: ${{ secrets.SOURCE_REPO_PATH }} # <owner/repo>, should be within secrets
