@@ -79,6 +79,10 @@ on:
 jobs:
   repo-sync:
     runs-on: ubuntu-latest
+    # https://docs.github.com/en/actions/using-jobs/assigning-permissions-to-jobs
+    permissions:
+      contents: write
+      pull-requests: write
 
     steps:
       # To use this repository's private action, you must check out the repository
@@ -89,9 +93,6 @@ jobs:
 
       - name: actions-template-sync
         uses: AndreasAugustin/actions-template-sync@v1.1.8
-        permissions:
-          content: write
-          pull-requests: write
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           source_repo_path: <owner/repo>
@@ -152,6 +153,10 @@ It is also possible to use a different git provider, e.g. GitLab.
 jobs:
   repo-sync:
     runs-on: ubuntu-latest
+    # https://docs.github.com/en/actions/using-jobs/assigning-permissions-to-jobs
+    permissions:
+      contents: write
+      pull-requests: write
 
     steps:
       # To use this repository's private action, you must check out the repository
@@ -162,9 +167,6 @@ jobs:
 
       - name: actions-template-sync
         uses: AndreasAugustin/actions-template-sync@v1.1.8
-        permissions:
-          content: write
-          pull-requests: write
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           source_repo_path: ${{ secrets.SOURCE_REPO_PATH }} # <owner/repo>, should be within secrets

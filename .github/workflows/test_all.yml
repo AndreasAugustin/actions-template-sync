@@ -12,12 +12,24 @@ jobs:
   call_test_hooks:
     uses: ./.github/workflows/test_hooks.yml
     secrets: inherit
+    permissions:
+      contents: write
+      pull-requests: write
   call_test_ssh_gitlab:
     uses: ./.github/workflows/test_ssh_gitlab.yml
     secrets: inherit
+    permissions:
+      contents: write
+      pull-requests: write
   call_test_ssh:
     uses: ./.github/workflows/test_ssh.yml
     secrets: inherit
+    permissions:
+      contents: write
+      pull-requests: write
   call_test:
     uses: ./.github/workflows/test.yml
     secrets: inherit
+    permissions:
+      contents: write
+      pull-requests: write

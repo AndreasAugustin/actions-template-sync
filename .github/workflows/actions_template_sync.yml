@@ -10,6 +10,9 @@ on:
 jobs:
   repo-sync:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
 
     steps:
       # To use this repository's private action, you must check out the repository
