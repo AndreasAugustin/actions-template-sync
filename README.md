@@ -88,8 +88,6 @@ jobs:
       # To use this repository's private action, you must check out the repository
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: actions-template-sync
         uses: AndreasAugustin/actions-template-sync@v1.1.8
