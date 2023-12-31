@@ -336,13 +336,15 @@ hooks:
 
   This happens because the template repository is trying to overwrite some files inside `.github/workflows/`.
 
-  Currently `GITHUB_TOKEN` can't be given `workflow` permission. You can grant our workflow with `workflows` permission using a PAT following the steps below:
+  Currently `GITHUB_TOKEN` can't be given `workflow` permission.
+  You can grant our workflow with `workflows` permission using a PAT following the steps below:
 
-  1. [Create a PAT](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens#creating-a-fine-grained-personal-access-token) with these repository permissions granted: `contents:write`, `workflows:write`, `metadata:read`.
+  1. [Create a PAT][github-create-pat] with these repository permissions granted: `contents:write`, `workflows:write`, `metadata:read`.
 
-  2. Copy the generated token and [create a new secret for your target repository](https://docs.github.com/en/actions/security-guides/using-secrets-in-github-actions#creating-secrets-for-a-repository).
+  2. Copy the generated token and [create a new secret for your target repository][github-create-secret].
 
   3. Configure the `checkout` action to use the token in secrets like this:
+
      ```yaml
      # File: .github/workflows/template-sync.yml
 
@@ -491,3 +493,5 @@ specification. Contributions of any kind are welcome!
 [other-action-template-repository-sync]: https://github.com/ahmadnassri/action-template-repository-sync
 [git-glossary]: https://git-scm.com/docs/gitglossary
 [dotdc-blog]: https://0xdc.me/blog/github-templates-and-repository-sync/
+[github-create-pat]: https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens#creating-a-fine-grained-personal-access-token
+[github-create-secret]: https://docs.github.com/en/actions/security-guides/using-secrets-in-github-actions#creating-secrets-for-a-repository
