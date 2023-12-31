@@ -331,7 +331,7 @@ hooks:
 
   1. [Create a PAT](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens#creating-a-fine-grained-personal-access-token) with these repository permissions granted: `contents:write`, `workflows:write`, `metadata:read`.
 
-  2. Copy the generated token and [create a new secret for your target repository](https://doc.github.com/en/actions/security-guides/using-secrets-in-github-actions#creating-secrets-for-a-repository).
+  2. Copy the generated token and [create a new secret for your target repository](https://docs.github.com/en/actions/security-guides/using-secrets-in-github-actions#creating-secrets-for-a-repository).
 
   3. Configure the `checkout` action to use the token in secrets like this:
      ```yaml
