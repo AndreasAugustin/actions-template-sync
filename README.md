@@ -325,52 +325,52 @@ hooks:
 
 * refusing to allow a GitHub App to create or update workflow `.github/workflows/******.yml` without `workflows` permission
 
-This happens because the template repository is trying to overwrite some files inside `.github/workflows/`.
+  This happens because the template repository is trying to overwrite some files inside `.github/workflows/`.
 
-Currently `GITHUB_TOKEN` can't be given `workflow` permission. You can grant our workflow with `workflows` permission using a PAT following the steps below:
+  Currently `GITHUB_TOKEN` can't be given `workflow` permission. You can grant our workflow with `workflows` permission using a PAT following the steps below:
 
-1. [Create a PAT](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your personal-access-tokens#creating-a-fine-grained-personal-access-token) with these repository permissions granted: `contents:write`, `workflows:write`, `metadata:read`.
+  1. [Create a PAT](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens#creating-a-fine-grained-personal-access-token) with these repository permissions granted: `contents:write`, `workflows:write`, `metadata:read`.
 
-2. Copy the generated token and [create a new secret for your target repository](https://doc.github.com/en/actions/security-guides/using-secrets-in-github-actions#creating-secrets-for-a-repository).
+  2. Copy the generated token and [create a new secret for your target repository](https://doc.github.com/en/actions/security-guides/using-secrets-in-github-actions#creating-secrets-for-a-repository).
 
-3. Configure the `checkout` action to use the token in secrets like this:
-```yaml
-# File: .github/workflows/template-sync.yml
+  3. Configure the `checkout` action to use the token in secrets like this:
+     ```yaml
+     # File: .github/workflows/template-sync.yml
 
-on:
-    # cronjob trigger
-  schedule:
-  - cron:  "0 0 1 * *"
-  # manual trigger
-  workflow_dispatch:
-jobs:
-  repo-sync:
-    runs-on: ubuntu-latest
-    # https://docs.github.com/en/actions/using-jobs/assigning-permissions-to-jobs
-    permissions:
-      contents: write
-      pull-requests: write
+     on:
+         # cronjob trigger
+       schedule:
+       - cron:  "0 0 1 * *"
+       # manual trigger
+       workflow_dispatch:
+     jobs:
+       repo-sync:
+         runs-on: ubuntu-latest
+         # https://docs.github.com/en/actions/using-jobs/assigning-permissions-to-jobs
+         permissions:
+           contents: write
+           pull-requests: write
 
-    steps:
-      # To use this repository's private action, you must check out the repository
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          submodules: true
-          token: ${{ secrets.<secret_name> }} 
+         steps:
+           # To use this repository's private action, you must check out the repository
+           - name: Checkout
+             uses: actions/checkout@v4
+             with:
+               submodules: true
+               token: ${{ secrets.<secret_name> }}
 
-      - name: actions-template-sync
-        uses: AndreasAugustin/actions-template-sync@v1.1.8
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          source_repo_path: <owner/repo>
-          upstream_branch: <target_branch> # defaults to main
-          pr_labels: <label1>,<label2>[,...] # optional, no default
-```
+           - name: actions-template-sync
+             uses: AndreasAugustin/actions-template-sync@v1.1.8
+             with:
+               github_token: ${{ secrets.GITHUB_TOKEN }}
+               source_repo_path: <owner/repo>
+               upstream_branch: <target_branch> # defaults to main
+               pr_labels: <label1>,<label2>[,...] # optional, no default
+     ```
 
 * pull request create failed: GraphQL: GitHub Actions is not permitted to create or approve pull requests (createPullRequest)
 
-Open your project `Settings > Actions > General` and select the checkbox `Allow GitHub Actions to create and approve pull requests`
+  Open your project `Settings > Actions > General` and select the checkbox `Allow GitHub Actions to create and approve pull requests`
 under the `Workflow permissions` section.
 
 ## Release Updates
