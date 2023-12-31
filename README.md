@@ -128,6 +128,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
+          submodules: true
           token: ${{ steps.generate_token.outputs.token }}
 
       - name: actions-template-sync
@@ -163,6 +164,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
+          submodules: true
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: actions-template-sync
@@ -216,6 +218,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
+          submodules: true
           token: ${{ secrets.CUSTOM_GITHUB_PAT }}
 
       - name: Test action step PAT
