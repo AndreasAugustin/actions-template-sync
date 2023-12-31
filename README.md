@@ -94,7 +94,7 @@ jobs:
         #   submodules: true
 
       - name: actions-template-sync
-        uses: AndreasAugustin/actions-template-sync@v1.1.8
+        uses: AndreasAugustin/actions-template-sync@v1.1.9
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           source_repo_path: <owner/repo>
@@ -134,7 +134,7 @@ jobs:
           token: ${{ steps.generate_token.outputs.token }}
 
       - name: actions-template-sync
-        uses: AndreasAugustin/actions-template-sync@v1.1.8
+        uses: AndreasAugustin/actions-template-sync@v1.1.9
         with:
           github_token: ${{ steps.generate_token.outputs.token }}
           source_repo_path: <owner/repo>
@@ -170,7 +170,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: actions-template-sync
-        uses: AndreasAugustin/actions-template-sync@v1.1.8
+        uses: AndreasAugustin/actions-template-sync@v1.1.9
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           source_repo_path: ${{ secrets.SOURCE_REPO_PATH }} # <owner/repo>, should be within secrets
@@ -224,7 +224,7 @@ jobs:
           token: ${{ secrets.CUSTOM_GITHUB_PAT }}
 
       - name: Test action step PAT
-        uses: AndreasAugustin/actions-template-sync@v1.1.8
+        uses: AndreasAugustin/actions-template-sync@v1.1.9
         with:
           github_token: ${{ secrets.CUSTOM_GITHUB_PAT }}
           source_repo_path: ${{ secrets.SOURCE_REPO_PATH }} # <owner/repo>, should be within secrets
@@ -260,7 +260,11 @@ There are docker images available. Please checkout [How to use docker](docs/DOCK
 This repo uses this [template][template] and this action from the [marketplace][marketplace].
 See the definition [here][self-usage].
 
-If you look for a more detailed guide you can have a look at [Dev.to][devto-example] or [GitHub][github-example]
+If you look for a more detailed guide you can have a look at
+
+* [Dev.to][devto-example]
+* [GitHub][github-example]
+* :heart: [nice blog post][dotdc-blog]
 
 ### Trigger
 
@@ -304,7 +308,7 @@ The following hooks are supported (please check [docs/ARCHITECTURE.md](docs/ARCH
 **Remark** The underlying OS is defined by an Alpine container.
 E.q. for the installation phase you need to use commands like `apk add --update --no-cache python3`
 
-Schema and example for the `temlatesync.yml`
+Schema and example for the `templatesync.yml`
 
 ```yml
 hooks:
@@ -332,13 +336,15 @@ hooks:
 
   This happens because the template repository is trying to overwrite some files inside `.github/workflows/`.
 
-  Currently `GITHUB_TOKEN` can't be given `workflow` permission. You can grant our workflow with `workflows` permission using a PAT following the steps below:
+  Currently `GITHUB_TOKEN` can't be given `workflow` permission.
+  You can grant our workflow with `workflows` permission using a PAT following the steps below:
 
-  1. [Create a PAT](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens#creating-a-fine-grained-personal-access-token) with these repository permissions granted: `contents:write`, `workflows:write`, `metadata:read`.
+  1. [Create a PAT][github-create-pat] with these repository permissions granted: `contents:write`, `workflows:write`, `metadata:read`.
 
-  2. Copy the generated token and [create a new secret for your target repository](https://docs.github.com/en/actions/security-guides/using-secrets-in-github-actions#creating-secrets-for-a-repository).
+  2. Copy the generated token and [create a new secret for your target repository][github-create-secret].
 
   3. Configure the `checkout` action to use the token in secrets like this:
+
      ```yaml
      # File: .github/workflows/template-sync.yml
 
@@ -392,7 +398,7 @@ For more information, see "[Enabling debug logging.][enabling-debug-logging]"
 
 There are other great tools available within GitHub. Here you can find a comparison.
 
-| **feature** | **actions-template-sync** |[repo-sync][other-repo-sync]| [git-repo-sync][other-git-repo-sync] | [action-template-repository-sync][other-action-template-repository-sync] |
+| **feature** | **actions-template-sync** |[github-sync][other-repo-sync]| [git-repo-sync][other-git-repo-sync] | [action-template-repository-sync][other-action-template-repository-sync] |
 | ----------- | ------------------------- | -------------------------- | ------------------------------------ | --------------------------------- |
 | GitHub action | :heavy_check_mark: | :heavy_check_mark: | :x: | :heavy_check_mark: |
 | hooks | :heavy_check_mark: | :x: | :x: | :x: |
@@ -482,7 +488,10 @@ specification. Contributions of any kind are welcome!
 [dockerhub-repo]: https://hub.docker.com/r/andyaugustin/actions-template-sync
 [github-repo]: https://github.com/AndreasAugustin/actions-template-sync/pkgs/container/actions-template-sync
 [github-pat]: https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token
-[other-repo-sync]: https://github.com/repo-sync/repo-sync
+[other-repo-sync]: https://github.com/repo-sync/github-sync
 [other-git-repo-sync]: https://github.com/it3xl/git-repo-sync
-[other-action-template-repository-sync]: https://github.com/it3xl/git-repo-sync
+[other-action-template-repository-sync]: https://github.com/ahmadnassri/action-template-repository-sync
 [git-glossary]: https://git-scm.com/docs/gitglossary
+[dotdc-blog]: https://0xdc.me/blog/github-templates-and-repository-sync/
+[github-create-pat]: https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens#creating-a-fine-grained-personal-access-token
+[github-create-secret]: https://docs.github.com/en/actions/security-guides/using-secrets-in-github-actions#creating-secrets-for-a-repository

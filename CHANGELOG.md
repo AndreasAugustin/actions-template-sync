@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.9](https://github.com/AndreasAugustin/actions-template-sync/compare/v1.1.8...v1.1.9) (2023-12-30)
+
+
+### Bug Fixes
+
+* github pat in documentation examples ([#423](https://github.com/AndreasAugustin/actions-template-sync/issues/423)) ([aea6128](https://github.com/AndreasAugustin/actions-template-sync/commit/aea6128ca5ae7e21f7ba687ead3f56326cce1b76))
+
 ## [1.1.8](https://github.com/AndreasAugustin/actions-template-sync/compare/v1.1.7...v1.1.8) (2023-09-24)
 
 
