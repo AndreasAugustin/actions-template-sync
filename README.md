@@ -88,8 +88,10 @@ jobs:
       # To use this repository's private action, you must check out the repository
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-          submodules: true
+        # https://github.com/actions/checkout#usage
+        # uncomment if you use submodules within the source repository
+        # with:
+        #   submodules: true
 
       - name: actions-template-sync
         uses: AndreasAugustin/actions-template-sync@v1.1.8
@@ -128,7 +130,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          submodules: true
+          # submodules: true
           token: ${{ steps.generate_token.outputs.token }}
 
       - name: actions-template-sync
@@ -164,7 +166,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          submodules: true
+          # submodules: true
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: actions-template-sync
@@ -218,7 +220,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          submodules: true
+          # submodules: true
           token: ${{ secrets.CUSTOM_GITHUB_PAT }}
 
       - name: Test action step PAT
@@ -359,7 +361,7 @@ hooks:
            - name: Checkout
              uses: actions/checkout@v4
              with:
-               submodules: true
+               # submodules: true
                token: ${{ secrets.<secret_name> }}
 
            - name: actions-template-sync
