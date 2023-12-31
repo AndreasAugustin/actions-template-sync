@@ -26,4 +26,3 @@ jobs:
         id: release_please
         with:
           release-type: simple
-          package-name: actions-template-sync
