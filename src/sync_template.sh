@@ -32,7 +32,7 @@ if [[ -n "${SRC_SSH_PRIVATEKEY_ABS_PATH}" ]]; then
   export GIT_SSH_COMMAND="ssh -i ${SRC_SSH_PRIVATEKEY_ABS_PATH}"
 fi
 
-GIT_REMOTE_PULL_PARAMS="${GIT_REMOTE_PULL_PARAMS:---allow-unrelated-histories --squash --strategy=recursive -X theirs}"
+GIT_REMOTE_PULL_PARAMS="${GIT_REMOTE_PULL_PARAMS:---allow-unrelated-histories --strategy=recursive -X theirs}"
 
 cmd_from_yml_file "install"
 
@@ -95,6 +95,16 @@ if [ -s "${TEMPLATE_SYNC_IGNORE_FILE_PATH}" ]; then
 fi
 
 echo "::group::commit changes"
+
+force_delete_files() {
+  warn "force file deletion is enabled. Deleting files which are deleted within the target repository"
+  git log --diff-filter D --pretty="format:" --name-only "${TEMPLATE_REMOTE_GIT_HASH}"..HEAD | sed '/^$/d' | xargs rm
+}
+
+if [ "$IS_FORCE_DELETION" == "true" ]; then
+  force_delete_files
+fi
+
 git add .
 
 # we are checking the ignore file if it exists or is empty
