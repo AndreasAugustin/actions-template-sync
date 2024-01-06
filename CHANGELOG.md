@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.0](https://github.com/AndreasAugustin/actions-template-sync/compare/v1.1.9...v1.2.0) (2024-01-06)
+
+
+### Features
+
+* :construction_worker: ([#432](https://github.com/AndreasAugustin/actions-template-sync/issues/432)) support major/minor tags ([#433](https://github.com/AndreasAugustin/actions-template-sync/issues/433)) ([eb942cf](https://github.com/AndreasAugustin/actions-template-sync/commit/eb942cf9366ff4cfbcb6860f9392db555a4e5c11))
+
 ## [1.1.9](https://github.com/AndreasAugustin/actions-template-sync/compare/v1.1.8...v1.1.9) (2023-12-30)
 
 
