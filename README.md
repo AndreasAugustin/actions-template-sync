@@ -94,7 +94,7 @@ jobs:
         #   submodules: true
 
       - name: actions-template-sync
-        uses: AndreasAugustin/actions-template-sync@v1.1.9
+        uses: AndreasAugustin/actions-template-sync@v1
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           source_repo_path: <owner/repo>
@@ -134,7 +134,7 @@ jobs:
           token: ${{ steps.generate_token.outputs.token }}
 
       - name: actions-template-sync
-        uses: AndreasAugustin/actions-template-sync@v1.1.9
+        uses: AndreasAugustin/actions-template-sync@v1
         with:
           github_token: ${{ steps.generate_token.outputs.token }}
           source_repo_path: <owner/repo>
@@ -170,7 +170,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: actions-template-sync
-        uses: AndreasAugustin/actions-template-sync@v1.1.9
+        uses: AndreasAugustin/actions-template-sync@v1
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           source_repo_path: ${{ secrets.SOURCE_REPO_PATH }} # <owner/repo>, should be within secrets
@@ -224,7 +224,7 @@ jobs:
           token: ${{ secrets.CUSTOM_GITHUB_PAT }}
 
       - name: Test action step PAT
-        uses: AndreasAugustin/actions-template-sync@v1.1.9
+        uses: AndreasAugustin/actions-template-sync@v1
         with:
           github_token: ${{ secrets.CUSTOM_GITHUB_PAT }}
           source_repo_path: ${{ secrets.SOURCE_REPO_PATH }} # <owner/repo>, should be within secrets
@@ -371,7 +371,7 @@ hooks:
                token: ${{ secrets.<secret_name> }}
 
            - name: actions-template-sync
-             uses: AndreasAugustin/actions-template-sync@v1.1.8
+             uses: AndreasAugustin/actions-template-sync@v1
              with:
                github_token: ${{ secrets.GITHUB_TOKEN }}
                source_repo_path: <owner/repo>
@@ -386,7 +386,7 @@ under the `Workflow permissions` section.
 
 ## Release Updates
 
-* :warning: starting with version v1.0.0 the `upstream_branch` variable default is not `main` anymore. It is now set to the remote default branch.
+* :warning: starting with version `v1` (`v1.0.0`) the `upstream_branch` variable default is not `main` anymore. It is now set to the remote default branch.
 * starting with version v0.5.2-draft the `templateversionrc` file is not needed anymore. You can delete that file from the target repositories.
 
 ## Debug
