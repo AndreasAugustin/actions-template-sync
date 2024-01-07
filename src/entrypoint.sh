@@ -47,7 +47,7 @@ function gpg_setup() {
   echo -e "$GPG_PRIVATE_KEY" | gpg --import --batch
   for fpr in $(gpg --list-key --with-colons "${GIT_USER_EMAIL}"  | awk -F: '/fpr:/ {print $10}' | sort -u); do  echo -e "5\ny\n" |  gpg --no-tty --command-fd 0 --expert --edit-key "$fpr" trust; done
 
-  KEY_ID="$(gpg --list-secret-key --with-colons dev@andreas-augustin.org |  awk -F: '/sec:/ {print $5}')"
+  KEY_ID="$(gpg --list-secret-key --with-colons "${GIT_USER_EMAIL}" | awk -F: '/sec:/ {print $5}')"
   git config --global user.signingkey "${KEY_ID}"
   git config --global commit.gpgsign true
   git config --global gpg.program /bin/gpg_no_tty.sh
