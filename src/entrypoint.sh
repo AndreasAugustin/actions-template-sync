@@ -1,4 +1,4 @@
-#! /usr/bin/env bash
+#!/usr/bin/env bash
 set -e
 # set -u
 # set -x
@@ -50,6 +50,7 @@ function gpg_setup() {
   KEY_ID="$(gpg --list-secret-key --with-colons dev@andreas-augustin.org |  awk -F: '/sec:/ {print $5}')"
   git config --global user.signingkey "${KEY_ID}"
   git config --global commit.gpgsign true
+  git config --global gpg.program /bin/gpg_no_tty.sh
 
   #if [[ -n "${GPG_PASSPHRASE}" ]] &>/dev/null; then
     # TODO

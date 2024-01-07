@@ -20,7 +20,8 @@ RUN sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh
 ADD src/*.sh /bin/
 RUN chmod +x /bin/entrypoint.sh \
   && chmod +x /bin/sync_template.sh \
-  && chmod +x /bin/sync_common.sh
+  && chmod +x /bin/sync_common.sh \
+  && chmod +x /bin/gpg_no_tty.sh
 
 RUN mkdir -p /root/.ssh \
   && ssh-keyscan -t rsa github.com >> /root/.ssh/known_hosts
