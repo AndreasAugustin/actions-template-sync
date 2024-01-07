@@ -41,6 +41,23 @@ function ssh_setup() {
   echo "::endgroup::"
 }
 
+function gpg_setup() {
+  echo "::group::gpg setup"
+  info "start prepare gpg"
+  echo -e "$GPG_PRIVATE_KEY" | gpg --import --batch
+  for fpr in $(gpg --list-key --with-colons "${GIT_USER_EMAIL}"  | awk -F: '/fpr:/ {print $10}' | sort -u); do  echo -e "5\ny\n" |  gpg --command-fd 0 --expert --edit-key "$fpr" trust; done
+
+  git config --global user.signingkey "$(gpg --list-secret-key --with-colons dev@andreas-augustin.org |  awk -F: '/sec:/ {print $5}')"
+  git config --global commit.gpgsign true
+
+  #if [[ -n "${GPG_PASSPHRASE}" ]] &>/dev/null; then
+    # TODO
+  #fi
+
+  info "done prepare gpg"
+  echo "::endgroup::"for fpr in
+}
+
 # Forward to /dev/null to swallow the output of the private key
 if [[ -n "${SSH_PRIVATE_KEY_SRC}" ]] &>/dev/null; then
   ssh_setup
@@ -72,6 +89,10 @@ function git_init() {
 }
 
 git_init
+
+if [[ -n "${GPG_PRIVATE_KEY}" ]] &>/dev/null; then
+  gpg_setup
+fi
 
 # shellcheck source=src/sync_template.sh
 source sync_template.sh

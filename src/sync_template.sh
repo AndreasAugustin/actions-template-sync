@@ -44,7 +44,7 @@ debug "new Git HASH ${NEW_TEMPLATE_GIT_HASH}"
 
 echo "::group::Check new changes"
 
-check_branch_remote_existing() {
+function check_branch_remote_existing() {
   git ls-remote --exit-code --heads origin "${NEW_BRANCH}" || BRANCH_DOES_NOT_EXIST=true
 
   if [[ "${BRANCH_DOES_NOT_EXIST}" != true ]]; then
@@ -119,7 +119,7 @@ git commit -m "${PR_COMMIT_MSG}"
 
 echo "::endgroup::"
 
-push_and_create_pr () {
+function push_and_create_pr () {
   cmd_from_yml_file "prepush"
   if [ "$IS_DRY_RUN" != "true" ]; then
 

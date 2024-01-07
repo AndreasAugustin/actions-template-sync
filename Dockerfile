@@ -6,7 +6,7 @@ FROM alpine:3.19.0 as dev
 ARG GH_CLI_VER=2.34.0
 
 # install packages
-RUN apk add --update --no-cache bash make git zsh curl tmux musl openssh git-lfs vim yq
+RUN apk add --update --no-cache bash make git zsh curl tmux musl openssh git-lfs vim yq gnupg
 
 RUN wget https://github.com/cli/cli/releases/download/v${GH_CLI_VER}/gh_${GH_CLI_VER}_linux_386.tar.gz -O ghcli.tar.gz
 RUN tar --strip-components=1 -xf ghcli.tar.gz
@@ -33,7 +33,7 @@ WORKDIR /app
 FROM node:21.5.0-alpine as docs
 
 # install packages
-RUN apk add --update --no-cache bash make git zsh curl tmux gnupg
+RUN apk add --update --no-cache bash make git zsh curl tmux
 
 # Make zsh your default shell for tmux
 RUN echo "set-option -g default-shell /bin/zsh" >> /root/.tmux.conf

@@ -250,6 +250,8 @@ jobs:
 | git_user_name | `[optional]` set the committer git user.name | `false` | `${GITHUB_ACTOR}` |
 | git_user_email | `[optional]` set the committer git user.email | `false` | `github-action@actions-template-sync.noreply.${SOURCE_REPO_HOSTNAME}` |
 | git_remote_pull_params |`[optional]` set remote pull parameters | `false` | `--allow-unrelated-histories --squash --strategy=recursive -X theirs` |
+| gpg_private_key | `[optional]` set if you want to sign commits | `false` | |
+| gpg_passphrase | `[optional]` set if your optionial gpg private key has a passphrase | `false` | |
 
 ### Docker
 
@@ -286,6 +288,64 @@ E.g. when you like to disable the sync for all files with exceptions, you need t
 ```txt
 :!newfile-1.txt
 *
+```
+
+## Sign commits
+
+It is recommended to [sign your commits][devto-sign-commits]. This action is able to sign commits.
+
+First, [generate a GPG key][github-create-gpg-key] and export the GPG private key as an ASCII armored version to your clipboard:
+
+```bash
+# macOS
+gpg --armor --export-secret-key jon@doe.example | pbcopy
+
+# Ubuntu (assuming GNU base64)
+gpg --armor --export-secret-key jon@doe.example -w0 | xclip
+
+# Arch
+gpg --armor --export-secret-key jon@doe.example | xclip -selection clipboard -i
+
+# FreeBSD (assuming BSD base64)
+gpg --armor --export-secret-key jon@doe.example | xclip
+```
+
+:warning: the gpg username and email must match the `git_user_name` and `git_user_email` parameters.
+Paste your clipboard as a [secret][github-create-secret] named `GPG_PRIVATE_KEY` for example. If your key has a password, create another secret named `GPG_PASSPHRASE`.
+
+```yaml
+# File: .github/workflows/template-sync.yml
+
+on:
+    # cronjob trigger
+  schedule:
+  - cron:  "0 0 1 * *"
+  # manual trigger
+  workflow_dispatch:
+jobs:
+  repo-sync:
+    runs-on: ubuntu-latest
+    # https://docs.github.com/en/actions/using-jobs/assigning-permissions-to-jobs
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      # To use this repository's private action, you must check out the repository
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: actions-template-sync
+        uses: AndreasAugustin/actions-template-sync@v1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          source_repo_path: <owner/repo>
+          git_user_name: # add the gpg username
+          git_user_email: # add the gpg email
+          gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
+          # uncomment if your key has a passpharse
+          # gpg_passpharse: ${{ secrets.GPG_PASSPHRASE }}
+
 ```
 
 ## Lifecycle hooks
@@ -411,6 +471,7 @@ There are other great tools available within GitHub. Here you can find a compari
 | dry run | :heavy_check_mark: | :x: | :x: | :heavy_check_mark:  |
 | ignore files | :heavy_check_mark: | :x: | :x: | :heavy_check_mark: |
 | creates a PR | :heavy_check_mark: | :heavy_check_mark: | :x: | :heavy_check_mark: |
+| sign commits | :heavy_check_mark: | :x: | :x: | :x: |
 | remarks | The action is placed within the target repositories | The action is placed within the target repositories | CLI meant for local use | The action will be based within the base repository with a list of dependent repositories |
 
 ## DEV
@@ -481,6 +542,7 @@ specification. Contributions of any kind are welcome!
 [self-usage]: https://github.com/AndreasAugustin/actions-template-sync/blob/main/.github/workflows/actions_template_sync.yml
 [pr-labels]: https://docs.github.com/en/issues/using-labels-and-milestones-to-track-work/managing-labels
 [devto-example]: https://dev.to/andreasaugustin/github-actions-template-sync-1g9k
+[devto-sign-commits]: https://dev.to/andreasaugustin/git-how-and-why-to-sign-commits-35dn
 [github-example]: https://github.com/AndreasAugustin/teaching/blob/main/docs/git/git_action_sync.md
 [github-app]: https://docs.github.com/en/developers/apps/getting-started-with-apps/about-apps#about-github-apps
 [glob-pattern]: https://en.wikipedia.org/wiki/Glob_(programming)
@@ -495,3 +557,4 @@ specification. Contributions of any kind are welcome!
 [dotdc-blog]: https://0xdc.me/blog/github-templates-and-repository-sync/
 [github-create-pat]: https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens#creating-a-fine-grained-personal-access-token
 [github-create-secret]: https://docs.github.com/en/actions/security-guides/using-secrets-in-github-actions#creating-secrets-for-a-repository
+[github-create-gpg-key]: https://docs.github.com/en/authentication/managing-commit-signature-verification/generating-a-new-gpg-key

@@ -9,7 +9,7 @@ set -e
 # Arguments:
 #   message to print.
 #######################################
-err() {
+function err() {
   echo "::error::[$(date +'%Y-%m-%dT%H:%M:%S%z')]: $*" >&2;
 }
 
@@ -18,7 +18,7 @@ err() {
 # Arguments:
 #   message to print.
 #######################################
-debug() {
+function debug() {
   echo "::debug::$*";
 }
 
@@ -27,7 +27,7 @@ debug() {
 # Arguments:
 #   message to print.
 #######################################
-warn() {
+function warn() {
   echo "::warn::$*";
 }
 
@@ -36,7 +36,7 @@ warn() {
 # Arguments:
 #   message to print.
 #######################################
-info() {
+function info() {
   echo "::info::$*";
 }
 
@@ -46,7 +46,7 @@ info() {
 #   hook -> the hook to use
 #
 ####################################3#
-cmd_from_yml_file() {
+function cmd_from_yml_file() {
   local FILE_NAME="templatesync.yml"
   local HOOK=$1
   local YML_PATH=".hooks.${HOOK}.commands"
