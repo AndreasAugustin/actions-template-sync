@@ -52,10 +52,6 @@ function gpg_setup() {
   git config --global commit.gpgsign true
   git config --global gpg.program /bin/gpg_no_tty.sh
 
-  #if [[ -n "${GPG_PASSPHRASE}" ]] &>/dev/null; then
-    # TODO
-  #fi
-
   info "done prepare gpg"
   echo "::endgroup::"for fpr in
 }
