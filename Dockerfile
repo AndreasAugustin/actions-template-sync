@@ -33,7 +33,7 @@ WORKDIR /app
 FROM node:21.5.0-alpine as docs
 
 # install packages
-RUN apk add --update --no-cache bash make git zsh curl tmux
+RUN apk add --update --no-cache bash make git zsh curl tmux gnupg
 
 # Make zsh your default shell for tmux
 RUN echo "set-option -g default-shell /bin/zsh" >> /root/.tmux.conf

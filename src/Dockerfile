@@ -15,7 +15,7 @@ LABEL org.opencontainers.image.title="actions-template-sync image"
 LABEL org.opencontainers.image.description="contains actions-template-sync"
 
 # install packages
-RUN apk add --update --no-cache bash git curl musl openssh git-lfs yq
+RUN apk add --update --no-cache bash git curl musl openssh git-lfs yq gnupg
 
 RUN wget https://github.com/cli/cli/releases/download/v${GH_CLI_VER}/gh_${GH_CLI_VER}_linux_386.tar.gz -O ghcli.tar.gz
 RUN tar --strip-components=1 -xf ghcli.tar.gz
