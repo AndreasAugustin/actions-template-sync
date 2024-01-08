@@ -115,7 +115,7 @@ if git diff --quiet && git diff --staged --quiet; then
   exit 0
 fi
 
-GIT_TRACE=1 git commit --signoff -m "${PR_COMMIT_MSG}"
+git commit --signoff -m "${PR_COMMIT_MSG}"
 
 echo "::endgroup::"
 
