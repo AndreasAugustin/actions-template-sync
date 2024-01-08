@@ -94,17 +94,22 @@ if [ -s "${TEMPLATE_SYNC_IGNORE_FILE_PATH}" ]; then
   echo "::endgroup::"
 fi
 
-echo "::group::commit changes"
 
-force_delete_files() {
+
+function force_delete_files() {
+  echo "::group::force file deletion"
   warn "force file deletion is enabled. Deleting files which are deleted within the target repository"
-  git log --diff-filter D --pretty="format:" --name-only "${TEMPLATE_REMOTE_GIT_HASH}"..HEAD | sed '/^$/d' | xargs rm
+  FILES_TO_DELETE=$(git log --diff-filter D --pretty="format:" --name-only "${TEMPLATE_REMOTE_GIT_HASH}"..HEAD | sed '/^$/d')
+  warn "files to delete: ${FILES_TO_DELETE}"
+  echo "${FILES_TO_DELETE}" | xargs rm
+  echo "::endgroup::"
 }
 
 if [ "$IS_FORCE_DELETION" == "true" ]; then
   force_delete_files
 fi
 
+echo "::group::commit changes"
 git add .
 
 # we are checking the ignore file if it exists or is empty
