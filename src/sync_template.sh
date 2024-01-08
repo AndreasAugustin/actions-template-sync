@@ -101,7 +101,10 @@ function force_delete_files() {
   warn "force file deletion is enabled. Deleting files which are deleted within the target repository"
   FILES_TO_DELETE=$(git log --diff-filter D --pretty="format:" --name-only "${TEMPLATE_REMOTE_GIT_HASH}"..HEAD | sed '/^$/d')
   warn "files to delete: ${FILES_TO_DELETE}"
-  echo "${FILES_TO_DELETE}" | xargs rm
+  if [[ -n "${FILES_TO_DELETE}" ]]; then
+    echo "${FILES_TO_DELETE}" | xargs rm
+  fi
+
   echo "::endgroup::"
 }
 
