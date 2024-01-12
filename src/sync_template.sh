@@ -119,10 +119,33 @@ git commit -m "${PR_COMMIT_MSG}"
 
 echo "::endgroup::"
 
+cleanup_older_prs () {
+  cmd_from_yml_file "precleanup"
+
+  if [ "$IS_DRY_RUN" != "true" ]; then
+    echo "::group::cleanup older PRs"
+    gh pr list \
+    --base "${UPSTREAM_BRANCH}" \
+    --state open \
+    --label "${PR_LABELS}" \
+    --json number \
+    --template '{{range .}}{{printf "%v" .number}}{{"\n"}}{{end}}' | xargs -L1 gh pr close
+    echo "::endgroup::"
+  else
+      warn "dry_run option is set to off. Skipping older prs cleanup"
+  fi
+}
+
+if [ "$IS_PR_CLEANUP" != "false" ]; then
+    cleanup_older_prs
+else
+    warn "is_pr_cleanup option is set to off. Skipping older prs cleanup"
+fi
+
 push_and_create_pr () {
   cmd_from_yml_file "prepush"
-  if [ "$IS_DRY_RUN" != "true" ]; then
 
+  if [ "$IS_DRY_RUN" != "true" ]; then
     echo "::group::push changes and create PR"
     debug "push changes"
     git push --set-upstream origin "${NEW_BRANCH}"
