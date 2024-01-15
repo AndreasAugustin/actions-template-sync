@@ -302,6 +302,7 @@ The following hooks are supported (please check [docs/ARCHITECTURE.md](docs/ARCH
 
 * `install` is executed after the container has started and after reading and setting up the environment.
 * `prepull` is executed before the code is pulled from the source repository
+* `precommit` is executed before the code is commited
 * `prepush` is executed before the push is executed, right after the commit
 * `prepr` is executed before the PR is done
 
@@ -320,6 +321,10 @@ hooks:
     commands:
       - echo 'hi, we are within the prepull phase'
       - echo 'maybe you want to do adjustments on the local code'
+  precommit:
+    commands:
+      - echo 'hi, we are within the precommit phase'
+      - echo 'maybe you want to add further changes before the code is committed'
   prepush:
     commands:
       - echo 'hi, we are within the prepush phase'
