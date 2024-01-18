@@ -94,8 +94,6 @@ if [ -s "${TEMPLATE_SYNC_IGNORE_FILE_PATH}" ]; then
   echo "::endgroup::"
 fi
 
-
-
 function force_delete_files() {
   echo "::group::force file deletion"
   warn "force file deletion is enabled. Deleting files which are deleted within the target repository"
@@ -111,6 +109,8 @@ function force_delete_files() {
 if [ "$IS_FORCE_DELETION" == "true" ]; then
   force_delete_files
 fi
+
+cmd_from_yml_file "precommit"
 
 echo "::group::commit changes"
 git add .

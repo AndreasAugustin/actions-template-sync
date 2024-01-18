@@ -204,7 +204,8 @@
       "avatar_url": "https://avatars.githubusercontent.com/u/7644094?v=4",
       "profile": "https://blog.airey.be",
       "contributions": [
-        "bug"
+        "bug",
+        "review"
       ]
     },
     {
@@ -225,6 +226,25 @@
         "ideas",
         "question",
         "doc"
+      ]
+    },
+    {
+      "login": "xontab",
+      "name": "Shaun Tabone",
+      "avatar_url": "https://avatars.githubusercontent.com/u/4987684?v=4",
+      "profile": "http://www.xontab.com",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "kevin-aude",
+      "name": "Kevin AUDE",
+      "avatar_url": "https://avatars.githubusercontent.com/u/98819045?v=4",
+      "profile": "https://github.com/kevin-aude",
+      "contributions": [
+        "ideas",
+        "code"
       ]
     }
   ],

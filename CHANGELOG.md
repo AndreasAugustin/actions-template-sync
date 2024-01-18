@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.0](https://github.com/AndreasAugustin/actions-template-sync/compare/v1.2.0...v1.3.0) (2024-01-18)
+
+
+### Features
+
+* **hooks:** added precommit hook ([#439](https://github.com/AndreasAugustin/actions-template-sync/issues/439)) ([4a42410](https://github.com/AndreasAugustin/actions-template-sync/commit/4a42410a3c63b359844b20860359bc2f8ab4e6fa))
+
 ## [1.2.0](https://github.com/AndreasAugustin/actions-template-sync/compare/v1.1.9...v1.2.0) (2024-01-06)
 
 
