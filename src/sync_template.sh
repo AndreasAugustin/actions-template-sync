@@ -94,6 +94,8 @@ if [ -s "${TEMPLATE_SYNC_IGNORE_FILE_PATH}" ]; then
   echo "::endgroup::"
 fi
 
+cmd_from_yml_file "precommit"
+
 echo "::group::commit changes"
 git add .
 
