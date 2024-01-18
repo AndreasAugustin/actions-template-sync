@@ -226,6 +226,15 @@
         "question",
         "doc"
       ]
+    },
+    {
+      "login": "xontab",
+      "name": "Shaun Tabone",
+      "avatar_url": "https://avatars.githubusercontent.com/u/4987684?v=4",
+      "profile": "http://www.xontab.com",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
