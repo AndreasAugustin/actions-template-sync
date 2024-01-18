@@ -250,7 +250,7 @@ jobs:
 | is_force_deletion | `[optional]` set to `true` if you want to force delete files which are deleted within the source repository even if they contain changes" | `false` | `false` |
 | git_user_name | `[optional]` set the committer git user.name | `false` | `${GITHUB_ACTOR}` |
 | git_user_email | `[optional]` set the committer git user.email | `false` | `github-action@actions-template-sync.noreply.${SOURCE_REPO_HOSTNAME}` |
-| git_remote_pull_params |`[optional]` set remote pull parameters | `false` | `--allow-unrelated-histories --strategy=recursive -X theirs` |
+| git_remote_pull_params |`[optional]` set remote pull parameters | `false` | `--allow-unrelated-histories --squash --strategy=recursive -X theirs` |
 
 ### Docker
 

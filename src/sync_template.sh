@@ -32,9 +32,13 @@ if [[ -n "${SRC_SSH_PRIVATEKEY_ABS_PATH}" ]]; then
   export GIT_SSH_COMMAND="ssh -i ${SRC_SSH_PRIVATEKEY_ABS_PATH}"
 fi
 
-GIT_REMOTE_PULL_PARAMS="${GIT_REMOTE_PULL_PARAMS:---allow-unrelated-histories --strategy=recursive -X theirs}"
+GIT_REMOTE_PULL_PARAMS="${GIT_REMOTE_PULL_PARAMS:---allow-unrelated-histories --squash --strategy=recursive -X theirs}"
 
 cmd_from_yml_file "install"
+
+LOCAL_CURRENT_GIT_HASH=$(git rev-parse HEAD)
+
+info "current git hash: ${LOCAL_CURRENT_GIT_HASH}"
 
 TEMPLATE_SYNC_IGNORE_FILE_PATH=".templatesyncignore"
 TEMPLATE_REMOTE_GIT_HASH=$(git ls-remote "${SOURCE_REPO}" HEAD | awk '{print $1}')
@@ -97,7 +101,7 @@ fi
 function force_delete_files() {
   echo "::group::force file deletion"
   warn "force file deletion is enabled. Deleting files which are deleted within the target repository"
-  FILES_TO_DELETE=$(git log --diff-filter D --pretty="format:" --name-only "${TEMPLATE_REMOTE_GIT_HASH}"..HEAD | sed '/^$/d')
+  FILES_TO_DELETE=$(git log --diff-filter D --pretty="format:" --name-only "${LOCAL_CURRENT_GIT_HASH}"..HEAD | sed '/^$/d')
   warn "files to delete: ${FILES_TO_DELETE}"
   if [[ -n "${FILES_TO_DELETE}" ]]; then
     echo "${FILES_TO_DELETE}" | xargs rm
