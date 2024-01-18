@@ -35,7 +35,7 @@ GitCommitSync["fa:fa-code-commit Commit the changes"]
 CheckIsDryRun{"Check if is_dry_run is set to true"}
 GitPushSync["Push the changes to GitHub"]
 GitPullRequestSync["fa:fa-code-pull-request Create a pull request on GitHub"]
-Hook{{"hooks, <b>prepush | prepush | prepr</b>"}}
+Hook{{"hooks, <b>prepull | precommit | prepush | prepr</b>"}}
 
 subgraph githubactions["fa:fa-github GitHubActions"]
 
