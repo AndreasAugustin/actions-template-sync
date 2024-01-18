@@ -235,6 +235,16 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "kevin-aude",
+      "name": "Kevin AUDE",
+      "avatar_url": "https://avatars.githubusercontent.com/u/98819045?v=4",
+      "profile": "https://github.com/kevin-aude",
+      "contributions": [
+        "ideas",
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
