@@ -1,6 +1,6 @@
 # actions-template-sync
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-22-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-24-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
  [![actions-template-sync](https://github.com/AndreasAugustin/actions-template-sync/actions/workflows/actions_template_sync.yml/badge.svg)](https://github.com/AndreasAugustin/actions-template-sync/actions/workflows/actions_template_sync.yml)
@@ -303,6 +303,7 @@ The following hooks are supported (please check [docs/ARCHITECTURE.md](docs/ARCH
 
 * `install` is executed after the container has started and after reading and setting up the environment.
 * `prepull` is executed before the code is pulled from the source repository
+* `precommit` is executed before the code is commited
 * `prepush` is executed before the push is executed, right after the commit
 * `precleanup` is executed before older PRs targeting the same branch are closed
 * `prepr` is executed before the PR is done
@@ -322,6 +323,10 @@ hooks:
     commands:
       - echo 'hi, we are within the prepull phase'
       - echo 'maybe you want to do adjustments on the local code'
+  precommit:
+    commands:
+      - echo 'hi, we are within the precommit phase'
+      - echo 'maybe you want to add further changes before the code is committed'
   prepush:
     commands:
       - echo 'hi, we are within the prepush phase'
@@ -462,11 +467,13 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/ebronson68"><img src="https://avatars.githubusercontent.com/u/111298136?v=4?s=100" width="100px;" alt="Eleanor Bronson"/><br /><sub><b>Eleanor Bronson</b></sub></a><br /><a href="#ideas-ebronson68" title="Ideas, Planning, & Feedback">🤔</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/marvin-belonio"><img src="https://avatars.githubusercontent.com/u/88089002?v=4?s=100" width="100px;" alt="Marvin Osswald"/><br /><sub><b>Marvin Osswald</b></sub></a><br /><a href="https://github.com/AndreasAugustin/actions-template-sync/commits?author=marvin-belonio" title="Documentation">📖</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/dotdc"><img src="https://avatars.githubusercontent.com/u/12827900?v=4?s=100" width="100px;" alt="David Calvert"/><br /><sub><b>David Calvert</b></sub></a><br /><a href="https://github.com/AndreasAugustin/actions-template-sync/commits?author=dotdc" title="Documentation">📖</a> <a href="https://github.com/AndreasAugustin/actions-template-sync/issues?q=author%3Adotdc" title="Bug reports">🐛</a> <a href="https://github.com/AndreasAugustin/actions-template-sync/commits?author=dotdc" title="Code">💻</a> <a href="#maintenance-dotdc" title="Maintenance">🚧</a> <a href="#blog-dotdc" title="Blogposts">📝</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://blog.airey.be"><img src="https://avatars.githubusercontent.com/u/7644094?v=4?s=100" width="100px;" alt="Andy Airey"/><br /><sub><b>Andy Airey</b></sub></a><br /><a href="https://github.com/AndreasAugustin/actions-template-sync/issues?q=author%3Aaairey" title="Bug reports">🐛</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://blog.airey.be"><img src="https://avatars.githubusercontent.com/u/7644094?v=4?s=100" width="100px;" alt="Andy Airey"/><br /><sub><b>Andy Airey</b></sub></a><br /><a href="https://github.com/AndreasAugustin/actions-template-sync/issues?q=author%3Aaairey" title="Bug reports">🐛</a> <a href="https://github.com/AndreasAugustin/actions-template-sync/pulls?q=is%3Apr+reviewed-by%3Aaairey" title="Reviewed Pull Requests">👀</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://fs02.github.io/"><img src="https://avatars.githubusercontent.com/u/3049307?v=4?s=100" width="100px;" alt="Surya Asriadie"/><br /><sub><b>Surya Asriadie</b></sub></a><br /><a href="https://github.com/AndreasAugustin/actions-template-sync/issues?q=author%3AFs02" title="Bug reports">🐛</a></td>
     </tr>
     <tr>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/jellllly420"><img src="https://avatars.githubusercontent.com/u/64725601?v=4?s=100" width="100px;" alt="jellllly420"/><br /><sub><b>jellllly420</b></sub></a><br /><a href="#ideas-jellllly420" title="Ideas, Planning, & Feedback">🤔</a> <a href="#question-jellllly420" title="Answering Questions">💬</a> <a href="https://github.com/AndreasAugustin/actions-template-sync/commits?author=jellllly420" title="Documentation">📖</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="http://www.xontab.com"><img src="https://avatars.githubusercontent.com/u/4987684?v=4?s=100" width="100px;" alt="Shaun Tabone"/><br /><sub><b>Shaun Tabone</b></sub></a><br /><a href="https://github.com/AndreasAugustin/actions-template-sync/commits?author=xontab" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/kevin-aude"><img src="https://avatars.githubusercontent.com/u/98819045?v=4?s=100" width="100px;" alt="Kevin AUDE"/><br /><sub><b>Kevin AUDE</b></sub></a><br /><a href="#ideas-kevin-aude" title="Ideas, Planning, & Feedback">🤔</a> <a href="https://github.com/AndreasAugustin/actions-template-sync/commits?author=kevin-aude" title="Code">💻</a></td>
     </tr>
   </tbody>
 </table>
