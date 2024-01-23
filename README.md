@@ -340,14 +340,18 @@ hooks:
       - echo 'hi, we are within the prepr phase'
       - echo 'maybe you want to change the code a bit and do another push before creating the pr'
 ```
+
 ## Labels creation
+
 By default, generated PRs will be labeled with the `template_sync` label.
 If that label doesn't exist in your repository, it will be created automatically unless you specify your own existing labels.
 Associating a label with the generated PRs helps keeping track of them and allows for features like automatic PR cleanup.
 
 ## Pull request cleanup
+
 Depending on your way of working, you may end up with multiple pull requests related to template syncing pointing to the same branch.
-If you want to avoid this situation, you can instruct this action to clean up older PRs pointing to the same branch (search based on labels).
+If you want to avoid this situation, you can instruct this action to clean up older PRs pointing to the same branch (search based on labels defined with the `pr_labels` config parameter).
+:warning: this feature will close all pull requests with labels configured with `pr_labels` config parameter.
 
 ## Troubleshooting
 
