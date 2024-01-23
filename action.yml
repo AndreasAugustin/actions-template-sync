@@ -23,6 +23,7 @@ inputs:
     default: "upstream merge template repository"
   pr_labels:
     description: "[optional] comma separated list of pull request labels"
+    default: "template_sync"
   pr_reviewers:
     description: "[optional] comma separated list of pull request reviewers"
   pr_commit_msg:

@@ -99,7 +99,7 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           source_repo_path: <owner/repo>
           upstream_branch: <target_branch> # defaults to main
-          pr_labels: <label1>,<label2>[,...] # optional, no default
+          pr_labels: <label1>,<label2>[,...] # defaults to template_sync
 ```
 
 You will receive a pull request within your repository if there are some changes available in the template.
@@ -139,7 +139,7 @@ jobs:
           github_token: ${{ steps.generate_token.outputs.token }}
           source_repo_path: <owner/repo>
           upstream_branch: <target_branch> # defaults to main
-          pr_labels: <label1>,<label2>[,...] # optional, no default
+          pr_labels: <label1>,<label2>[,...] # defaults to template_sync
 ```
 
 #### 2. Using SSH
@@ -175,7 +175,7 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           source_repo_path: ${{ secrets.SOURCE_REPO_PATH }} # <owner/repo>, should be within secrets
           upstream_branch: ${{ secrets.TARGET_BRANCH }} #<target_branch> # defaults to main
-          pr_labels: <label1>,<label2>[,...] # optional, no default
+          pr_labels: <label1>,<label2>[,...] # defaults to template_sync
           source_repo_ssh_private_key: ${{ secrets.SOURCE_REPO_SSH_PRIVATE_KEY }} # contains the private ssh key of the private repository
 ```
 
@@ -240,7 +240,7 @@ jobs:
 | source_repo_ssh_private_key | `[optional]` private ssh key for the source repository. [see](#private-template-repository)                   | `false`  |                                                                       |
 | pr_branch_name_prefix       | `[optional]` the prefix of branches created by this action                                                    | `false`  | `chore/template_sync`                                                 |
 | pr_title                    | `[optional]` the title of PRs opened by this action. Must be already created.                                 | `false`  | `upstream merge template repository`                                  |
-| pr_labels                   | `[optional]` comma separated list. [pull request labels][pr-labels]. Must be already created.                 | `false`  |                                                                       |
+| pr_labels                   | `[optional]` comma separated list. [pull request labels][pr-labels].                                          | `false`  | `sync_template`                                                       |
 | pr_reviewers                | `[optional]` comma separated list of pull request reviewers.                                                  | `false`  |                                                                       |
 | pr_commit_msg               | `[optional]` commit message in the created pull request                                                       | `false`  | `chore(template): merge template changes :up:`                        |
 | hostname                    | `[optional]` the hostname of the repository                                                                   | `false`  | `github.com`                                                          |
@@ -340,6 +340,14 @@ hooks:
       - echo 'hi, we are within the prepr phase'
       - echo 'maybe you want to change the code a bit and do another push before creating the pr'
 ```
+## Labels creation
+By default, generated PRs will be labeled with the `template_sync` label.
+If that label doesn't exist in your repository, it will be created automatically unless you specify your own existing labels.
+Associating a label with the generated PRs helps keeping track of them and allows for features like automatic PR cleanup.
+
+## Pull request cleanup
+Depending on your way of working, you may end up with multiple pull requests related to template syncing pointing to the same branch.
+If you want to avoid this situation, you can instruct this action to clean up older PRs pointing to the same branch (search based on labels).
 
 ## Troubleshooting
 
