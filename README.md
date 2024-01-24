@@ -350,7 +350,7 @@ Associating a label with the generated PRs helps keeping track of them and allow
 ## Pull request cleanup
 
 Depending on your way of working, you may end up with multiple pull requests related to template syncing pointing to the same branch.
-If you want to avoid this situation, you can instruct this action to clean up older PRs pointing to the same branch (search based on labels defined with the `pr_labels` config parameter).
+If you want to avoid this situation, you can instruct this action to clean up older PRs (search based on labels defined with the `pr_labels` config parameter).
 :warning: this feature will close all pull requests with labels configured with `pr_labels` config parameter.
 
 ## Troubleshooting
