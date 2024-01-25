@@ -124,22 +124,28 @@ git commit -m "${PR_COMMIT_MSG}"
 echo "::endgroup::"
 
 cleanup_older_prs () {
-  gh pr list \
+  older_prs=$(gh pr list \
   --base "${UPSTREAM_BRANCH}" \
   --state open \
   --label "${PR_LABELS}" \
   --json number \
-  --template '{{range .}}{{printf "%v" .number}}{{"\n"}}{{end}}' | xargs -L1 gh pr close
+  --template '{{range .}}{{printf "%v" .number}}{{"\n"}}{{end}}')
+
+  for older_pr in $older_prs
+  do
+    gh pr close "$older_pr"
+    debug "Closed PR #${older_pr}"
+  done
 }
 echo "::group::cleanup older PRs"
 
 if [ "$IS_DRY_RUN" != "true" ]; then
   if [ "$IS_PR_CLEANUP" != "false" ]; then
     if [[ -z "${PR_LABELS}" ]]; then
+     warn "env var 'PR_LABELS' is empty. Skipping older prs cleanup"
+    else
       cmd_from_yml_file "precleanup"
       cleanup_older_prs
-    else
-      warn "env var 'PR_LABELS' is empty. Skipping older prs cleanup"
     fi
   else
     warn "is_pr_cleanup option is set to off. Skipping older prs cleanup"
@@ -152,22 +158,22 @@ echo "::endgroup::"
 
 
 maybe_create_labels () {
-all_labels=${PR_LABELS//,/$'\n'}
-for label in $all_labels
-do
-    search_result=$(gh label list \
-    --search "${label}" \
-    --limit 1 \
-    --json name \
-    --template '{{range .}}{{printf "%v" .name}}{{"\n"}}{{end}}')
+  all_labels=${PR_LABELS//,/$'\n'}
+  for label in $all_labels
+  do
+      search_result=$(gh label list \
+      --search "${label}" \
+      --limit 1 \
+      --json name \
+      --template '{{range .}}{{printf "%v" .name}}{{"\n"}}{{end}}')
 
-    if [ "${search_result}" = "${label}" ]; then
-      info "label '${label}' was found in the repository"
-    else
-      gh label create "${label}"
-      info "label '${label}' was missing and has been created"
-    fi
-done
+      if [ "${search_result}" = "${label}" ]; then
+        info "label '${label}' was found in the repository"
+      else
+        gh label create "${label}"
+        info "label '${label}' was missing and has been created"
+      fi
+  done
 }
 
 echo "::group::check for missing labels"
