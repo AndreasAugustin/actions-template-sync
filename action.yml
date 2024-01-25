@@ -23,6 +23,7 @@ inputs:
     default: "upstream merge template repository"
   pr_labels:
     description: "[optional] comma separated list of pull request labels"
+    default: "template_sync"
   pr_reviewers:
     description: "[optional] comma separated list of pull request reviewers"
   pr_commit_msg:
@@ -35,6 +36,9 @@ inputs:
     description: "[optional] set to true if you do not want to push the changes and not want to create a PR"
   is_allow_hooks:
     description: "[optional] set to true if you want to allow hooks. Use this functionality with caution!"
+    default: "false"
+  is_pr_cleanup:
+    description: "[optional] set to true if you want to cleanup older PRs targeting the same branch."
     default: "false"
   is_not_source_github:
     description: "[optional] set to true if the source repository is not a github related repository. Useful e.q. if the source is GitLab"
@@ -61,6 +65,7 @@ runs:
     HOSTNAME: ${{ inputs.hostname }}
     IS_DRY_RUN: ${{ inputs.is_dry_run }}
     IS_ALLOW_HOOKS: ${{ inputs.is_allow_hooks }}
+    IS_PR_CLEANUP: ${{ inputs.is_pr_cleanup}}
     IS_NOT_SOURCE_GITHUB: ${{ inputs.is_not_source_github }}
     GIT_USER_NAME: ${{ inputs.git_user_name }}
     GIT_USER_EMAIL: ${{ inputs.git_user_email }}
