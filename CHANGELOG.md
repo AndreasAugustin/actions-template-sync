@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.5.0](https://github.com/AndreasAugustin/actions-template-sync/compare/v1.4.0...v1.5.0) (2024-02-04)
+
+
+### Features
+
+* :sparkles: ([#401](https://github.com/AndreasAugustin/actions-template-sync/issues/401)) add option to force file deletion ([#435](https://github.com/AndreasAugustin/actions-template-sync/issues/435)) ([e68941f](https://github.com/AndreasAugustin/actions-template-sync/commit/e68941ff0fc9695be3fe480ab739ebeb318dca0d))
+
 ## [1.4.0](https://github.com/AndreasAugustin/actions-template-sync/compare/v1.3.0...v1.4.0) (2024-01-25)
 
 
