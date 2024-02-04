@@ -248,7 +248,7 @@ jobs:
 | is_allow_hooks              | `[optional]` set to `true` if you want to enable lifecycle hooks. Use this with caution!                      | `false`  | `false`                                                               |
 | is_pr_cleanup               | `[optional]` set to `true` if you want to cleanup older PRs targeting the same branch. Use this with caution! | `false`  | `false`                                                               |
 | is_not_source_github        | `[optional]` set to `true` if the source git provider is not GitHub                                           | `false`  | `false`                                                               |
-| is_force_deletion | `[optional]` set to `true` if you want to force delete files which are deleted within the source repository even if they contain changes" | `false` | `false` |
+| is_force_deletion | `[optional]` set to `true` if you want to force delete files which are deleted within the source repository even if they contain changes. You need to also adjust `git_remote_pull_params` (see below for details) | `false` | `false` |
 | git_user_name               | `[optional]` set the committer git user.name                                                                  | `false`  | `${GITHUB_ACTOR}`                                                     |
 | git_user_email              | `[optional]` set the committer git user.email                                                                 | `false`  | `github-action@actions-template-sync.noreply.${SOURCE_REPO_HOSTNAME}` |
 | git_remote_pull_params      | `[optional]` set remote pull parameters                                                                       | `false`  | `--allow-unrelated-histories --squash --strategy=recursive -X theirs` |
@@ -354,6 +354,12 @@ Depending on your way of working, you may end up with multiple pull requests rel
 If you want to avoid this situation, you can instruct this action to clean up older PRs (search based on labels defined with the `pr_labels` config parameter).
 
 :warning: this feature will close all pull requests with labels configured with `pr_labels` config parameter.
+
+## Force deletion
+
+This feature will force delete files if those are deelted within the source repository.
+
+:warning: it is highly related to the `git_remote_pull_params` config parameter. It won't work with the default. You need to change this one e.g. to `git_remote_pull_params: --allow-unrelated-histories --strategy=recursive --no-edit`.
 
 ## Troubleshooting
 
