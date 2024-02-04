@@ -359,7 +359,8 @@ If you want to avoid this situation, you can instruct this action to clean up ol
 
 This feature will force delete files if those are deelted within the source repository.
 
-:warning: it is highly related to the `git_remote_pull_params` config parameter. It won't work with the default. You need to change this one e.g. to `git_remote_pull_params: --allow-unrelated-histories --strategy=recursive --no-edit`.
+:warning: it is highly related to the `git_remote_pull_params` config parameter and won't work with the default.
+You need to change the default one e.g. to `git_remote_pull_params: --allow-unrelated-histories --strategy=recursive --no-edit`.
 
 ## Troubleshooting
 
