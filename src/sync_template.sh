@@ -36,6 +36,10 @@ GIT_REMOTE_PULL_PARAMS="${GIT_REMOTE_PULL_PARAMS:---allow-unrelated-histories --
 
 cmd_from_yml_file "install"
 
+LOCAL_CURRENT_GIT_HASH=$(git rev-parse HEAD)
+
+info "current git hash: ${LOCAL_CURRENT_GIT_HASH}"
+
 TEMPLATE_SYNC_IGNORE_FILE_PATH=".templatesyncignore"
 TEMPLATE_REMOTE_GIT_HASH=$(git ls-remote "${SOURCE_REPO}" HEAD | awk '{print $1}')
 NEW_TEMPLATE_GIT_HASH=$(git rev-parse --short "${TEMPLATE_REMOTE_GIT_HASH}")
@@ -44,7 +48,7 @@ debug "new Git HASH ${NEW_TEMPLATE_GIT_HASH}"
 
 echo "::group::Check new changes"
 
-check_branch_remote_existing() {
+function check_branch_remote_existing() {
   git ls-remote --exit-code --heads origin "${NEW_BRANCH}" || BRANCH_DOES_NOT_EXIST=true
 
   if [[ "${BRANCH_DOES_NOT_EXIST}" != true ]]; then
@@ -95,6 +99,22 @@ if [ -s "${TEMPLATE_SYNC_IGNORE_FILE_PATH}" ]; then
   echo "::endgroup::"
 fi
 
+function force_delete_files() {
+  echo "::group::force file deletion"
+  warn "force file deletion is enabled. Deleting files which are deleted within the target repository"
+  FILES_TO_DELETE=$(git log --diff-filter D --pretty="format:" --name-only "${LOCAL_CURRENT_GIT_HASH}"..HEAD | sed '/^$/d')
+  warn "files to delete: ${FILES_TO_DELETE}"
+  if [[ -n "${FILES_TO_DELETE}" ]]; then
+    echo "${FILES_TO_DELETE}" | xargs rm
+  fi
+
+  echo "::endgroup::"
+}
+
+if [ "$IS_FORCE_DELETION" == "true" ]; then
+  force_delete_files
+fi
+
 cmd_from_yml_file "precommit"
 
 echo "::group::commit changes"
@@ -123,7 +143,7 @@ git commit -m "${PR_COMMIT_MSG}"
 
 echo "::endgroup::"
 
-cleanup_older_prs () {
+function cleanup_older_prs () {
   older_prs=$(gh pr list \
   --base "${UPSTREAM_BRANCH}" \
   --state open \
@@ -157,7 +177,7 @@ fi
 echo "::endgroup::"
 
 
-maybe_create_labels () {
+function maybe_create_labels () {
   all_labels=${PR_LABELS//,/$'\n'}
   for label in $all_labels
   do
@@ -190,12 +210,12 @@ fi
 
 echo "::endgroup::"
 
-push () {
+function push () {
   debug "push changes"
   git push --set-upstream origin "${NEW_BRANCH}"
 }
 
-create_pr () {
+function create_pr () {
   gh pr create \
         --title "${PR_TITLE}" \
         --body "Merge ${SOURCE_REPO_PATH} ${NEW_TEMPLATE_GIT_HASH}" \
