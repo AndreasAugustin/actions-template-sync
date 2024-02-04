@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.5.0](https://github.com/AndreasAugustin/actions-template-sync/compare/v1.4.0...v1.5.0) (2024-02-04)
+
+
+### Features
+
+* :sparkles: ([#401](https://github.com/AndreasAugustin/actions-template-sync/issues/401)) add option to force file deletion ([#435](https://github.com/AndreasAugustin/actions-template-sync/issues/435)) ([e68941f](https://github.com/AndreasAugustin/actions-template-sync/commit/e68941ff0fc9695be3fe480ab739ebeb318dca0d))
+
+## [1.4.0](https://github.com/AndreasAugustin/actions-template-sync/compare/v1.3.0...v1.4.0) (2024-01-25)
+
+
+### Features
+
+* allow for pruning of older PRs ([#438](https://github.com/AndreasAugustin/actions-template-sync/issues/438)) ([0e51714](https://github.com/AndreasAugustin/actions-template-sync/commit/0e51714bd42e4ce8223a641d7435c220a99aad51))
+
 ## [1.3.0](https://github.com/AndreasAugustin/actions-template-sync/compare/v1.2.0...v1.3.0) (2024-01-18)
 
 

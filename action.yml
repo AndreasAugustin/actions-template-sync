@@ -23,6 +23,7 @@ inputs:
     default: "upstream merge template repository"
   pr_labels:
     description: "[optional] comma separated list of pull request labels"
+    default: "template_sync"
   pr_reviewers:
     description: "[optional] comma separated list of pull request reviewers"
   pr_commit_msg:
@@ -36,8 +37,14 @@ inputs:
   is_allow_hooks:
     description: "[optional] set to true if you want to allow hooks. Use this functionality with caution!"
     default: "false"
+  is_pr_cleanup:
+    description: "[optional] set to true if you want to cleanup older PRs targeting the same branch."
+    default: "false"
   is_not_source_github:
     description: "[optional] set to true if the source repository is not a github related repository. Useful e.q. if the source is GitLab"
+    default: "false"
+  is_force_deletion:
+    description: "[optional] set to true if you want to force delete files which are deleted within the source repository even if they contain changes"
     default: "false"
   git_user_name:
     description: "[optional] set the committer git user.name for the merge commit"
@@ -65,7 +72,9 @@ runs:
     HOSTNAME: ${{ inputs.hostname }}
     IS_DRY_RUN: ${{ inputs.is_dry_run }}
     IS_ALLOW_HOOKS: ${{ inputs.is_allow_hooks }}
+    IS_PR_CLEANUP: ${{ inputs.is_pr_cleanup}}
     IS_NOT_SOURCE_GITHUB: ${{ inputs.is_not_source_github }}
+    IS_FORCE_DELETION: ${{ inputs.is_force_deletion }}
     GIT_USER_NAME: ${{ inputs.git_user_name }}
     GIT_USER_EMAIL: ${{ inputs.git_user_email }}
     GIT_REMOTE_PULL_PARAMS: ${{ inputs.git_remote_pull_params }}

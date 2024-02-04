@@ -99,7 +99,7 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           source_repo_path: <owner/repo>
           upstream_branch: <target_branch> # defaults to main
-          pr_labels: <label1>,<label2>[,...] # optional, no default
+          pr_labels: <label1>,<label2>[,...] # defaults to template_sync
 ```
 
 You will receive a pull request within your repository if there are some changes available in the template.
@@ -139,7 +139,7 @@ jobs:
           github_token: ${{ steps.generate_token.outputs.token }}
           source_repo_path: <owner/repo>
           upstream_branch: <target_branch> # defaults to main
-          pr_labels: <label1>,<label2>[,...] # optional, no default
+          pr_labels: <label1>,<label2>[,...] # defaults to template_sync
 ```
 
 #### 2. Using SSH
@@ -175,7 +175,7 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           source_repo_path: ${{ secrets.SOURCE_REPO_PATH }} # <owner/repo>, should be within secrets
           upstream_branch: ${{ secrets.TARGET_BRANCH }} #<target_branch> # defaults to main
-          pr_labels: <label1>,<label2>[,...] # optional, no default
+          pr_labels: <label1>,<label2>[,...] # defaults to template_sync
           source_repo_ssh_private_key: ${{ secrets.SOURCE_REPO_SSH_PRIVATE_KEY }} # contains the private ssh key of the private repository
 ```
 
@@ -232,24 +232,26 @@ jobs:
 
 ### Configuration parameters
 
-| Variable | Description | Required | `[Default]` |
-|----|----|----|----|
-| github_token | Token for the repo. Can be passed in using `$\{{ secrets.GITHUB_TOKEN }}` | `true` |  |
-| source_repo_path | Repository path of the template | `true` | |
-| upstream_branch | The target branch | `false` | `<The_remote_default>` |
-| source_repo_ssh_private_key | `[optional]` private ssh key for the source repository. [see](#private-template-repository)| `false` |  |
-| pr_branch_name_prefix | `[optional]` the prefix of branches created by this action | `false` | `chore/template_sync`  |
-| pr_title | `[optional]` the title of PRs opened by this action. Must be already created. | `false` | `upstream merge template repository`  |
-| pr_labels | `[optional]` comma separated list. [pull request labels][pr-labels]. Must be already created. | `false` | |
-| pr_reviewers | `[optional]` comma separated list of pull request reviewers. | `false` | |
-| pr_commit_msg | `[optional]` commit message in the created pull request | `false` | `chore(template): merge template changes :up:` |
-| hostname | `[optional]` the hostname of the repository | `false` | `github.com` |
-| is_dry_run | `[optional]` set to `true` if you do not want to push the changes and not want to create a PR |  `false` |   |
-| is_allow_hooks | `[optional]` set to `true` if you want to enable lifecycle hooks. Use this with caution! | `false` | `false` |
-| is_not_source_github | `[optional]` set to `true` if the source git provider is not GitHub | `false` | `false` |
-| git_user_name | `[optional]` set the committer git user.name | `false` | `${GITHUB_ACTOR}` |
-| git_user_email | `[optional]` set the committer git user.email | `false` | `github-action@actions-template-sync.noreply.${SOURCE_REPO_HOSTNAME}` |
-| git_remote_pull_params |`[optional]` set remote pull parameters | `false` | `--allow-unrelated-histories --squash --strategy=recursive -X theirs` |
+| Variable                    | Description                                                                                                   | Required | `[Default]`                                                           |
+|-----------------------------|---------------------------------------------------------------------------------------------------------------|----------|-----------------------------------------------------------------------|
+| github_token                | Token for the repo. Can be passed in using `$\{{ secrets.GITHUB_TOKEN }}`                                     | `true`   |                                                                       |
+| source_repo_path            | Repository path of the template                                                                               | `true`   |                                                                       |
+| upstream_branch             | The target branch                                                                                             | `false`  | `<The_remote_default>`                                                |
+| source_repo_ssh_private_key | `[optional]` private ssh key for the source repository. [see](#private-template-repository)                   | `false`  |                                                                       |
+| pr_branch_name_prefix       | `[optional]` the prefix of branches created by this action                                                    | `false`  | `chore/template_sync`                                                 |
+| pr_title                    | `[optional]` the title of PRs opened by this action. Must be already created.                                 | `false`  | `upstream merge template repository`                                  |
+| pr_labels                   | `[optional]` comma separated list. [pull request labels][pr-labels].                                          | `false`  | `sync_template`                                                       |
+| pr_reviewers                | `[optional]` comma separated list of pull request reviewers.                                                  | `false`  |                                                                       |
+| pr_commit_msg               | `[optional]` commit message in the created pull request                                                       | `false`  | `chore(template): merge template changes :up:`                        |
+| hostname                    | `[optional]` the hostname of the repository                                                                   | `false`  | `github.com`                                                          |
+| is_dry_run                  | `[optional]` set to `true` if you do not want to push the changes and not want to create a PR                 | `false`  |                                                                       |
+| is_allow_hooks              | `[optional]` set to `true` if you want to enable lifecycle hooks. Use this with caution!                      | `false`  | `false`                                                               |
+| is_pr_cleanup               | `[optional]` set to `true` if you want to cleanup older PRs targeting the same branch. Use this with caution! | `false`  | `false`                                                               |
+| is_not_source_github        | `[optional]` set to `true` if the source git provider is not GitHub                                           | `false`  | `false`                                                               |
+| is_force_deletion | `[optional]` set to `true` if you want to force delete files which are deleted within the source repository even if they contain changes. You need to also adjust `git_remote_pull_params` (see below for details) | `false` | `false` |
+| git_user_name               | `[optional]` set the committer git user.name                                                                  | `false`  | `${GITHUB_ACTOR}`                                                     |
+| git_user_email              | `[optional]` set the committer git user.email                                                                 | `false`  | `github-action@actions-template-sync.noreply.${SOURCE_REPO_HOSTNAME}` |
+| git_remote_pull_params      | `[optional]` set remote pull parameters                                                                       | `false`  | `--allow-unrelated-histories --squash --strategy=recursive -X theirs` |
 | gpg_private_key | `[optional]` set if you want to sign commits | `false` | |
 | gpg_passphrase | `[optional]` set if your optionial gpg private key has a passphrase | `false` | |
 
@@ -364,6 +366,7 @@ The following hooks are supported (please check [docs/ARCHITECTURE.md](docs/ARCH
 * `prepull` is executed before the code is pulled from the source repository
 * `precommit` is executed before the code is commited
 * `prepush` is executed before the push is executed, right after the commit
+* `precleanup` is executed before older PRs targeting the same branch are closed
 * `prepr` is executed before the PR is done
 
 **Remark** The underlying OS is defined by an Alpine container.
@@ -389,11 +392,35 @@ hooks:
     commands:
       - echo 'hi, we are within the prepush phase'
       - echo 'maybe you want to add further changes and commits'
+  precleanup:
+    commands:
+      - echo 'hi, we are within the precleanup phase'
+      - echo 'maybe you want to interact with older PRs before they are closed'
   prepr:
     commands:
       - echo 'hi, we are within the prepr phase'
       - echo 'maybe you want to change the code a bit and do another push before creating the pr'
 ```
+
+## Labels creation
+
+By default, generated PRs will be labeled with the `template_sync` label.
+If that label doesn't exist in your repository, it will be created automatically unless you specify your own existing labels.
+Associating a label with the generated PRs helps keeping track of them and allows for features like automatic PR cleanup.
+
+## Pull request cleanup
+
+Depending on your way of working, you may end up with multiple pull requests related to template syncing pointing to the same branch.
+If you want to avoid this situation, you can instruct this action to clean up older PRs (search based on labels defined with the `pr_labels` config parameter).
+
+:warning: this feature will close all pull requests with labels configured with `pr_labels` config parameter.
+
+## Force deletion
+
+This feature will force delete files if those are deelted within the source repository.
+
+:warning: it is highly related to the `git_remote_pull_params` config parameter and won't work with the default.
+You need to change the default one e.g. to `git_remote_pull_params: --allow-unrelated-histories --strategy=recursive --no-edit`.
 
 ## Troubleshooting
 
