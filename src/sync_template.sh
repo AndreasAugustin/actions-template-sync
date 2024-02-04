@@ -48,7 +48,7 @@ debug "new Git HASH ${NEW_TEMPLATE_GIT_HASH}"
 
 echo "::group::Check new changes"
 
-check_branch_remote_existing() {
+function check_branch_remote_existing() {
   git ls-remote --exit-code --heads origin "${NEW_BRANCH}" || BRANCH_DOES_NOT_EXIST=true
 
   if [[ "${BRANCH_DOES_NOT_EXIST}" != true ]]; then
@@ -143,7 +143,7 @@ git commit -m "${PR_COMMIT_MSG}"
 
 echo "::endgroup::"
 
-cleanup_older_prs () {
+function cleanup_older_prs () {
   older_prs=$(gh pr list \
   --base "${UPSTREAM_BRANCH}" \
   --state open \
@@ -177,7 +177,7 @@ fi
 echo "::endgroup::"
 
 
-maybe_create_labels () {
+function maybe_create_labels () {
   all_labels=${PR_LABELS//,/$'\n'}
   for label in $all_labels
   do
@@ -210,12 +210,12 @@ fi
 
 echo "::endgroup::"
 
-push () {
+function push () {
   debug "push changes"
   git push --set-upstream origin "${NEW_BRANCH}"
 }
 
-create_pr () {
+function create_pr () {
   gh pr create \
         --title "${PR_TITLE}" \
         --body "Merge ${SOURCE_REPO_PATH} ${NEW_TEMPLATE_GIT_HASH}" \
