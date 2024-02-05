@@ -44,8 +44,10 @@ function ssh_setup() {
 function gpg_setup() {
   echo "::group::gpg setup"
   info "start prepare gpg"
+  GPG_TTY=$(tty)
+  export GPG_TTY
   echo -e "$GPG_PRIVATE_KEY" | gpg --import --batch
-  # for fpr in $(gpg --list-key --with-colons "${GIT_USER_EMAIL}"  | awk -F: '/fpr:/ {print $10}' | sort -u); do  echo -e "5\ny\n" |  gpg --no-tty --command-fd 0 --expert --edit-key "$fpr" trust; done
+  for fpr in $(gpg --list-key --with-colons "${GIT_USER_EMAIL}"  | awk -F: '/fpr:/ {print $10}' | sort -u); do  echo -e "5\ny\n" |  gpg --no-tty --command-fd 0 --expert --edit-key "$fpr" trust; done
 
   KEY_ID="$(gpg --list-secret-key --with-colons "${GIT_USER_EMAIL}" | awk -F: '/sec:/ {print $5}')"
   git config --global user.signingkey "${KEY_ID}"
