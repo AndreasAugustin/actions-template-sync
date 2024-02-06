@@ -25,6 +25,10 @@ markdownlint: ## Validate markdown files
 zsh: ## open dev container with build environment
 	docker-compose run --service-ports dev /bin/zsh
 
+.PHONY: prod
+prod: ## run the prod docker image with bash
+	docker-compose run prod
+
 .PHONY: prune
 prune: ## delete the whole environment
 	docker-compose down -v --rmi all --remove-orphans

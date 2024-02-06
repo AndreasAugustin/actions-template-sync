@@ -29,4 +29,4 @@ RUN chmod +x /bin/entrypoint.sh \
 RUN mkdir -p /root/.ssh \
   && ssh-keyscan -t rsa github.com >> /root/.ssh/known_hosts
 
-ENTRYPOINT ["/bin/entrypoint.sh"]
+ENTRYPOINT ["/bin/bash", "/bin/entrypoint.sh"]
