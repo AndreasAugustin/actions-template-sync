@@ -259,6 +259,9 @@ jobs:
 
 There are docker images available. Please checkout [How to use docker](docs/DOCKER.md) for details.
 
+* [dockerhub andyaugustin/actions-template-sync][dockerhub-repo]
+* [github andreasaugustin/actions-template-sync][github-repo]
+
 ### Example
 
 This repo uses this [template][template] and this action from the [marketplace][marketplace].
@@ -354,9 +357,6 @@ jobs:
 
 Different lifecycle hooks are supported. You need to enable the functionality with the option `is_allow_hooks` and set it to `true`
 :warning: use this functionality with caution. You can use one of the available docker images to test it out. **With great power comes great responsibility**.
-
-* [dockerhub andyaugustin/actions-template-sync][dockerhub-repo]
-* [github andreasaugustin/actions-template-sync][github-repo]
 
 In addition, you need a configuration file with the name `templatesync.yml` within the root of the target repository.
 
