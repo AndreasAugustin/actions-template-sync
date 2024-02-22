@@ -253,7 +253,6 @@ jobs:
 | git_user_email              | `[optional]` set the committer git user.email                                                                 | `false`  | `github-action@actions-template-sync.noreply.${SOURCE_REPO_HOSTNAME}` |
 | git_remote_pull_params      | `[optional]` set remote pull parameters                                                                       | `false`  | `--allow-unrelated-histories --squash --strategy=recursive -X theirs` |
 | gpg_private_key | `[optional]` set if you want to sign commits | `false` | |
-| gpg_passphrase | `[optional]` set if your optionial gpg private key has a passphrase | `false` | |
 
 ### Docker
 
@@ -316,7 +315,8 @@ gpg --armor --export-secret-key jon@doe.example | xclip
 ```
 
 :warning: the gpg username and email must match the `git_user_name` and `git_user_email` parameters.
-Paste your clipboard as a [secret][github-create-secret] named `GPG_PRIVATE_KEY` for example. If your key has a password, create another secret named `GPG_PASSPHRASE`.
+Paste your clipboard as a [secret][github-create-secret] named `GPG_PRIVATE_KEY` for example.
+:warning: currently a pgp key with passphrase is not supported (yet).
 
 ```yaml
 # File: .github/workflows/template-sync.yml

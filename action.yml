@@ -54,8 +54,6 @@ inputs:
     description: "[optional] set the pull parameters for the remote repository"
   gpg_private_key:
     description: "[optional] set the gpg private key if you want to sign your commits"
-  gpg_passphrase:
-    description: "[optional] set if your private gpg key has a password"
 runs:
   using: "docker"
   image: "src/Dockerfile"
@@ -79,4 +77,3 @@ runs:
     GIT_USER_EMAIL: ${{ inputs.git_user_email }}
     GIT_REMOTE_PULL_PARAMS: ${{ inputs.git_remote_pull_params }}
     GPG_PRIVATE_KEY: ${{ inputs.gpg_private_key }}
-    GPG_PASSPHRASE: ${{ inputs.gpg_passphrase }}
