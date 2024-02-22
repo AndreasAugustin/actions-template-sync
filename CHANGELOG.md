@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.6.0](https://github.com/AndreasAugustin/actions-template-sync/compare/v1.5.0...v1.6.0) (2024-02-22)
+
+
+### Features
+
+* :sparkles: ([#204](https://github.com/AndreasAugustin/actions-template-sync/issues/204)) gpg sign ([#436](https://github.com/AndreasAugustin/actions-template-sync/issues/436)) ([99aefe5](https://github.com/AndreasAugustin/actions-template-sync/commit/99aefe5830f9ee249bbfbd90a85108f76e897c33))
+
 ## [1.5.0](https://github.com/AndreasAugustin/actions-template-sync/compare/v1.4.0...v1.5.0) (2024-02-04)
 
 
