@@ -1,6 +1,6 @@
 # actions-template-sync
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-24-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-25-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
  [![actions-template-sync](https://github.com/AndreasAugustin/actions-template-sync/actions/workflows/actions_template_sync.yml/badge.svg)](https://github.com/AndreasAugustin/actions-template-sync/actions/workflows/actions_template_sync.yml)
@@ -316,7 +316,8 @@ gpg --armor --export-secret-key jon@doe.example | xclip
 ```
 
 :warning: the gpg username and email must match the `git_user_name` and `git_user_email` parameters.
-Paste your clipboard as a [secret][github-create-secret] named `GPG_PRIVATE_KEY` for example. If your key has a password, create another secret named `GPG_PASSPHRASE`.
+Paste your clipboard as a [secret][github-create-secret] named `GPG_PRIVATE_KEY` for example.
+If your key has a password, create another secret named `GPG_PASSPHRASE`.
 
 ```yaml
 # File: .github/workflows/template-sync.yml
@@ -556,6 +557,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/jellllly420"><img src="https://avatars.githubusercontent.com/u/64725601?v=4?s=100" width="100px;" alt="jellllly420"/><br /><sub><b>jellllly420</b></sub></a><br /><a href="#ideas-jellllly420" title="Ideas, Planning, & Feedback">🤔</a> <a href="#question-jellllly420" title="Answering Questions">💬</a> <a href="https://github.com/AndreasAugustin/actions-template-sync/commits?author=jellllly420" title="Documentation">📖</a></td>
       <td align="center" valign="top" width="14.28%"><a href="http://www.xontab.com"><img src="https://avatars.githubusercontent.com/u/4987684?v=4?s=100" width="100px;" alt="Shaun Tabone"/><br /><sub><b>Shaun Tabone</b></sub></a><br /><a href="https://github.com/AndreasAugustin/actions-template-sync/commits?author=xontab" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/kevin-aude"><img src="https://avatars.githubusercontent.com/u/98819045?v=4?s=100" width="100px;" alt="Kevin AUDE"/><br /><sub><b>Kevin AUDE</b></sub></a><br /><a href="#ideas-kevin-aude" title="Ideas, Planning, & Feedback">🤔</a> <a href="https://github.com/AndreasAugustin/actions-template-sync/commits?author=kevin-aude" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/Jnig"><img src="https://avatars.githubusercontent.com/u/3729585?v=4?s=100" width="100px;" alt="Jakob"/><br /><sub><b>Jakob</b></sub></a><br /><a href="https://github.com/AndreasAugustin/actions-template-sync/pulls?q=is%3Apr+reviewed-by%3Ajnig" title="Reviewed Pull Requests">👀</a></td>
     </tr>
   </tbody>
 </table>
