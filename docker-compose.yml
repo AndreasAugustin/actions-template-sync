@@ -23,3 +23,9 @@ services:
     volumes:
       - .:/app/
     working_dir: /app/
+
+  prod:
+    build:
+      context: ./src/
+    tty: true
+    entrypoint: ["/bin/bash"]

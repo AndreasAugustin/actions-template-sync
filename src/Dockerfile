@@ -15,7 +15,7 @@ LABEL org.opencontainers.image.title="actions-template-sync image"
 LABEL org.opencontainers.image.description="contains actions-template-sync"
 
 # install packages
-RUN apk add --update --no-cache bash git curl musl openssh git-lfs yq
+RUN apk add --update --no-cache bash git curl musl openssh git-lfs yq gnupg tig
 
 RUN wget https://github.com/cli/cli/releases/download/v${GH_CLI_VER}/gh_${GH_CLI_VER}_linux_386.tar.gz -O ghcli.tar.gz
 RUN tar --strip-components=1 -xf ghcli.tar.gz
@@ -23,9 +23,10 @@ RUN tar --strip-components=1 -xf ghcli.tar.gz
 ADD *.sh /bin/
 RUN chmod +x /bin/entrypoint.sh \
   && chmod +x /bin/sync_template.sh \
-  && chmod +x /bin/sync_common.sh
+  && chmod +x /bin/sync_common.sh \
+  && chmod +x /bin/gpg_no_tty.sh
 
 RUN mkdir -p /root/.ssh \
   && ssh-keyscan -t rsa github.com >> /root/.ssh/known_hosts
 
-ENTRYPOINT ["/bin/entrypoint.sh"]
+ENTRYPOINT ["/bin/bash", "/bin/entrypoint.sh"]
