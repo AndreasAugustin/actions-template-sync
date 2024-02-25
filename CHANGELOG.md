@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.6.2](https://github.com/AndreasAugustin/actions-template-sync/compare/v1.6.1...v1.6.2) (2024-02-25)
+
+
+### Bug Fixes
+
+* :bug: try catch for edge cases ([#465](https://github.com/AndreasAugustin/actions-template-sync/issues/465)) ([95ce4e4](https://github.com/AndreasAugustin/actions-template-sync/commit/95ce4e4d5cc72b62970056977256a6592a10547c))
+
 ## [1.6.1](https://github.com/AndreasAugustin/actions-template-sync/compare/v1.6.0...v1.6.1) (2024-02-25)
 
 
