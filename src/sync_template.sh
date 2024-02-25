@@ -190,8 +190,11 @@ function maybe_create_labels () {
       if [ "${search_result}" = "${label##[[:space:]]}" ]; then
         info "label '${label##[[:space:]]}' was found in the repository"
       else
-        gh label create "${label}"
-        info "label '${label}' was missing and has been created"
+        if gh label create "${label}"; then
+          info "label '${label}' was missing and has been created"
+        else
+          warn "label creation did not work. For any reason the former check sometimes is failing"
+        fi
       fi
   done
 }
