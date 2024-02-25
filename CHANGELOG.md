@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.6.1](https://github.com/AndreasAugustin/actions-template-sync/compare/v1.6.0...v1.6.1) (2024-02-25)
+
+
+### Bug Fixes
+
+* **#461:** :bug: issue with pull request labels with emoji and space ([#462](https://github.com/AndreasAugustin/actions-template-sync/issues/462)) ([89b8d21](https://github.com/AndreasAugustin/actions-template-sync/commit/89b8d210b8454957a81dbbf5b81e6977708a25cd))
+
 ## [1.6.0](https://github.com/AndreasAugustin/actions-template-sync/compare/v1.5.0...v1.6.0) (2024-02-22)
 
 
