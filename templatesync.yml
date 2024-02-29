@@ -3,6 +3,7 @@
 hooks:
   install:
     commands:
+      - echo "foo ${MY_VAR}"
       - echo 'hi, we are within the prepush phase'
 
   prepush:
