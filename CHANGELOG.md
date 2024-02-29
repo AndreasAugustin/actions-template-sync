@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.7.0](https://github.com/AndreasAugustin/actions-template-sync/compare/v1.6.2...v1.7.0) (2024-02-29)
+
+
+### Features
+
+* **#468:** :sparkles: enable usage of github env variables within hooks ([#469](https://github.com/AndreasAugustin/actions-template-sync/issues/469)) ([17d4603](https://github.com/AndreasAugustin/actions-template-sync/commit/17d4603da56b49e4b72c6531ba6d2db6dbcc3a31))
+
 ## [1.6.2](https://github.com/AndreasAugustin/actions-template-sync/compare/v1.6.1...v1.6.2) (2024-02-25)
 
 
