@@ -1,5 +1,33 @@
 # Changelog
 
+## [1.8.0](https://github.com/AndreasAugustin/actions-template-sync/compare/v1.7.0...v1.8.0) (2024-02-29)
+
+
+### Features
+
+* **#472:** :sparkles: define output ([#473](https://github.com/AndreasAugustin/actions-template-sync/issues/473)) ([a19cd8d](https://github.com/AndreasAugustin/actions-template-sync/commit/a19cd8d7c999cdf9bdc2a08818eb2878d1222cdf))
+
+## [1.7.0](https://github.com/AndreasAugustin/actions-template-sync/compare/v1.6.2...v1.7.0) (2024-02-29)
+
+
+### Features
+
+* **#468:** :sparkles: enable usage of github env variables within hooks ([#469](https://github.com/AndreasAugustin/actions-template-sync/issues/469)) ([17d4603](https://github.com/AndreasAugustin/actions-template-sync/commit/17d4603da56b49e4b72c6531ba6d2db6dbcc3a31))
+
+## [1.6.2](https://github.com/AndreasAugustin/actions-template-sync/compare/v1.6.1...v1.6.2) (2024-02-25)
+
+
+### Bug Fixes
+
+* :bug: try catch for edge cases ([#465](https://github.com/AndreasAugustin/actions-template-sync/issues/465)) ([95ce4e4](https://github.com/AndreasAugustin/actions-template-sync/commit/95ce4e4d5cc72b62970056977256a6592a10547c))
+
+## [1.6.1](https://github.com/AndreasAugustin/actions-template-sync/compare/v1.6.0...v1.6.1) (2024-02-25)
+
+
+### Bug Fixes
+
+* **#461:** :bug: issue with pull request labels with emoji and space ([#462](https://github.com/AndreasAugustin/actions-template-sync/issues/462)) ([89b8d21](https://github.com/AndreasAugustin/actions-template-sync/commit/89b8d210b8454957a81dbbf5b81e6977708a25cd))
+
 ## [1.6.0](https://github.com/AndreasAugustin/actions-template-sync/compare/v1.5.0...v1.6.0) (2024-02-22)
 
 

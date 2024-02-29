@@ -20,6 +20,8 @@ jobs:
         uses: actions/checkout@v4
       - name: Test action step
         uses: ./ # Uses an action in the root directory
+        env:
+          MY_VAR: "bar"
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           source_repo_path: AndreasAugustin/template.git

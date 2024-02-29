@@ -19,8 +19,13 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Test action step
+        id: test
         uses: ./ # Uses an action in the root directory
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           source_repo_path: AndreasAugustin/template.git
           is_dry_run: true
+      - name: print output
+        env:
+          FORMER_OUTPUT_PR_BRANCH: ${{ steps.test.outputs.pr_branch }}
+        run: echo "pr_branch ${FORMER_OUTPUT_PR_BRANCH}"

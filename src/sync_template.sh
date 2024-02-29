@@ -178,8 +178,8 @@ echo "::endgroup::"
 
 
 function maybe_create_labels () {
-  all_labels=${PR_LABELS//,/$'\n'}
-  for label in $all_labels
+  readarray -t labels_array < <(awk -F',' '{ for( i=1; i<=NF; i++ ) print $i }' <<<"${PR_LABELS}")
+  for label in "${labels_array[@]}"
   do
       search_result=$(gh label list \
       --search "${label}" \
@@ -187,11 +187,14 @@ function maybe_create_labels () {
       --json name \
       --template '{{range .}}{{printf "%v" .name}}{{"\n"}}{{end}}')
 
-      if [ "${search_result}" = "${label}" ]; then
-        info "label '${label}' was found in the repository"
+      if [ "${search_result}" = "${label##[[:space:]]}" ]; then
+        info "label '${label##[[:space:]]}' was found in the repository"
       else
-        gh label create "${label}"
-        info "label '${label}' was missing and has been created"
+        if gh label create "${label}"; then
+          info "label '${label}' was missing and has been created"
+        else
+          warn "label creation did not work. For any reason the former check sometimes is failing"
+        fi
       fi
   done
 }
@@ -236,3 +239,16 @@ else
 fi
 
 echo "::endgroup::"
+
+function set_github_action_outputs() {
+  echo "::group::set gh action outputs"
+  if [[ -z "${GITHUB_RUN_ID}" ]]; then
+    info "env var 'GITHUB_RUN_ID' is empty -> no github action workflow"
+  else
+    # https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#setting-an-output-parameter
+    echo "pr_branch=${NEW_BRANCH}" >> "$GITHUB_OUTPUT"
+  fi
+  echo "::endgroup::"
+}
+
+set_github_action_outputs

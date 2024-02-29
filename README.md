@@ -1,6 +1,6 @@
 # actions-template-sync
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-25-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-26-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
  [![actions-template-sync](https://github.com/AndreasAugustin/actions-template-sync/actions/workflows/actions_template_sync.yml/badge.svg)](https://github.com/AndreasAugustin/actions-template-sync/actions/workflows/actions_template_sync.yml)
@@ -230,7 +230,7 @@ jobs:
           source_repo_path: ${{ secrets.SOURCE_REPO_PATH }} # <owner/repo>, should be within secrets
 ```
 
-### Configuration parameters
+### Action Inputs
 
 | Variable                    | Description                                                                                                   | Required | `[Default]`                                                           |
 |-----------------------------|---------------------------------------------------------------------------------------------------------------|----------|-----------------------------------------------------------------------|
@@ -254,6 +254,14 @@ jobs:
 | git_remote_pull_params      | `[optional]` set remote pull parameters                                                                       | `false`  | `--allow-unrelated-histories --squash --strategy=recursive -X theirs` |
 | gpg_private_key | `[optional]` set if you want to sign commits | `false` | |
 | gpg_passphrase | `[optional]` set if your optionial gpg private key has a passphrase | `false` | |
+
+### Action Outputs
+
+> Properties that are available after the action executed.
+
+| output | description |
+| ------ | ----------- |
+| pr_branch | The name of the branch used for the pull request |
 
 ### Docker
 
@@ -375,6 +383,23 @@ E.q. for the installation phase you need to use commands like `apk add --update 
 
 Schema and example for the `templatesync.yml`
 
+**Remark** It is possible to use environment variables within the github action definition usable within the command configuration, e.g.
+
+```yml
+- name: Test action step
+  uses: AndreasAugustin/actions-template-sync@v1
+  env:
+    MY_VAR: "foo"  # possible to define envrionment variables
+  with:
+    github_token: ${{ secrets.GITHUB_TOKEN }}
+    source_repo_path: AndreasAugustin/template.git
+    upstream_branch: main
+    is_dry_run: true
+    is_allow_hooks: true
+```
+
+Please not the double quotes within the following `prepull echo` command
+
 ```yml
 hooks:
   install:
@@ -383,7 +408,7 @@ hooks:
       - python3 --version
   prepull:
     commands:
-      - echo 'hi, we are within the prepull phase'
+      - echo "hi, we are within the prepull phase ${MY_VAR}"
       - echo 'maybe you want to do adjustments on the local code'
   precommit:
     commands:
@@ -558,6 +583,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
       <td align="center" valign="top" width="14.28%"><a href="http://www.xontab.com"><img src="https://avatars.githubusercontent.com/u/4987684?v=4?s=100" width="100px;" alt="Shaun Tabone"/><br /><sub><b>Shaun Tabone</b></sub></a><br /><a href="https://github.com/AndreasAugustin/actions-template-sync/commits?author=xontab" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/kevin-aude"><img src="https://avatars.githubusercontent.com/u/98819045?v=4?s=100" width="100px;" alt="Kevin AUDE"/><br /><sub><b>Kevin AUDE</b></sub></a><br /><a href="#ideas-kevin-aude" title="Ideas, Planning, & Feedback">🤔</a> <a href="https://github.com/AndreasAugustin/actions-template-sync/commits?author=kevin-aude" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/Jnig"><img src="https://avatars.githubusercontent.com/u/3729585?v=4?s=100" width="100px;" alt="Jakob"/><br /><sub><b>Jakob</b></sub></a><br /><a href="https://github.com/AndreasAugustin/actions-template-sync/pulls?q=is%3Apr+reviewed-by%3Ajnig" title="Reviewed Pull Requests">👀</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://kevin.deldycke.com"><img src="https://avatars.githubusercontent.com/u/159718?v=4?s=100" width="100px;" alt="Kevin Deldycke"/><br /><sub><b>Kevin Deldycke</b></sub></a><br /><a href="https://github.com/AndreasAugustin/actions-template-sync/issues?q=author%3Akdeldycke" title="Bug reports">🐛</a> <a href="#ideas-kdeldycke" title="Ideas, Planning, & Feedback">🤔</a></td>
     </tr>
   </tbody>
 </table>
