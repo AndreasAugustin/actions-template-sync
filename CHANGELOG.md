@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.8.0](https://github.com/AndreasAugustin/actions-template-sync/compare/v1.7.0...v1.8.0) (2024-02-29)
+
+
+### Features
+
+* **#472:** :sparkles: define output ([#473](https://github.com/AndreasAugustin/actions-template-sync/issues/473)) ([a19cd8d](https://github.com/AndreasAugustin/actions-template-sync/commit/a19cd8d7c999cdf9bdc2a08818eb2878d1222cdf))
+
 ## [1.7.0](https://github.com/AndreasAugustin/actions-template-sync/compare/v1.6.2...v1.7.0) (2024-02-29)
 
 
