@@ -230,7 +230,7 @@ jobs:
           source_repo_path: ${{ secrets.SOURCE_REPO_PATH }} # <owner/repo>, should be within secrets
 ```
 
-### Configuration parameters
+### Action Inputs
 
 | Variable                    | Description                                                                                                   | Required | `[Default]`                                                           |
 |-----------------------------|---------------------------------------------------------------------------------------------------------------|----------|-----------------------------------------------------------------------|
@@ -253,6 +253,14 @@ jobs:
 | git_user_email              | `[optional]` set the committer git user.email                                                                 | `false`  | `github-action@actions-template-sync.noreply.${SOURCE_REPO_HOSTNAME}` |
 | git_remote_pull_params      | `[optional]` set remote pull parameters                                                                       | `false`  | `--allow-unrelated-histories --squash --strategy=recursive -X theirs` |
 | gpg_private_key | `[optional]` set if you want to sign commits | `false` | |
+
+### Action Outputs
+
+> Properties that are available after the action executed.
+
+| output | description |
+| ------ | ----------- |
+| pr_branch | The name of the branch used for the pull request |
 
 ### Docker
 

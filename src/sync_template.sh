@@ -239,3 +239,16 @@ else
 fi
 
 echo "::endgroup::"
+
+function set_github_action_outputs() {
+  echo "::group::set gh action outputs"
+  if [[ -z "${GITHUB_RUN_ID}" ]]; then
+    info "env var 'GITHUB_RUN_ID' is empty -> no github action workflow"
+  else
+    # https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#setting-an-output-parameter
+    echo "pr_branch=${NEW_BRANCH}" >> "$GITHUB_OUTPUT"
+  fi
+  echo "::endgroup::"
+}
+
+set_github_action_outputs
