@@ -374,6 +374,23 @@ E.q. for the installation phase you need to use commands like `apk add --update 
 
 Schema and example for the `templatesync.yml`
 
+**Remark** It is possible to use environment variables within the github action definition usable within the command configuration, e.g.
+
+```yml
+- name: Test action step
+  uses: AndreasAugustin/actions-template-sync@v1
+  env:
+    MY_VAR: "foo"  # possible to define envrionment variables
+  with:
+    github_token: ${{ secrets.GITHUB_TOKEN }}
+    source_repo_path: AndreasAugustin/template.git
+    upstream_branch: main
+    is_dry_run: true
+    is_allow_hooks: true
+```
+
+Please not the double quotes within the following `prepull echo` command
+
 ```yml
 hooks:
   install:
@@ -382,7 +399,7 @@ hooks:
       - python3 --version
   prepull:
     commands:
-      - echo 'hi, we are within the prepull phase'
+      - echo "hi, we are within the prepull phase ${MY_VAR}"
       - echo 'maybe you want to do adjustments on the local code'
   precommit:
     commands:
