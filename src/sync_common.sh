@@ -61,11 +61,7 @@ function cmd_from_yml_file() {
       exit 1;
     fi
     readarray cmd_Arr < <(yq "${YML_PATH} | .[]"  "${FILE_NAME}")
-    echo "${cmd_Arr[@]}"
 
-    echo "${FOO}"
     for key in "${cmd_Arr[@]}"; do echo "${key}" | bash; done
-
-    # for key in "${cmd_Arr[@]}"; do printf '%s\n' "$(${key})"; done
   fi
 }
