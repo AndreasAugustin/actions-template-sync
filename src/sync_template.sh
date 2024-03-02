@@ -48,11 +48,24 @@ debug "new Git HASH ${NEW_TEMPLATE_GIT_HASH}"
 
 echo "::group::Check new changes"
 
+function set_github_action_outputs() {
+  echo "::group::set gh action outputs"
+  if [[ -z "${GITHUB_RUN_ID}" ]]; then
+    info "env var 'GITHUB_RUN_ID' is empty -> no github action workflow"
+  else
+    # https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#setting-an-output-parameter
+    echo "pr_branch=${NEW_BRANCH}" >> "$GITHUB_OUTPUT"
+  fi
+  echo "::endgroup::"
+}
+
+
 function check_branch_remote_existing() {
   git ls-remote --exit-code --heads origin "${NEW_BRANCH}" || BRANCH_DOES_NOT_EXIST=true
 
   if [[ "${BRANCH_DOES_NOT_EXIST}" != true ]]; then
     warn "Git branch '${NEW_BRANCH}' exists in the remote repository"
+    set_github_action_outputs
     exit 0
   fi
 }
@@ -239,16 +252,5 @@ else
 fi
 
 echo "::endgroup::"
-
-function set_github_action_outputs() {
-  echo "::group::set gh action outputs"
-  if [[ -z "${GITHUB_RUN_ID}" ]]; then
-    info "env var 'GITHUB_RUN_ID' is empty -> no github action workflow"
-  else
-    # https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#setting-an-output-parameter
-    echo "pr_branch=${NEW_BRANCH}" >> "$GITHUB_OUTPUT"
-  fi
-  echo "::endgroup::"
-}
 
 set_github_action_outputs
