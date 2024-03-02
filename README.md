@@ -262,6 +262,13 @@ jobs:
 | ------ | ----------- |
 | pr_branch | The name of the branch used for the pull request |
 
+**Remarks** Please consider following edge cases
+
+* **pr_branch**
+  * If PR branch already exists (e.g. after a 2nd run) the action won't update the branch but will still output the branch name
+  * If the remote repository already contains the source repository changes the action will exit and the output variable will be undefined
+  * If there are no changes the action will exit and the output variable will be undefined
+
 ### Docker
 
 There are docker images available. Please checkout [How to use docker](docs/DOCKER.md) for details.

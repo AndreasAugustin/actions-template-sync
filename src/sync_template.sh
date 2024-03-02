@@ -53,6 +53,7 @@ function check_branch_remote_existing() {
 
   if [[ "${BRANCH_DOES_NOT_EXIST}" != true ]]; then
     warn "Git branch '${NEW_BRANCH}' exists in the remote repository"
+    set_github_action_outputs
     exit 0
   fi
 }
