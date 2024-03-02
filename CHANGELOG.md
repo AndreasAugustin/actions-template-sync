@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.8.1](https://github.com/AndreasAugustin/actions-template-sync/compare/v1.8.0...v1.8.1) (2024-03-02)
+
+
+### Bug Fixes
+
+* **#476:** :bug: output variable edge cases ([#479](https://github.com/AndreasAugustin/actions-template-sync/issues/479)) ([ab4153b](https://github.com/AndreasAugustin/actions-template-sync/commit/ab4153bb937a2d7ad996f0693977cb943443e8b3))
+
 ## [1.8.0](https://github.com/AndreasAugustin/actions-template-sync/compare/v1.7.0...v1.8.0) (2024-02-29)
 
 
