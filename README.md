@@ -96,7 +96,6 @@ jobs:
       - name: actions-template-sync
         uses: AndreasAugustin/actions-template-sync@v1
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
           source_repo_path: <owner/repo>
           upstream_branch: <target_branch> # defaults to main
           pr_labels: <label1>,<label2>[,...] # defaults to template_sync
@@ -232,11 +231,11 @@ jobs:
 
 ### Action Inputs
 
-| Variable                    | Description                                                                                                   | Required | `[Default]`                                                           |
+| Variable                    | Description                                                                                                   | Required | Default                                                           |
 |-----------------------------|---------------------------------------------------------------------------------------------------------------|----------|-----------------------------------------------------------------------|
-| github_token                | Token for the repo. Can be passed in using `$\{{ secrets.GITHUB_TOKEN }}`                                     | `true`   |                                                                       |
+| github_token                | Token for the repo. Can be passed in using `${{ secrets.GITHUB_TOKEN }}`                                     | `true`   |   `${{ github.token }}`                                                                    |
 | source_repo_path            | Repository path of the template                                                                               | `true`   |                                                                       |
-| upstream_branch             | The target branch                                                                                             | `false`  | `<The_remote_default>`                                                |
+| upstream_branch             | The target branch                                                                                             | `false`  | The remote's default (usually `main`)                                                |
 | source_repo_ssh_private_key | `[optional]` private ssh key for the source repository. [see](#private-template-repository)                   | `false`  |                                                                       |
 | pr_branch_name_prefix       | `[optional]` the prefix of branches created by this action                                                    | `false`  | `chore/template_sync`                                                 |
 | pr_title                    | `[optional]` the title of PRs opened by this action. Must be already created.                                 | `false`  | `upstream merge template repository`                                  |
