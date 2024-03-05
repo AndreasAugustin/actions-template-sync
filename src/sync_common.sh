@@ -60,7 +60,8 @@ function cmd_from_yml_file() {
       err "yaml query yq is not installed. 'https://mikefarah.gitbook.io/yq/'";
       exit 1;
     fi
-    readarray cmd_Arr < <(yq "${YML_PATH} | .[]"  "${FILE_NAME}")
+    # readarray cmd_Arr < <(yq "${YML_PATH} | .[]"  "${FILE_NAME}")
+    readarray cmd_Arr < <(yq "${YML_PATH} | .[]" "env(HOOKS)")
 
     for key in "${cmd_Arr[@]}"; do echo "${key}" | bash; done
   fi
