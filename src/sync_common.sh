@@ -49,7 +49,7 @@ function info() {
 function cmd_from_yml_file() {
   local FILE_NAME="templatesync.yml"
   local HOOK=$1
-  local YML_PATH=".hooks.${HOOK}.commands"
+  local YML_PATH_SUFF=".${HOOK}.commands"
 
   if [ "$IS_ALLOW_HOOKS" != "true" ]; then
     debug "execute cmd hooks not enabled"
@@ -64,8 +64,10 @@ function cmd_from_yml_file() {
     if [[ -n "${HOOKS}" ]]; then
       debug "hooks input variable is set. Using the variable"
       echo "${HOOKS}" > "tmp.${FILE_NAME}"
+      YML_PATH="${YML_PATH_SUFF}"
     else
       cp ${FILE_NAME} "tmp.${FILE_NAME}"
+      YML_PATH=".hooks.${YML_PATH_SUFF}"
     fi
 
     readarray cmd_Arr < <(yq "${YML_PATH} | .[]"  "tmp.${FILE_NAME}")
