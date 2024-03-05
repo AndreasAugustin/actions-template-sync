@@ -64,7 +64,6 @@ function cmd_from_yml_file() {
     if [[ -n "${HOOKS}" ]]; then
       debug "hooks input variable is set. Using the variable"
       echo "${HOOKS}" > "tmp.${FILE_NAME}"
-      cat "tmp.${FILE_NAME}"
     else
       cp ${FILE_NAME} "tmp.${FILE_NAME}"
     fi
