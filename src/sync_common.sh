@@ -67,13 +67,8 @@ function cmd_from_yml() {
       YML_PATH="${YML_PATH_SUFF}"
     else
       cp ${FILE_NAME} "tmp.${FILE_NAME}"
-      YML_PATH=".hooks.${YML_PATH_SUFF}"
-      info "${YML_PATH}"
+      YML_PATH=".hooks${YML_PATH_SUFF}"
     fi
-
-    info "${YML_PATH}"
-
-    yq "${YML_PATH} | .[]"  "tmp.${FILE_NAME}"
 
     readarray cmd_Arr < <(yq "${YML_PATH} | .[]"  "tmp.${FILE_NAME}")
 
