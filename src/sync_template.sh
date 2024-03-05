@@ -44,15 +44,29 @@ TEMPLATE_SYNC_IGNORE_FILE_PATH=".templatesyncignore"
 TEMPLATE_REMOTE_GIT_HASH=$(git ls-remote "${SOURCE_REPO}" HEAD | awk '{print $1}')
 NEW_TEMPLATE_GIT_HASH=$(git rev-parse --short "${TEMPLATE_REMOTE_GIT_HASH}")
 NEW_BRANCH="${PR_BRANCH_NAME_PREFIX}_${NEW_TEMPLATE_GIT_HASH}"
+PR_BODY="${PR_BODY:-Merge ${SOURCE_REPO_PATH} ${NEW_TEMPLATE_GIT_HASH}}"
 debug "new Git HASH ${NEW_TEMPLATE_GIT_HASH}"
 
 echo "::group::Check new changes"
+
+function set_github_action_outputs() {
+  echo "::group::set gh action outputs"
+  if [[ -z "${GITHUB_RUN_ID}" ]]; then
+    info "env var 'GITHUB_RUN_ID' is empty -> no github action workflow"
+  else
+    # https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#setting-an-output-parameter
+    echo "pr_branch=${NEW_BRANCH}" >> "$GITHUB_OUTPUT"
+  fi
+  echo "::endgroup::"
+}
+
 
 function check_branch_remote_existing() {
   git ls-remote --exit-code --heads origin "${NEW_BRANCH}" || BRANCH_DOES_NOT_EXIST=true
 
   if [[ "${BRANCH_DOES_NOT_EXIST}" != true ]]; then
     warn "Git branch '${NEW_BRANCH}' exists in the remote repository"
+    set_github_action_outputs
     exit 0
   fi
 }
@@ -221,7 +235,7 @@ function push () {
 function create_pr () {
   gh pr create \
         --title "${PR_TITLE}" \
-        --body "Merge ${SOURCE_REPO_PATH} ${NEW_TEMPLATE_GIT_HASH}" \
+        --body "${PR_BODY}" \
         --base "${UPSTREAM_BRANCH}" \
         --label "${PR_LABELS}" \
         --reviewer "${PR_REVIEWERS}"
@@ -239,16 +253,5 @@ else
 fi
 
 echo "::endgroup::"
-
-function set_github_action_outputs() {
-  echo "::group::set gh action outputs"
-  if [[ -z "${GITHUB_RUN_ID}" ]]; then
-    info "env var 'GITHUB_RUN_ID' is empty -> no github action workflow"
-  else
-    # https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#setting-an-output-parameter
-    echo "pr_branch=${NEW_BRANCH}" >> "$GITHUB_OUTPUT"
-  fi
-  echo "::endgroup::"
-}
 
 set_github_action_outputs

@@ -22,7 +22,6 @@ jobs:
         id: test
         uses: ./ # Uses an action in the root directory
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
           source_repo_path: AndreasAugustin/template.git
           is_dry_run: true
       - name: print output

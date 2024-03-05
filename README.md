@@ -96,7 +96,6 @@ jobs:
       - name: actions-template-sync
         uses: AndreasAugustin/actions-template-sync@v1
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
           source_repo_path: <owner/repo>
           upstream_branch: <target_branch> # defaults to main
           pr_labels: <label1>,<label2>[,...] # defaults to template_sync
@@ -232,14 +231,15 @@ jobs:
 
 ### Action Inputs
 
-| Variable                    | Description                                                                                                   | Required | `[Default]`                                                           |
+| Variable                    | Description                                                                                                   | Required | Default                                                           |
 |-----------------------------|---------------------------------------------------------------------------------------------------------------|----------|-----------------------------------------------------------------------|
-| github_token                | Token for the repo. Can be passed in using `$\{{ secrets.GITHUB_TOKEN }}`                                     | `true`   |                                                                       |
+| github_token                | Token for the repo. Can be passed in using `${{ secrets.GITHUB_TOKEN }}`                                     | `true`   |   `${{ github.token }}`                                                                    |
 | source_repo_path            | Repository path of the template                                                                               | `true`   |                                                                       |
-| upstream_branch             | The target branch                                                                                             | `false`  | `<The_remote_default>`                                                |
+| upstream_branch             | The target branch                                                                                             | `false`  | The remote's default (usually `main`)                                                |
 | source_repo_ssh_private_key | `[optional]` private ssh key for the source repository. [see](#private-template-repository)                   | `false`  |                                                                       |
 | pr_branch_name_prefix       | `[optional]` the prefix of branches created by this action                                                    | `false`  | `chore/template_sync`                                                 |
 | pr_title                    | `[optional]` the title of PRs opened by this action. Must be already created.                                 | `false`  | `upstream merge template repository`                                  |
+| pr_body                     | `[optional]` the body of PRs opened by this action. | `false` | `Merge ${SOURCE_REPO_PATH} ${TEMPLATE_GIT_HASH}` |
 | pr_labels                   | `[optional]` comma separated list. [pull request labels][pr-labels].                                          | `false`  | `sync_template`                                                       |
 | pr_reviewers                | `[optional]` comma separated list of pull request reviewers.                                                  | `false`  |                                                                       |
 | pr_commit_msg               | `[optional]` commit message in the created pull request                                                       | `false`  | `chore(template): merge template changes :up:`                        |
@@ -262,6 +262,13 @@ jobs:
 | output | description |
 | ------ | ----------- |
 | pr_branch | The name of the branch used for the pull request |
+
+**Remarks** Please consider following edge cases
+
+* **pr_branch**
+  * If PR branch already exists (e.g. after a 2nd run) the action won't update the branch but will still output the branch name
+  * If the remote repository already contains the source repository changes the action will exit and the output variable will be undefined
+  * If there are no changes the action will exit and the output variable will be undefined
 
 ### Docker
 
@@ -583,7 +590,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
       <td align="center" valign="top" width="14.28%"><a href="http://www.xontab.com"><img src="https://avatars.githubusercontent.com/u/4987684?v=4?s=100" width="100px;" alt="Shaun Tabone"/><br /><sub><b>Shaun Tabone</b></sub></a><br /><a href="https://github.com/AndreasAugustin/actions-template-sync/commits?author=xontab" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/kevin-aude"><img src="https://avatars.githubusercontent.com/u/98819045?v=4?s=100" width="100px;" alt="Kevin AUDE"/><br /><sub><b>Kevin AUDE</b></sub></a><br /><a href="#ideas-kevin-aude" title="Ideas, Planning, & Feedback">🤔</a> <a href="https://github.com/AndreasAugustin/actions-template-sync/commits?author=kevin-aude" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/Jnig"><img src="https://avatars.githubusercontent.com/u/3729585?v=4?s=100" width="100px;" alt="Jakob"/><br /><sub><b>Jakob</b></sub></a><br /><a href="https://github.com/AndreasAugustin/actions-template-sync/pulls?q=is%3Apr+reviewed-by%3Ajnig" title="Reviewed Pull Requests">👀</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://kevin.deldycke.com"><img src="https://avatars.githubusercontent.com/u/159718?v=4?s=100" width="100px;" alt="Kevin Deldycke"/><br /><sub><b>Kevin Deldycke</b></sub></a><br /><a href="https://github.com/AndreasAugustin/actions-template-sync/issues?q=author%3Akdeldycke" title="Bug reports">🐛</a> <a href="#ideas-kdeldycke" title="Ideas, Planning, & Feedback">🤔</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://kevin.deldycke.com"><img src="https://avatars.githubusercontent.com/u/159718?v=4?s=100" width="100px;" alt="Kevin Deldycke"/><br /><sub><b>Kevin Deldycke</b></sub></a><br /><a href="https://github.com/AndreasAugustin/actions-template-sync/issues?q=author%3Akdeldycke" title="Bug reports">🐛</a> <a href="#ideas-kdeldycke" title="Ideas, Planning, & Feedback">🤔</a> <a href="https://github.com/AndreasAugustin/actions-template-sync/commits?author=kdeldycke" title="Code">💻</a></td>
     </tr>
   </tbody>
 </table>

@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.9.0](https://github.com/AndreasAugustin/actions-template-sync/compare/v1.8.1...v1.9.0) (2024-03-05)
+
+
+### Features
+
+* :sparkles: Set token to the default provided by GitHub workflow ([#483](https://github.com/AndreasAugustin/actions-template-sync/issues/483)) ([c1e7561](https://github.com/AndreasAugustin/actions-template-sync/commit/c1e756148de0343df66fda1a2380382ef06c16d7))
+* **#477:** :sparkles: add input parameter for pr body ([#488](https://github.com/AndreasAugustin/actions-template-sync/issues/488)) ([481cc21](https://github.com/AndreasAugustin/actions-template-sync/commit/481cc21550d858dfc12c49f4dfb7605ac744a091))
+
+## [1.8.1](https://github.com/AndreasAugustin/actions-template-sync/compare/v1.8.0...v1.8.1) (2024-03-02)
+
+
+### Bug Fixes
+
+* **#476:** :bug: output variable edge cases ([#479](https://github.com/AndreasAugustin/actions-template-sync/issues/479)) ([ab4153b](https://github.com/AndreasAugustin/actions-template-sync/commit/ab4153bb937a2d7ad996f0693977cb943443e8b3))
+
 ## [1.8.0](https://github.com/AndreasAugustin/actions-template-sync/compare/v1.7.0...v1.8.0) (2024-02-29)
 
 
