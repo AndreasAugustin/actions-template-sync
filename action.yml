@@ -22,6 +22,8 @@ inputs:
   pr_title:
     description: "[optional] the title of PRs opened by this action"
     default: "upstream merge template repository"
+  pr_body:
+    description: "[optional] the body of PRs opened by this action"
   pr_labels:
     description: "[optional] comma separated list of pull request labels"
     default: "template_sync"
