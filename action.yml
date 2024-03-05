@@ -22,6 +22,8 @@ inputs:
   pr_title:
     description: "[optional] the title of PRs opened by this action"
     default: "upstream merge template repository"
+  pr_body:
+    description: "[optional] the body of PRs opened by this action"
   pr_labels:
     description: "[optional] comma separated list of pull request labels"
     default: "template_sync"
@@ -65,6 +67,7 @@ runs:
     SSH_PRIVATE_KEY_SRC: ${{ inputs.source_repo_ssh_private_key }}
     PR_BRANCH_NAME_PREFIX: ${{ inputs.pr_branch_name_prefix }}
     PR_TITLE: ${{ inputs.pr_title }}
+    PR_BODY: ${{ inputs.pr_body }}
     PR_LABELS: ${{ inputs.pr_labels }}
     PR_REVIEWERS: ${{ inputs.pr_reviewers }}
     PR_COMMIT_MSG: ${{ inputs.pr_commit_msg }}
