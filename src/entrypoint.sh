@@ -6,6 +6,10 @@ set -e
 # shellcheck source=src/sync_common.sh
 source sync_common.sh
 
+###########################################
+# Precheks
+##########################################
+
 if [[ -z "${GITHUB_TOKEN}" ]]; then
     err "Missing input 'github_token: \${{ secrets.GITHUB_TOKEN }}'.";
     exit 1;
@@ -16,6 +20,10 @@ if [[ -z "${SOURCE_REPO_PATH}" ]]; then
   exit 1
 fi
 
+############################################
+# Variables
+############################################
+
 DEFAULT_REPO_HOSTNAME="github.com"
 SOURCE_REPO_HOSTNAME="${HOSTNAME:-${DEFAULT_REPO_HOSTNAME}}"
 GIT_USER_NAME="${GIT_USER_NAME:-${GITHUB_ACTOR}}"
@@ -23,6 +31,10 @@ GIT_USER_EMAIL="${GIT_USER_EMAIL:-github-action@actions-template-sync.noreply.${
 
 # In case of ssh template repository this will be overwritten
 SOURCE_REPO_PREFIX="https://${SOURCE_REPO_HOSTNAME}/"
+
+################################################
+# Functions
+################################################
 
 function ssh_setup() {
   echo "::group::ssh setup"
@@ -53,17 +65,8 @@ function gpg_setup() {
   git config --global gpg.program /bin/gpg_no_tty.sh
 
   info "done prepare gpg"
-  echo "::endgroup::"for fpr in
+  echo "::endgroup::"
 }
-
-# Forward to /dev/null to swallow the output of the private key
-if [[ -n "${SSH_PRIVATE_KEY_SRC}" ]] &>/dev/null; then
-  ssh_setup
-elif [[ "${SOURCE_REPO_HOSTNAME}" != "${DEFAULT_REPO_HOSTNAME}" ]]; then
-  gh auth login --git-protocol "https" --hostname "${SOURCE_REPO_HOSTNAME}" --with-token <<< "${GITHUB_TOKEN}"
-fi
-
-export SOURCE_REPO="${SOURCE_REPO_PREFIX}${SOURCE_REPO_PATH}"
 
 function git_init() {
   echo "::group::git init"
@@ -85,6 +88,19 @@ function git_init() {
   fi
   echo "::endgroup::"
 }
+
+###################################################
+# Logic
+###################################################
+
+# Forward to /dev/null to swallow the output of the private key
+if [[ -n "${SSH_PRIVATE_KEY_SRC}" ]] &>/dev/null; then
+  ssh_setup
+elif [[ "${SOURCE_REPO_HOSTNAME}" != "${DEFAULT_REPO_HOSTNAME}" ]]; then
+  gh auth login --git-protocol "https" --hostname "${SOURCE_REPO_HOSTNAME}" --with-token <<< "${GITHUB_TOKEN}"
+fi
+
+export SOURCE_REPO="${SOURCE_REPO_PREFIX}${SOURCE_REPO_PATH}"
 
 git_init
 
