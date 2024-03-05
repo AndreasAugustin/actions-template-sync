@@ -7,6 +7,10 @@ set -e
 # shellcheck source=src/sync_template.sh
 source sync_common.sh
 
+############################################
+# Prechecks
+############################################
+
 if [[ -z "${PR_COMMIT_MSG}" ]]; then
   err "Missing env variable 'PR_COMMIT_MSG'";
   exit 1;
@@ -22,6 +26,10 @@ if ! [ -x "$(command -v gh)" ]; then
   exit 1;
 fi
 
+########################################################
+# Variables
+########################################################
+
 if [[ -z "${UPSTREAM_BRANCH}" ]]; then
   UPSTREAM_BRANCH="$(git remote show origin | awk '/HEAD branch/ {print $NF}')"
   info "Missing env variable 'UPSTREAM_BRANCH' setting to remote default ${UPSTREAM_BRANCH}";
@@ -34,7 +42,7 @@ fi
 
 GIT_REMOTE_PULL_PARAMS="${GIT_REMOTE_PULL_PARAMS:---allow-unrelated-histories --squash --strategy=recursive -X theirs}"
 
-cmd_from_yml_file "install"
+cmd_from_yml "install"
 
 LOCAL_CURRENT_GIT_HASH=$(git rev-parse HEAD)
 
@@ -48,6 +56,10 @@ PR_BODY="${PR_BODY:-Merge ${SOURCE_REPO_PATH} ${NEW_TEMPLATE_GIT_HASH}}"
 debug "new Git HASH ${NEW_TEMPLATE_GIT_HASH}"
 
 echo "::group::Check new changes"
+
+#####################################################
+# Functions
+#####################################################
 
 function set_github_action_outputs() {
   echo "::group::set gh action outputs"
@@ -71,6 +83,73 @@ function check_branch_remote_existing() {
   fi
 }
 
+function force_delete_files() {
+  echo "::group::force file deletion"
+  warn "force file deletion is enabled. Deleting files which are deleted within the target repository"
+  FILES_TO_DELETE=$(git log --diff-filter D --pretty="format:" --name-only "${LOCAL_CURRENT_GIT_HASH}"..HEAD | sed '/^$/d')
+  warn "files to delete: ${FILES_TO_DELETE}"
+  if [[ -n "${FILES_TO_DELETE}" ]]; then
+    echo "${FILES_TO_DELETE}" | xargs rm
+  fi
+
+  echo "::endgroup::"
+}
+
+function cleanup_older_prs () {
+  older_prs=$(gh pr list \
+  --base "${UPSTREAM_BRANCH}" \
+  --state open \
+  --label "${PR_LABELS}" \
+  --json number \
+  --template '{{range .}}{{printf "%v" .number}}{{"\n"}}{{end}}')
+
+  for older_pr in $older_prs
+  do
+    gh pr close "$older_pr"
+    debug "Closed PR #${older_pr}"
+  done
+}
+
+function maybe_create_labels () {
+  readarray -t labels_array < <(awk -F',' '{ for( i=1; i<=NF; i++ ) print $i }' <<<"${PR_LABELS}")
+  for label in "${labels_array[@]}"
+  do
+      search_result=$(gh label list \
+      --search "${label}" \
+      --limit 1 \
+      --json name \
+      --template '{{range .}}{{printf "%v" .name}}{{"\n"}}{{end}}')
+
+      if [ "${search_result}" = "${label##[[:space:]]}" ]; then
+        info "label '${label##[[:space:]]}' was found in the repository"
+      else
+        if gh label create "${label}"; then
+          info "label '${label}' was missing and has been created"
+        else
+          warn "label creation did not work. For any reason the former check sometimes is failing"
+        fi
+      fi
+  done
+}
+
+function push () {
+  debug "push changes"
+  git push --set-upstream origin "${NEW_BRANCH}"
+}
+
+function create_pr () {
+  gh pr create \
+        --title "${PR_TITLE}" \
+        --body "${PR_BODY}" \
+        --base "${UPSTREAM_BRANCH}" \
+        --label "${PR_LABELS}" \
+        --reviewer "${PR_REVIEWERS}"
+}
+
+########################################################
+# Logic
+#######################################################
+
 check_branch_remote_existing
 
 git cat-file -e "${TEMPLATE_REMOTE_GIT_HASH}" || COMMIT_NOT_IN_HIST=true
@@ -81,7 +160,7 @@ fi
 
 echo "::endgroup::"
 
-cmd_from_yml_file "prepull"
+cmd_from_yml "prepull"
 
 echo "::group::Pull template"
 
@@ -113,23 +192,11 @@ if [ -s "${TEMPLATE_SYNC_IGNORE_FILE_PATH}" ]; then
   echo "::endgroup::"
 fi
 
-function force_delete_files() {
-  echo "::group::force file deletion"
-  warn "force file deletion is enabled. Deleting files which are deleted within the target repository"
-  FILES_TO_DELETE=$(git log --diff-filter D --pretty="format:" --name-only "${LOCAL_CURRENT_GIT_HASH}"..HEAD | sed '/^$/d')
-  warn "files to delete: ${FILES_TO_DELETE}"
-  if [[ -n "${FILES_TO_DELETE}" ]]; then
-    echo "${FILES_TO_DELETE}" | xargs rm
-  fi
-
-  echo "::endgroup::"
-}
-
 if [ "$IS_FORCE_DELETION" == "true" ]; then
   force_delete_files
 fi
 
-cmd_from_yml_file "precommit"
+cmd_from_yml "precommit"
 
 echo "::group::commit changes"
 
@@ -157,20 +224,6 @@ git commit --signoff -m "${PR_COMMIT_MSG}"
 
 echo "::endgroup::"
 
-function cleanup_older_prs () {
-  older_prs=$(gh pr list \
-  --base "${UPSTREAM_BRANCH}" \
-  --state open \
-  --label "${PR_LABELS}" \
-  --json number \
-  --template '{{range .}}{{printf "%v" .number}}{{"\n"}}{{end}}')
-
-  for older_pr in $older_prs
-  do
-    gh pr close "$older_pr"
-    debug "Closed PR #${older_pr}"
-  done
-}
 echo "::group::cleanup older PRs"
 
 if [ "$IS_DRY_RUN" != "true" ]; then
@@ -178,7 +231,7 @@ if [ "$IS_DRY_RUN" != "true" ]; then
     if [[ -z "${PR_LABELS}" ]]; then
      warn "env var 'PR_LABELS' is empty. Skipping older prs cleanup"
     else
-      cmd_from_yml_file "precleanup"
+      cmd_from_yml "precleanup"
       cleanup_older_prs
     fi
   else
@@ -189,29 +242,6 @@ else
 fi
 
 echo "::endgroup::"
-
-
-function maybe_create_labels () {
-  readarray -t labels_array < <(awk -F',' '{ for( i=1; i<=NF; i++ ) print $i }' <<<"${PR_LABELS}")
-  for label in "${labels_array[@]}"
-  do
-      search_result=$(gh label list \
-      --search "${label}" \
-      --limit 1 \
-      --json name \
-      --template '{{range .}}{{printf "%v" .name}}{{"\n"}}{{end}}')
-
-      if [ "${search_result}" = "${label##[[:space:]]}" ]; then
-        info "label '${label##[[:space:]]}' was found in the repository"
-      else
-        if gh label create "${label}"; then
-          info "label '${label}' was missing and has been created"
-        else
-          warn "label creation did not work. For any reason the former check sometimes is failing"
-        fi
-      fi
-  done
-}
 
 echo "::group::check for missing labels"
 
@@ -227,26 +257,12 @@ fi
 
 echo "::endgroup::"
 
-function push () {
-  debug "push changes"
-  git push --set-upstream origin "${NEW_BRANCH}"
-}
-
-function create_pr () {
-  gh pr create \
-        --title "${PR_TITLE}" \
-        --body "${PR_BODY}" \
-        --base "${UPSTREAM_BRANCH}" \
-        --label "${PR_LABELS}" \
-        --reviewer "${PR_REVIEWERS}"
-}
-
 echo "::group::push changes and create PR"
 
 if [ "$IS_DRY_RUN" != "true" ]; then
-  cmd_from_yml_file "prepush"
+  cmd_from_yml "prepush"
   push
-  cmd_from_yml_file "prepr"
+  cmd_from_yml "prepr"
   create_pr
 else
     warn "dry_run option is set to off. Skipping push changes and skip create pr"
