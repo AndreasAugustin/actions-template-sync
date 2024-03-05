@@ -415,8 +415,6 @@ E.q. for the installation phase you need to use commands like `apk add --update 
 ```yml
 - name: Test action step
   uses: AndreasAugustin/actions-template-sync@v1
-  env:
-    MY_VAR: "foo"  # possible to define envrionment variables
   with:
     source_repo_path: AndreasAugustin/template.git
     upstream_branch: main
