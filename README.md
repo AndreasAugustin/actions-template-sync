@@ -246,6 +246,7 @@ jobs:
 | hostname                    | `[optional]` the hostname of the repository                                                                   | `false`  | `github.com`                                                          |
 | is_dry_run                  | `[optional]` set to `true` if you do not want to push the changes and not want to create a PR                 | `false`  |                                                                       |
 | is_allow_hooks              | `[optional]` set to `true` if you want to enable lifecycle hooks. Use this with caution!                      | `false`  | `false`                                                               |
+| hooks | `[optional]` please check the lifecycle hooks section below | `false` | |
 | is_pr_cleanup               | `[optional]` set to `true` if you want to cleanup older PRs targeting the same branch. Use this with caution! | `false`  | `false`                                                               |
 | is_not_source_github        | `[optional]` set to `true` if the source git provider is not GitHub                                           | `false`  | `false`                                                               |
 | is_force_deletion | `[optional]` set to `true` if you want to force delete files which are deleted within the source repository even if they contain changes. You need to also adjust `git_remote_pull_params` (see below for details) | `false` | `false` |
@@ -373,7 +374,8 @@ jobs:
 Different lifecycle hooks are supported. You need to enable the functionality with the option `is_allow_hooks` and set it to `true`
 :warning: use this functionality with caution. You can use one of the available docker images to test it out. **With great power comes great responsibility**.
 
-In addition, you need a configuration file with the name `templatesync.yml` within the root of the target repository.
+In addition, you need either a configuration file with the name `templatesync.yml` within the root of the target repository
+or you set the hooks input parameter within the action definition with a related yaml string
 
 The following hooks are supported (please check [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) for a better understanding of the lifecycles).
 
@@ -387,7 +389,26 @@ The following hooks are supported (please check [docs/ARCHITECTURE.md](docs/ARCH
 **Remark** The underlying OS is defined by an Alpine container.
 E.q. for the installation phase you need to use commands like `apk add --update --no-cache python3`
 
-Schema and example for the `templatesync.yml`
+### Example for the hooks input parameter
+
+```yml
+- name: Test action step
+  uses: AndreasAugustin/actions-template-sync@v1
+  env:
+    MY_VAR: "foo"  # possible to define envrionment variables
+  with:
+    source_repo_path: AndreasAugustin/template.git
+    upstream_branch: main
+    is_dry_run: true
+    is_allow_hooks: true
+    hooks: >
+      prepull:
+        commands:
+          - echo 'hi, we are within the prepull phase'
+          - echo 'maybe you want to do adjustments on the local code'
+```
+
+### Schema and example for the `templatesync.yml`
 
 **Remark** It is possible to use environment variables within the github action definition usable within the command configuration, e.g.
 
@@ -397,7 +418,6 @@ Schema and example for the `templatesync.yml`
   env:
     MY_VAR: "foo"  # possible to define envrionment variables
   with:
-    github_token: ${{ secrets.GITHUB_TOKEN }}
     source_repo_path: AndreasAugustin/template.git
     upstream_branch: main
     is_dry_run: true

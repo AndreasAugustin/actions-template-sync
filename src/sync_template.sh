@@ -34,7 +34,7 @@ fi
 
 GIT_REMOTE_PULL_PARAMS="${GIT_REMOTE_PULL_PARAMS:---allow-unrelated-histories --squash --strategy=recursive -X theirs}"
 
-cmd_from_yml_file "install"
+cmd_from_yml "install"
 
 LOCAL_CURRENT_GIT_HASH=$(git rev-parse HEAD)
 
@@ -81,7 +81,7 @@ fi
 
 echo "::endgroup::"
 
-cmd_from_yml_file "prepull"
+cmd_from_yml "prepull"
 
 echo "::group::Pull template"
 
@@ -129,7 +129,7 @@ if [ "$IS_FORCE_DELETION" == "true" ]; then
   force_delete_files
 fi
 
-cmd_from_yml_file "precommit"
+cmd_from_yml "precommit"
 
 echo "::group::commit changes"
 
@@ -178,7 +178,7 @@ if [ "$IS_DRY_RUN" != "true" ]; then
     if [[ -z "${PR_LABELS}" ]]; then
      warn "env var 'PR_LABELS' is empty. Skipping older prs cleanup"
     else
-      cmd_from_yml_file "precleanup"
+      cmd_from_yml "precleanup"
       cleanup_older_prs
     fi
   else
@@ -244,9 +244,9 @@ function create_pr () {
 echo "::group::push changes and create PR"
 
 if [ "$IS_DRY_RUN" != "true" ]; then
-  cmd_from_yml_file "prepush"
+  cmd_from_yml "prepush"
   push
-  cmd_from_yml_file "prepr"
+  cmd_from_yml "prepr"
   create_pr
 else
     warn "dry_run option is set to off. Skipping push changes and skip create pr"

@@ -40,6 +40,8 @@ inputs:
   is_allow_hooks:
     description: "[optional] set to true if you want to allow hooks. Use this functionality with caution!"
     default: "false"
+  hooks:
+    description: "[optional] define the hooks as yaml string input"
   is_pr_cleanup:
     description: "[optional] set to true if you want to cleanup older PRs targeting the same branch."
     default: "false"
@@ -74,6 +76,7 @@ runs:
     HOSTNAME: ${{ inputs.hostname }}
     IS_DRY_RUN: ${{ inputs.is_dry_run }}
     IS_ALLOW_HOOKS: ${{ inputs.is_allow_hooks }}
+    HOOKS: ${{ inputs.hooks }}
     IS_PR_CLEANUP: ${{ inputs.is_pr_cleanup}}
     IS_NOT_SOURCE_GITHUB: ${{ inputs.is_not_source_github }}
     IS_FORCE_DELETION: ${{ inputs.is_force_deletion }}
