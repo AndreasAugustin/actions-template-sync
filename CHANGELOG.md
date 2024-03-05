@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.10.0](https://github.com/AndreasAugustin/actions-template-sync/compare/v1.9.0...v1.10.0) (2024-03-05)
+
+
+### Features
+
+* **#467:** :sparkles: hooks now within action inputs ([#489](https://github.com/AndreasAugustin/actions-template-sync/issues/489)) ([0e55c08](https://github.com/AndreasAugustin/actions-template-sync/commit/0e55c08f95f9a83c60f809fa6b49785187ec7623))
+
 ## [1.9.0](https://github.com/AndreasAugustin/actions-template-sync/compare/v1.8.1...v1.9.0) (2024-03-05)
 
 
