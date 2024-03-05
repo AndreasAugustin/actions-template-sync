@@ -65,9 +65,11 @@ function cmd_from_yml() {
       debug "hooks input variable is set. Using the variable"
       echo "${HOOKS}" > "tmp.${FILE_NAME}"
       YML_PATH="${YML_PATH_SUFF}"
+      info "foo"
     else
       cp ${FILE_NAME} "tmp.${FILE_NAME}"
       YML_PATH=".hooks.${YML_PATH_SUFF}"
+      info "bar"
     fi
 
     readarray cmd_Arr < <(yq "${YML_PATH} | .[]"  "tmp.${FILE_NAME}")
