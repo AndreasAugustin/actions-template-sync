@@ -41,12 +41,12 @@ function info() {
 }
 
 #######################################
-# Executes commands defined within yml file
+# Executes commands defined within yml file or env variable
 # Arguments:
 #   hook -> the hook to use
 #
 ####################################3#
-function cmd_from_yml_file() {
+function cmd_from_yml() {
   local FILE_NAME="templatesync.yml"
   local HOOK=$1
   local YML_PATH_SUFF=".${HOOK}.commands"
