@@ -136,7 +136,7 @@ function git_init() {
   git config --global user.email "${git_user_email}"
   git config --global user.name "${git_user_name}"
   git config --global pull.rebase false
-  git config --add safe.directory /github/workspace
+  git config --global --add safe.directory /github/workspace
   # TODO(anau) think about git lfs
   git lfs install
 
