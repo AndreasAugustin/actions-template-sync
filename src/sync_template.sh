@@ -279,10 +279,8 @@ function restore_templatesyncignore_file() {
   info "restore the ignore file"
   local template_sync_ignore_file_path=$1
   if [ -s "${template_sync_ignore_file_path}" ]; then
-    echo "::group::restore ignore file"
     git reset "${template_sync_ignore_file_path}"
     git checkout -- "${template_sync_ignore_file_path}" || warn "not able to checkout the former .templatesyncignore file. Most likely the file was not present"
-    echo "::endgroup::"
   fi
 }
 
@@ -366,7 +364,7 @@ function commit() {
 
 function push_prepare_pr_create_pr() {
   info "push_prepare_pr_create_pr"
-  if [ "$IS_DRY_RUN" != "true" ]; then
+  if [ "$IS_DRY_RUN" == "true" ]; then
     warn "dry_run option is set to on. skipping labels check, cleanup older PRs, push and create pr"
     return 0
   fi
