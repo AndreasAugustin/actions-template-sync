@@ -312,7 +312,7 @@ function handle_templatesyncignore() {
 
 function prechecks() {
   info "prechecks"
-  echo "::group::force file deletion"
+  echo "::group::prechecks"
   check_branch_remote_existing "${NEW_BRANCH}"
 
   check_if_commit_already_in_hist_graceful_exit "${TEMPLATE_REMOTE_GIT_HASH}"
