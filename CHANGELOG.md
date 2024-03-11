@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.11.0](https://github.com/AndreasAugustin/actions-template-sync/compare/v1.10.0...v1.11.0) (2024-03-11)
+
+
+### Features
+
+* :sparkles: gpg sign with passphrase ([#460](https://github.com/AndreasAugustin/actions-template-sync/issues/460)) ([cec582e](https://github.com/AndreasAugustin/actions-template-sync/commit/cec582ee2fc98db86d2cb5335a33a2fdaa59f418))
+
 ## [1.10.0](https://github.com/AndreasAugustin/actions-template-sync/compare/v1.9.0...v1.10.0) (2024-03-05)
 
 
