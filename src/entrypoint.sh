@@ -113,7 +113,7 @@ function gpg_setup() {
   KEY_ID="$(gpg --list-secret-key --with-colons "${git_user_email}" | awk -F: '/sec:/ {print $5}')"
   git config user.signingkey "${KEY_ID}"
   git config commit.gpgsign true
-  git config gpg.program "$(pwd)/gpg_no_tty.sh"
+  git config gpg.program "${SCRIPT_DIR}/gpg_no_tty.sh"
 
   info "done prepare gpg"
   echo "::endgroup::"
@@ -176,4 +176,4 @@ if [[ -n "${GPG_PRIVATE_KEY}" ]] &>/dev/null; then
 fi
 
 # shellcheck source=src/sync_template.sh
-source sync_template.sh
+source "${SCRIPT_DIR}/sync_template.sh"
