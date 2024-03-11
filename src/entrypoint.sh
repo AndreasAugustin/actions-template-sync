@@ -6,7 +6,7 @@ set -e
 SCRIPT_DIR="$(dirname "$(readlink -f "$0")")"
 
 # shellcheck source=./sync_common.sh
-source "${SCRIPT_DIR}/src/sync_common.sh"
+source "${SCRIPT_DIR}/sync_common.sh"
 
 ###########################################
 # Precheks
