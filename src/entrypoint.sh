@@ -3,8 +3,10 @@ set -e
 # set -u
 # set -x
 
+SCRIPT_DIR="$(dirname "$(readlink -f "$0")")"
+
 # shellcheck source=./sync_common.sh
-source "$(pwd)/sync_common.sh"
+source "${SCRIPT_DIR}/src/sync_common.sh"
 
 ###########################################
 # Precheks
