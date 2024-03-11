@@ -44,10 +44,6 @@ GIT_REMOTE_PULL_PARAMS="${GIT_REMOTE_PULL_PARAMS:---allow-unrelated-histories --
 
 cmd_from_yml "install"
 
-LOCAL_CURRENT_GIT_HASH=$(git rev-parse HEAD)
-
-info "current git hash: ${LOCAL_CURRENT_GIT_HASH}"
-
 TEMPLATE_SYNC_IGNORE_FILE_PATH=".templatesyncignore"
 TEMPLATE_REMOTE_GIT_HASH=$(git ls-remote "${SOURCE_REPO}" HEAD | awk '{print $1}')
 NEW_TEMPLATE_GIT_HASH=$(git rev-parse --short "${TEMPLATE_REMOTE_GIT_HASH}")
@@ -55,51 +51,124 @@ NEW_BRANCH="${PR_BRANCH_NAME_PREFIX}_${NEW_TEMPLATE_GIT_HASH}"
 PR_BODY="${PR_BODY:-Merge ${SOURCE_REPO_PATH} ${NEW_TEMPLATE_GIT_HASH}}"
 debug "new Git HASH ${NEW_TEMPLATE_GIT_HASH}"
 
-echo "::group::Check new changes"
+# Check if the Ignore File exists inside .github folder or if it doesn't exist at all
+if [[ -f ".github/${TEMPLATE_SYNC_IGNORE_FILE_PATH}" || ! -f "${TEMPLATE_SYNC_IGNORE_FILE_PATH}" ]]; then
+  debug "using ignore file as in .github folder"
+  TEMPLATE_SYNC_IGNORE_FILE_PATH=".github/${TEMPLATE_SYNC_IGNORE_FILE_PATH}"
+fi
 
 #####################################################
 # Functions
 #####################################################
 
+#######################################
+# set the gh action outputs if run with github action.
+# Arguments:
+#   pr_branch
+#######################################
 function set_github_action_outputs() {
   echo "::group::set gh action outputs"
+
+  local pr_branch=$1
+  info "set github action outputs"
+
   if [[ -z "${GITHUB_RUN_ID}" ]]; then
     info "env var 'GITHUB_RUN_ID' is empty -> no github action workflow"
   else
     # https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#setting-an-output-parameter
-    echo "pr_branch=${NEW_BRANCH}" >> "$GITHUB_OUTPUT"
+    echo "pr_branch=${pr_branch}" >> "$GITHUB_OUTPUT"
   fi
   echo "::endgroup::"
 }
 
-
+#######################################
+# Check if the branch exists remote.
+# Arguments:
+#   pr_branch
+#######################################
 function check_branch_remote_existing() {
-  git ls-remote --exit-code --heads origin "${NEW_BRANCH}" || BRANCH_DOES_NOT_EXIST=true
 
-  if [[ "${BRANCH_DOES_NOT_EXIST}" != true ]]; then
-    warn "Git branch '${NEW_BRANCH}' exists in the remote repository"
-    set_github_action_outputs
+  local branch_to_check=$1
+
+  info "check if the remote branch ${branch_to_check} exists. Exit if so"
+
+  git ls-remote --exit-code --heads origin "${branch_to_check}" || branch_does_not_exist=true
+
+  if [[ "${branch_does_not_exist}" != true ]]; then
+    warn "Git branch '${branch_to_check}' exists in the remote repository"
+    set_github_action_outputs "${branch_to_check}"
     exit 0
   fi
 }
 
-function force_delete_files() {
-  echo "::group::force file deletion"
-  warn "force file deletion is enabled. Deleting files which are deleted within the target repository"
-  FILES_TO_DELETE=$(git log --diff-filter D --pretty="format:" --name-only "${LOCAL_CURRENT_GIT_HASH}"..HEAD | sed '/^$/d')
-  warn "files to delete: ${FILES_TO_DELETE}"
-  if [[ -n "${FILES_TO_DELETE}" ]]; then
-    echo "${FILES_TO_DELETE}" | xargs rm
+#######################################
+# Check if the commit is already in history.
+# exit 0 if so
+# Arguments:
+#   template_remote_git_hash
+#######################################
+function check_if_commit_already_in_hist_graceful_exit() {
+  info "check if commit already in history"
+
+  local template_remote_git_hash=$1
+
+  git cat-file -e "${template_remote_git_hash}" || commit_not_in_hist=true
+  if [ "${commit_not_in_hist}" != true ] ; then
+      warn "repository is up to date!"
+      exit 0
   fi
 
-  echo "::endgroup::"
 }
 
+##########################################
+# check if there are staged files.
+# exit if not
+##########################################
+function check_staged_files_available_graceful_exit() {
+  if git diff --quiet && git diff --staged --quiet; then
+    info "nothing to commit"
+    exit 0
+  fi
+}
+
+#######################################
+# force source file deletion if they had been deleted
+#######################################
+function force_delete_files() {
+  info "force delete files"
+  warn "force file deletion is enabled. Deleting files which are deleted within the target repository"
+  local_current_git_hash=$(git rev-parse HEAD)
+
+  info "current git hash: ${local_current_git_hash}"
+
+  files_to_delete=$(git log --diff-filter D --pretty="format:" --name-only "${local_current_git_hash}"..HEAD | sed '/^$/d')
+  warn "files to delete: ${files_to_delete}"
+  if [[ -n "${files_to_delete}" ]]; then
+    echo "${files_to_delete}" | xargs rm
+  fi
+}
+
+#######################################
+# cleanup older prs based on labels.
+# Arguments:
+#   upstream_branch
+#   pr_labels
+#######################################
 function cleanup_older_prs () {
+  info "cleanup older prs"
+
+  local upstream_branch=$1
+  local pr_labels=$2
+
+  if [[ -z "${pr_labels}" ]]; then
+     warn "env var 'PR_LABELS' is empty. Skipping older prs cleanup"
+     return 0
+  fi
+
   older_prs=$(gh pr list \
-  --base "${UPSTREAM_BRANCH}" \
+  --base "${upstream_branch}" \
   --state open \
-  --label "${PR_LABELS}" \
+  --label "${pr_labels}" \
   --json number \
   --template '{{range .}}{{printf "%v" .number}}{{"\n"}}{{end}}')
 
@@ -110,8 +179,41 @@ function cleanup_older_prs () {
   done
 }
 
-function maybe_create_labels () {
-  readarray -t labels_array < <(awk -F',' '{ for( i=1; i<=NF; i++ ) print $i }' <<<"${PR_LABELS}")
+##################################
+# pull source changes
+# Arguments:
+#   source_repo
+#   git_remote_pull_params
+##################################
+function pull_source_changes() {
+  info "pull changes from source repository"
+  local source_repo=$1
+  local git_remote_pull_params=$2
+
+  eval "git pull ${source_repo} ${git_remote_pull_params}" || pull_has_issues=true
+
+  if [ "$pull_has_issues" == true ] ; then
+      warn "There had been some git pull issues."
+      warn "Maybe a merge issue."
+      warn "We go on but it is likely that you need to fix merge issues within the created PR."
+  fi
+}
+
+#######################################
+# eventual create labels (if they are not existent).
+# Arguments:
+#   pr_labels
+#######################################
+function eventual_create_labels () {
+  local pr_labels=$1
+  info "eventual create labels ${pr_labels}"
+
+  if [[ -z "${pr_labels}" ]]; then
+    info "'pr_labels' is empty. Skipping labels check"
+    retun 0
+  fi
+
+  readarray -t labels_array < <(awk -F',' '{ for( i=1; i<=NF; i++ ) print $i }' <<<"${pr_labels}")
   for label in "${labels_array[@]}"
   do
       search_result=$(gh label list \
@@ -132,142 +234,177 @@ function maybe_create_labels () {
   done
 }
 
+##############################
+# push the changes
+# Arguments:
+#   branch
+##############################
 function push () {
-  debug "push changes"
-  git push --set-upstream origin "${NEW_BRANCH}"
+  info "push changes"
+  local branch=$1
+  git push --set-upstream origin "${branch}"
 }
 
+####################################
+# creates a pr
+# Arguments:
+#   title
+#   body
+#   branch
+#   labels
+#   reviewers
+###################################
 function create_pr () {
+  info "create pr"
+  local title=$1
+  local body=$2
+  local branch=$3
+  local labels=$4
+  local reviewers=$5
+
   gh pr create \
-        --title "${PR_TITLE}" \
-        --body "${PR_BODY}" \
-        --base "${UPSTREAM_BRANCH}" \
-        --label "${PR_LABELS}" \
-        --reviewer "${PR_REVIEWERS}"
+        --title "${title}" \
+        --body "${body}" \
+        --base "${branch}" \
+        --label "${labels}" \
+        --reviewer "${reviewers}"
+}
+
+#########################################
+# restore the .templatesyncignore file
+# Arguments:
+#   template_sync_ignore_file_path
+###########################################
+function restore_templatesyncignore_file() {
+  info "restore the ignore file"
+  local template_sync_ignore_file_path=$1
+  if [ -s "${template_sync_ignore_file_path}" ]; then
+    git reset "${template_sync_ignore_file_path}"
+    git checkout -- "${template_sync_ignore_file_path}" || warn "not able to checkout the former .templatesyncignore file. Most likely the file was not present"
+  fi
+}
+
+#########################################
+# reset all files within the .templatesyncignore file
+# Arguments:
+#   template_sync_ignore_file_path
+###########################################
+function handle_templatesyncignore() {
+  info "handle .templatesyncignore"
+  local template_sync_ignore_file_path=$1
+  # we are checking the ignore file if it exists or is empty
+  # -s is true if the file contains whitespaces
+  if [ -s "${template_sync_ignore_file_path}" ]; then
+    debug "unstage files from template sync ignore"
+    git reset --pathspec-from-file="${template_sync_ignore_file_path}"
+
+    debug "clean untracked files"
+    git clean -df
+
+    debug "discard all unstaged changes"
+    git checkout -- .
+  fi
 }
 
 ########################################################
 # Logic
 #######################################################
 
-check_branch_remote_existing
+function prechecks() {
+  info "prechecks"
+  echo "::group::force file deletion"
+  check_branch_remote_existing "${NEW_BRANCH}"
 
-git cat-file -e "${TEMPLATE_REMOTE_GIT_HASH}" || COMMIT_NOT_IN_HIST=true
-if [ "$COMMIT_NOT_IN_HIST" != true ] ; then
-    warn "repository is up to date!"
-    exit 0
-fi
+  check_if_commit_already_in_hist_graceful_exit "${TEMPLATE_REMOTE_GIT_HASH}"
 
-echo "::endgroup::"
-
-cmd_from_yml "prepull"
-
-echo "::group::Pull template"
-
-debug "create new branch from default branch with name ${NEW_BRANCH}"
-git checkout -b "${NEW_BRANCH}"
-debug "pull changes from template"
-
-eval "git pull ${SOURCE_REPO} ${GIT_REMOTE_PULL_PARAMS}" || PULL_HAS_ISSUES=true
-
-if [ "$PULL_HAS_ISSUES" == true ] ; then
-    warn "There had been some git pull issues."
-    warn "Maybe a merge issue."
-    warn "We go on but it is likely that you need to fix merge issues within the created PR."
-fi
-
-echo "::endgroup::"
-
-# Check if the Ignore File exists inside .github folder or if it doesn't exist at all
-if [[ -f ".github/${TEMPLATE_SYNC_IGNORE_FILE_PATH}" || ! -f "${TEMPLATE_SYNC_IGNORE_FILE_PATH}" ]]; then
-  debug "using ignore file as in .github folder"
-  TEMPLATE_SYNC_IGNORE_FILE_PATH=".github/${TEMPLATE_SYNC_IGNORE_FILE_PATH}"
-fi
-
-if [ -s "${TEMPLATE_SYNC_IGNORE_FILE_PATH}" ]; then
-  echo "::group::restore ignore file"
-  info "restore the ignore file"
-  git reset "${TEMPLATE_SYNC_IGNORE_FILE_PATH}"
-  git checkout -- "${TEMPLATE_SYNC_IGNORE_FILE_PATH}" || warn "not able to checkout the former .templatesyncignore file. Most likely the file was not present"
   echo "::endgroup::"
-fi
+}
 
-if [ "$IS_FORCE_DELETION" == "true" ]; then
-  force_delete_files
-fi
 
-cmd_from_yml "precommit"
+function checkout_branch_and_pull() {
+  info "checkout branch and pull"
+  cmd_from_yml "prepull"
 
-echo "::group::commit changes"
+  echo "::group::checkout branch and pull"
 
-git add .
+  debug "create new branch from default branch with name ${NEW_BRANCH}"
+  git checkout -b "${NEW_BRANCH}"
+  debug "pull changes from template"
 
-# we are checking the ignore file if it exists or is empty
-# -s is true if the file contains whitespaces
-if [ -s "${TEMPLATE_SYNC_IGNORE_FILE_PATH}" ]; then
-  debug "unstage files from template sync ignore"
-  git reset --pathspec-from-file="${TEMPLATE_SYNC_IGNORE_FILE_PATH}"
+  pull_source_changes "${SOURCE_REPO}" "${GIT_REMOTE_PULL_PARAMS}"
 
-  debug "clean untracked files"
-  git clean -df
+  restore_templatesyncignore_file "${TEMPLATE_SYNC_IGNORE_FILE_PATH}"
 
-  debug "discard all unstaged changes"
-  git checkout -- .
-fi
+  if [ "$IS_FORCE_DELETION" == "true" ]; then
+    force_delete_files
+  fi
 
-if git diff --quiet && git diff --staged --quiet; then
-  info "nothing to commit"
-  exit 0
-fi
+  echo "::endgroup::"
+}
 
-git commit --signoff -m "${PR_COMMIT_MSG}"
 
-echo "::endgroup::"
+function commit() {
+  info "commit"
 
-echo "::group::cleanup older PRs"
+  cmd_from_yml "precommit"
 
-if [ "$IS_DRY_RUN" != "true" ]; then
+  echo "::group::commit changes"
+
+  git add .
+
+  handle_templatesyncignore "${TEMPLATE_SYNC_IGNORE_FILE_PATH}"
+
+  check_staged_files_available_graceful_exit
+
+  git commit --signoff -m "${PR_COMMIT_MSG}"
+
+  echo "::endgroup::"
+}
+
+
+function push_prepare_pr_create_pr() {
+  info "push_prepare_pr_create_pr"
+  if [ "$IS_DRY_RUN" == "true" ]; then
+    warn "dry_run option is set to on. skipping labels check, cleanup older PRs, push and create pr"
+    return 0
+  fi
+  echo "::group::check for missing labels"
+
+  eventual_create_labels "${PR_LABELS}"
+
+  echo "::endgroup::"
+
+  echo "::group::cleanup older PRs"
   if [ "$IS_PR_CLEANUP" != "false" ]; then
     if [[ -z "${PR_LABELS}" ]]; then
-     warn "env var 'PR_LABELS' is empty. Skipping older prs cleanup"
+    warn "env var 'PR_LABELS' is empty. Skipping older prs cleanup"
     else
       cmd_from_yml "precleanup"
-      cleanup_older_prs
+      cleanup_older_prs "${UPSTREAM_BRANCH}" "${PR_LABELS}"
     fi
   else
     warn "is_pr_cleanup option is set to off. Skipping older prs cleanup"
   fi
-else
-  warn "dry_run option is set to off. Skipping older prs cleanup"
-fi
 
-echo "::endgroup::"
+  echo "::endgroup::"
 
-echo "::group::check for missing labels"
+  echo "::group::push changes and create PR"
 
-if [[ -z "${PR_LABELS}" ]]; then
-  info "env var 'PR_LABELS' is empty. Skipping labels check"
-else
-  if [ "$IS_DRY_RUN" != "true" ]; then
-    maybe_create_labels
-  else
-    warn "dry_run option is set to off. Skipping labels check"
-  fi
-fi
-
-echo "::endgroup::"
-
-echo "::group::push changes and create PR"
-
-if [ "$IS_DRY_RUN" != "true" ]; then
   cmd_from_yml "prepush"
-  push
+  push "${NEW_BRANCH}"
   cmd_from_yml "prepr"
-  create_pr
-else
-    warn "dry_run option is set to off. Skipping push changes and skip create pr"
-fi
+  create_pr "${PR_TITLE}" "${PR_BODY}" "${UPSTREAM_BRANCH}" "${PR_LABELS}" "${PR_REVIEWERS}"
 
-echo "::endgroup::"
+  echo "::endgroup::"
+}
 
-set_github_action_outputs
+
+prechecks
+
+checkout_branch_and_pull
+
+commit
+
+push_prepare_pr_create_pr
+
+set_github_action_outputs "${NEW_BRANCH}"
