@@ -36,30 +36,79 @@ SOURCE_REPO_PREFIX="https://${SOURCE_REPO_HOSTNAME}/"
 # Functions
 ################################################
 
+#######################################
+# doing the ssh setup.
+# Arguments:
+#   ssh_private_key_src
+#   source_repo_hostname
+# Changes:
+#   SOURCE_REPO_PREFIX
+# Exports:
+#   SRC_SSH_PRIVATEKEY_ABS_PATH
+#######################################
 function ssh_setup() {
   echo "::group::ssh setup"
 
   info "prepare ssh"
-  SRC_SSH_FILE_DIR="/tmp/.ssh"
-  SRC_SSH_PRIVATEKEY_FILE_NAME="id_rsa_actions_template_sync"
-  export SRC_SSH_PRIVATEKEY_ABS_PATH="${SRC_SSH_FILE_DIR}/${SRC_SSH_PRIVATEKEY_FILE_NAME}"
+
+  local src_ssh_file_dir="/tmp/.ssh"
+  local src_ssh_private_key_file_name="id_rsa_actions_template_sync"
+
+  local ssh_private_key_src=$1
+  local source_repo_hostname=$2
+
+  if [[ -z "${ssh_private_key_src}" ]] &>/dev/null; then
+    err "Missing variable 'ssh_private_key_src'.";
+    exit 1;
+  fi
+
+  if [[ -z "${source_repo_hostname}" ]]; then
+    err "Missing variable 'source_repo_hostname'.";
+    exit 1;
+  fi
+
+  # exporting SRC_SSH_PRIVATEKEY_ABS_PATH to be used later
+  export SRC_SSH_PRIVATEKEY_ABS_PATH="${src_ssh_file_dir}/${src_ssh_private_key_file_name}"
+
   debug "We are using SSH within a private source repo"
-  mkdir -p "${SRC_SSH_FILE_DIR}"
+  mkdir -p "${src_ssh_file_dir}"
   # use cat <<< instead of echo to swallow output of the private key
-  cat <<< "${SSH_PRIVATE_KEY_SRC}" | sed 's/\\n/\n/g' > "${SRC_SSH_PRIVATEKEY_ABS_PATH}"
+  cat <<< "${ssh_private_key_src}" | sed 's/\\n/\n/g' > "${SRC_SSH_PRIVATEKEY_ABS_PATH}"
   chmod 600 "${SRC_SSH_PRIVATEKEY_ABS_PATH}"
-  SOURCE_REPO_PREFIX="git@${SOURCE_REPO_HOSTNAME}:"
+
+  # adjusting outer variable source repo prefix
+  SOURCE_REPO_PREFIX="git@${source_repo_hostname}:"
 
   echo "::endgroup::"
 }
 
+#######################################
+# doing the gpg setup.
+# Arguments:
+#   gpg_private_key
+#   git_user_email
+#######################################
 function gpg_setup() {
   echo "::group::gpg setup"
   info "start prepare gpg"
-  echo -e "$GPG_PRIVATE_KEY" | gpg --import --batch
-  for fpr in $(gpg --list-key --with-colons "${GIT_USER_EMAIL}"  | awk -F: '/fpr:/ {print $10}' | sort -u); do  echo -e "5\ny\n" |  gpg --no-tty --command-fd 0 --expert --edit-key "$fpr" trust; done
 
-  KEY_ID="$(gpg --list-secret-key --with-colons "${GIT_USER_EMAIL}" | awk -F: '/sec:/ {print $5}')"
+  local gpg_private_key=$1
+  local git_user_email=$2
+
+  if [[ -z "${gpg_private_key}" ]] &>/dev/null; then
+    err "Missing variable 'gpg_private_key'.";
+    exit 1;
+  fi
+
+  if [[ -z "${git_user_email}" ]]; then
+    err "Missing variable 'git_user_email'.";
+    exit 1;
+  fi
+
+  echo -e "${gpg_private_key}" | gpg --import --batch
+  for fpr in $(gpg --list-key --with-colons "${git_user_email}"  | awk -F: '/fpr:/ {print $10}' | sort -u); do  echo -e "5\ny\n" |  gpg --no-tty --command-fd 0 --expert --edit-key "$fpr" trust; done
+
+  KEY_ID="$(gpg --list-secret-key --with-colons "${git_user_email}" | awk -F: '/sec:/ {print $5}')"
   git config --global user.signingkey "${KEY_ID}"
   git config --global commit.gpgsign true
   git config --global gpg.program /bin/gpg_no_tty.sh
@@ -68,23 +117,36 @@ function gpg_setup() {
   echo "::endgroup::"
 }
 
+
+#######################################
+# doing the git setup.
+# Arguments:
+#   git_user_email
+#   git_user_name
+#   source_repo_hostname
+#######################################
 function git_init() {
   echo "::group::git init"
   info "set git global configuration"
 
-  git config --global user.email "${GIT_USER_EMAIL}"
-  git config --global user.name "${GIT_USER_NAME}"
+  local git_user_email=$1
+  local git_user_name=$2
+  local source_repo_hostname=$3
+
+  git config --global user.email "${git_user_email}"
+  git config --global user.name "${git_user_name}"
   git config --global pull.rebase false
   git config --global --add safe.directory /github/workspace
+  # TODO(anau) think about git lfs
   git lfs install
 
   if [[ "${IS_NOT_SOURCE_GITHUB}" == 'true' ]]; then
     info "the source repository is not located within GitHub."
-    ssh-keyscan -t rsa "${SOURCE_REPO_HOSTNAME}" >> /root/.ssh/known_hosts
+    ssh-keyscan -t rsa "${source_repo_hostname}" >> /root/.ssh/known_hosts
   else
     info "the source repository is located within GitHub."
-    gh auth setup-git --hostname "${SOURCE_REPO_HOSTNAME}"
-    gh auth status --hostname "${SOURCE_REPO_HOSTNAME}"
+    gh auth setup-git --hostname "${source_repo_hostname}"
+    gh auth status --hostname "${source_repo_hostname}"
   fi
   echo "::endgroup::"
 }
@@ -95,17 +157,17 @@ function git_init() {
 
 # Forward to /dev/null to swallow the output of the private key
 if [[ -n "${SSH_PRIVATE_KEY_SRC}" ]] &>/dev/null; then
-  ssh_setup
+  ssh_setup "${SSH_PRIVATE_KEY_SRC}" "${SOURCE_REPO_HOSTNAME}"
 elif [[ "${SOURCE_REPO_HOSTNAME}" != "${DEFAULT_REPO_HOSTNAME}" ]]; then
   gh auth login --git-protocol "https" --hostname "${SOURCE_REPO_HOSTNAME}" --with-token <<< "${GITHUB_TOKEN}"
 fi
 
 export SOURCE_REPO="${SOURCE_REPO_PREFIX}${SOURCE_REPO_PATH}"
 
-git_init
+git_init "${GIT_USER_EMAIL}" "${GIT_USER_NAME}" "${SOURCE_REPO_HOSTNAME}"
 
 if [[ -n "${GPG_PRIVATE_KEY}" ]] &>/dev/null; then
-  gpg_setup
+  gpg_setup "${GPG_PRIVATE_KEY}" "${GIT_USER_EMAIL}"
 fi
 
 # shellcheck source=src/sync_template.sh
