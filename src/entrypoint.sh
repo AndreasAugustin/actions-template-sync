@@ -137,8 +137,11 @@ function git_init() {
   git config user.name "${git_user_name}"
   git config pull.rebase false
   git config --add safe.directory /github/workspace
-  # TODO(anau) think about git lfs
-  git lfs install
+
+   if [[ "${IS_GIT_LFS}" == 'true' ]]; then
+    info "enable git lfs."
+    git lfs install
+  fi
 
   if [[ "${IS_NOT_SOURCE_GITHUB}" == 'true' ]]; then
     info "the source repository is not located within GitHub."

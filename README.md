@@ -244,6 +244,7 @@ jobs:
 | pr_reviewers                | `[optional]` comma separated list of pull request reviewers.                                                  | `false`  |                                                                       |
 | pr_commit_msg               | `[optional]` commit message in the created pull request                                                       | `false`  | `chore(template): merge template changes :up:`                        |
 | hostname                    | `[optional]` the hostname of the repository                                                                   | `false`  | `github.com`                                                          |
+| is_git_lfs | `[optional]` set to `true` if you want to enalbe git lfs | `false` | `false` |
 | is_dry_run                  | `[optional]` set to `true` if you do not want to push the changes and not want to create a PR                 | `false`  |                                                                       |
 | is_allow_hooks              | `[optional]` set to `true` if you want to enable lifecycle hooks. Use this with caution!                      | `false`  | `false`                                                               |
 | hooks | `[optional]` please check the lifecycle hooks section below | `false` | |

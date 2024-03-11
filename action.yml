@@ -51,6 +51,9 @@ inputs:
   is_force_deletion:
     description: "[optional] set to true if you want to force delete files which are deleted within the source repository even if they contain changes"
     default: "false"
+  is_git_lfs:
+    description: "[optional] set to true if you want to enable git lfs"
+    default: "false"
   git_user_name:
     description: "[optional] set the committer git user.name for the merge commit"
   git_user_email:
@@ -89,6 +92,7 @@ runs:
         IS_DRY_RUN: ${{ inputs.is_dry_run }}
         IS_ALLOW_HOOKS: ${{ inputs.is_allow_hooks }}
         HOOKS: ${{ inputs.hooks }}
+        IS_GIT_LFS: ${{ inputs.is_git_lfs }}
         IS_PR_CLEANUP: ${{ inputs.is_pr_cleanup}}
         IS_NOT_SOURCE_GITHUB: ${{ inputs.is_not_source_github }}
         IS_FORCE_DELETION: ${{ inputs.is_force_deletion }}
