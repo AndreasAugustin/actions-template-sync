@@ -4,8 +4,8 @@ set -e
 # set -u
 # set -x
 
-# shellcheck source=src/sync_template.sh
-source sync_common.sh
+# shellcheck source=./sync_template.sh
+source ./sync_common.sh
 
 ############################################
 # Prechecks

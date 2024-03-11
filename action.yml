@@ -73,8 +73,8 @@ runs:
   # image: "src/Dockerfile"
   steps:
     - name: github sync
-      run: ./entrypoint.sh
-      working-directory: src/
+      run: src/entrypoint.sh
+      # working-directory: src/
       shell: bash
       id: sync
       env:

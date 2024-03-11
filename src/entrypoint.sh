@@ -3,8 +3,8 @@ set -e
 # set -u
 # set -x
 
-# shellcheck source=src/sync_common.sh
-source sync_common.sh
+# shellcheck source=./sync_common.sh
+source ./sync_common.sh
 
 ###########################################
 # Precheks
@@ -111,7 +111,7 @@ function gpg_setup() {
   KEY_ID="$(gpg --list-secret-key --with-colons "${git_user_email}" | awk -F: '/sec:/ {print $5}')"
   git config user.signingkey "${KEY_ID}"
   git config commit.gpgsign true
-  git config gpg.program gpg_no_tty.sh
+  git config gpg.program "$(pwd)/gpg_no_tty.sh"
 
   info "done prepare gpg"
   echo "::endgroup::"
