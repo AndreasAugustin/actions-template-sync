@@ -4,7 +4,7 @@ set -e
 # set -x
 
 # shellcheck source=./sync_common.sh
-source ./sync_common.sh
+source "$(pwd)/sync_common.sh"
 
 ###########################################
 # Precheks
