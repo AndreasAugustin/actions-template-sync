@@ -64,7 +64,7 @@ inputs:
 outputs:
   pr_branch:
     description: "The name of the PR branch"
-    value: ${{ steps.sync.outputs.random-number }}
+    value: ${{ steps.sync.outputs.pr_branch }}
 runs:
   using: "composite"
   # image: "src/Dockerfile"
