@@ -109,9 +109,9 @@ function gpg_setup() {
   for fpr in $(gpg --list-key --with-colons "${git_user_email}"  | awk -F: '/fpr:/ {print $10}' | sort -u); do  echo -e "5\ny\n" |  gpg --no-tty --command-fd 0 --expert --edit-key "$fpr" trust; done
 
   KEY_ID="$(gpg --list-secret-key --with-colons "${git_user_email}" | awk -F: '/sec:/ {print $5}')"
-  git config --global user.signingkey "${KEY_ID}"
-  git config --global commit.gpgsign true
-  git config --global gpg.program /bin/gpg_no_tty.sh
+  git config user.signingkey "${KEY_ID}"
+  git config commit.gpgsign true
+  git config gpg.program gpg_no_tty.sh
 
   info "done prepare gpg"
   echo "::endgroup::"
@@ -133,10 +133,10 @@ function git_init() {
   local git_user_name=$2
   local source_repo_hostname=$3
 
-  git config --global user.email "${git_user_email}"
-  git config --global user.name "${git_user_name}"
-  git config --global pull.rebase false
-  git config --global --add safe.directory /github/workspace
+  git config user.email "${git_user_email}"
+  git config user.name "${git_user_name}"
+  git config pull.rebase false
+  git config --add safe.directory /github/workspace
   # TODO(anau) think about git lfs
   git lfs install
 
