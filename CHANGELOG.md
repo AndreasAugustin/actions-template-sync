@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.12.0](https://github.com/AndreasAugustin/actions-template-sync/compare/v1.11.0...v1.12.0) (2024-03-13)
+
+
+### Features
+
+* **#482:** :sparkles: add option to force push and pr ([#499](https://github.com/AndreasAugustin/actions-template-sync/issues/499)) ([cbef7ee](https://github.com/AndreasAugustin/actions-template-sync/commit/cbef7ee63378db46e59d89a09c055376dccf4817))
+
 ## [1.11.0](https://github.com/AndreasAugustin/actions-template-sync/compare/v1.10.0...v1.11.0) (2024-03-11)
 
 
