@@ -22,6 +22,11 @@ if [[ -z "${SOURCE_REPO_PATH}" ]]; then
   exit 1
 fi
 
+if [[ -z "${HOME}" ]]; then
+  err "Missing env variable HOME.";
+  exit 1
+fi
+
 ############################################
 # Variables
 ############################################
@@ -147,7 +152,8 @@ function git_init() {
 
   if [[ "${IS_NOT_SOURCE_GITHUB}" == 'true' ]]; then
     info "the source repository is not located within GitHub."
-    ssh-keyscan -t rsa "${source_repo_hostname}" >> /root/.ssh/known_hosts
+    mkdir -p "${HOME}"/.ssh
+    ssh-keyscan -t rsa "${source_repo_hostname}" >> "${HOME}"/.ssh/known_hosts
   else
     info "the source repository is located within GitHub."
     gh auth setup-git --hostname "${source_repo_hostname}"
