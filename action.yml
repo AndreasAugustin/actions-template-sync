@@ -54,6 +54,9 @@ inputs:
   is_force_deletion:
     description: "[optional] set to true if you want to force delete files which are deleted within the source repository even if they contain changes"
     default: "false"
+  is_git_lfs:
+    description: "[optional] set to true if you want to enable git lfs"
+    default: "false"
   git_user_name:
     description: "[optional] set the committer git user.name for the merge commit"
   git_user_email:
@@ -64,30 +67,41 @@ inputs:
     description: "[optional] set the gpg private key if you want to sign your commits"
   gpg_passphrase:
     description: "[optional] set if your private gpg key has a password"
+outputs:
+  pr_branch:
+    description: "The name of the PR branch"
+    value: ${{ steps.sync.outputs.pr_branch }}
 runs:
-  using: "docker"
-  image: "src/Dockerfile"
-  env:
-    GITHUB_TOKEN: ${{ inputs.github_token }}
-    SOURCE_REPO_PATH: ${{ inputs.source_repo_path }}
-    UPSTREAM_BRANCH: ${{ inputs.upstream_branch }}
-    SSH_PRIVATE_KEY_SRC: ${{ inputs.source_repo_ssh_private_key }}
-    PR_BRANCH_NAME_PREFIX: ${{ inputs.pr_branch_name_prefix }}
-    PR_TITLE: ${{ inputs.pr_title }}
-    PR_BODY: ${{ inputs.pr_body }}
-    PR_LABELS: ${{ inputs.pr_labels }}
-    PR_REVIEWERS: ${{ inputs.pr_reviewers }}
-    PR_COMMIT_MSG: ${{ inputs.pr_commit_msg }}
-    HOSTNAME: ${{ inputs.hostname }}
-    IS_DRY_RUN: ${{ inputs.is_dry_run }}
-    IS_ALLOW_HOOKS: ${{ inputs.is_allow_hooks }}
-    HOOKS: ${{ inputs.hooks }}
-    IS_FORCE_PUSH_PR: ${{ inputs.is_force_push_pr }}
-    IS_PR_CLEANUP: ${{ inputs.is_pr_cleanup}}
-    IS_NOT_SOURCE_GITHUB: ${{ inputs.is_not_source_github }}
-    IS_FORCE_DELETION: ${{ inputs.is_force_deletion }}
-    GIT_USER_NAME: ${{ inputs.git_user_name }}
-    GIT_USER_EMAIL: ${{ inputs.git_user_email }}
-    GIT_REMOTE_PULL_PARAMS: ${{ inputs.git_remote_pull_params }}
-    GPG_PRIVATE_KEY: ${{ inputs.gpg_private_key }}
-    GPG_PASSPHRASE: ${{ inputs.gpg_passphrase }}
+  using: "composite"
+  # image: "src/Dockerfile"
+  steps:
+    - name: github sync
+      run: ${{github.action_path}}/src/entrypoint.sh
+      # working-directory: src/
+      shell: bash
+      id: sync
+      env:
+        GITHUB_TOKEN: ${{ inputs.github_token }}
+        SOURCE_REPO_PATH: ${{ inputs.source_repo_path }}
+        UPSTREAM_BRANCH: ${{ inputs.upstream_branch }}
+        SSH_PRIVATE_KEY_SRC: ${{ inputs.source_repo_ssh_private_key }}
+        PR_BRANCH_NAME_PREFIX: ${{ inputs.pr_branch_name_prefix }}
+        PR_TITLE: ${{ inputs.pr_title }}
+        PR_BODY: ${{ inputs.pr_body }}
+        PR_LABELS: ${{ inputs.pr_labels }}
+        PR_REVIEWERS: ${{ inputs.pr_reviewers }}
+        PR_COMMIT_MSG: ${{ inputs.pr_commit_msg }}
+        HOSTNAME: ${{ inputs.hostname }}
+        IS_DRY_RUN: ${{ inputs.is_dry_run }}
+        IS_ALLOW_HOOKS: ${{ inputs.is_allow_hooks }}
+        HOOKS: ${{ inputs.hooks }}
+        IS_FORCE_PUSH_PR: ${{ inputs.is_force_push_pr }}
+        IS_GIT_LFS: ${{ inputs.is_git_lfs }}
+        IS_PR_CLEANUP: ${{ inputs.is_pr_cleanup}}
+        IS_NOT_SOURCE_GITHUB: ${{ inputs.is_not_source_github }}
+        IS_FORCE_DELETION: ${{ inputs.is_force_deletion }}
+        GIT_USER_NAME: ${{ inputs.git_user_name }}
+        GIT_USER_EMAIL: ${{ inputs.git_user_email }}
+        GIT_REMOTE_PULL_PARAMS: ${{ inputs.git_remote_pull_params }}
+        GPG_PRIVATE_KEY: ${{ inputs.gpg_private_key }}
+        GPG_PASSPHRASE: ${{ inputs.gpg_passphrase }}

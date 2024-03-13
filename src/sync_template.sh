@@ -4,8 +4,10 @@ set -e
 # set -u
 # set -x
 
+SCRIPT_DIR="$(dirname "$(readlink -f "$0")")"
+
 # shellcheck source=src/sync_template.sh
-source sync_common.sh
+source "${SCRIPT_DIR}/sync_common.sh"
 
 ############################################
 # Prechecks

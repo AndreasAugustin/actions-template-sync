@@ -3,8 +3,10 @@ set -e
 # set -u
 # set -x
 
+SCRIPT_DIR="$(dirname "$(readlink -f "$0")")"
+
 # shellcheck source=src/sync_common.sh
-source sync_common.sh
+source "${SCRIPT_DIR}/sync_common.sh"
 
 ###########################################
 # Precheks
@@ -17,6 +19,11 @@ fi
 
 if [[ -z "${SOURCE_REPO_PATH}" ]]; then
   err "Missing input 'source_repo_path: \${{ input.source_repo_path }}'.";
+  exit 1
+fi
+
+if [[ -z "${HOME}" ]]; then
+  err "Missing env variable HOME.";
   exit 1
 fi
 
@@ -109,9 +116,9 @@ function gpg_setup() {
   for fpr in $(gpg --list-key --with-colons "${git_user_email}"  | awk -F: '/fpr:/ {print $10}' | sort -u); do  echo -e "5\ny\n" |  gpg --no-tty --command-fd 0 --expert --edit-key "$fpr" trust; done
 
   KEY_ID="$(gpg --list-secret-key --with-colons "${git_user_email}" | awk -F: '/sec:/ {print $5}')"
-  git config --global user.signingkey "${KEY_ID}"
-  git config --global commit.gpgsign true
-  git config --global gpg.program /bin/gpg_no_tty.sh
+  git config user.signingkey "${KEY_ID}"
+  git config commit.gpgsign true
+  git config gpg.program "${SCRIPT_DIR}/gpg_no_tty.sh"
 
   info "done prepare gpg"
   echo "::endgroup::"
@@ -133,16 +140,20 @@ function git_init() {
   local git_user_name=$2
   local source_repo_hostname=$3
 
-  git config --global user.email "${git_user_email}"
-  git config --global user.name "${git_user_name}"
-  git config --global pull.rebase false
-  git config --global --add safe.directory /github/workspace
-  # TODO(anau) think about git lfs
-  git lfs install
+  git config user.email "${git_user_email}"
+  git config user.name "${git_user_name}"
+  git config pull.rebase false
+  git config --add safe.directory /github/workspace
+
+   if [[ "${IS_GIT_LFS}" == 'true' ]]; then
+    info "enable git lfs."
+    git lfs install
+  fi
 
   if [[ "${IS_NOT_SOURCE_GITHUB}" == 'true' ]]; then
     info "the source repository is not located within GitHub."
-    ssh-keyscan -t rsa "${source_repo_hostname}" >> /root/.ssh/known_hosts
+    mkdir -p "${HOME}"/.ssh
+    ssh-keyscan -t rsa "${source_repo_hostname}" >> "${HOME}"/.ssh/known_hosts
   else
     info "the source repository is located within GitHub."
     gh auth setup-git --hostname "${source_repo_hostname}"
@@ -171,4 +182,4 @@ if [[ -n "${GPG_PRIVATE_KEY}" ]] &>/dev/null; then
 fi
 
 # shellcheck source=src/sync_template.sh
-source sync_template.sh
+source "${SCRIPT_DIR}/sync_template.sh"

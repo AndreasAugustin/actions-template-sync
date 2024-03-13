@@ -94,7 +94,7 @@ jobs:
         #   submodules: true
 
       - name: actions-template-sync
-        uses: AndreasAugustin/actions-template-sync@v1
+        uses: AndreasAugustin/actions-template-sync@v2
         with:
           source_repo_path: <owner/repo>
           upstream_branch: <target_branch> # defaults to main
@@ -133,7 +133,7 @@ jobs:
           token: ${{ steps.generate_token.outputs.token }}
 
       - name: actions-template-sync
-        uses: AndreasAugustin/actions-template-sync@v1
+        uses: AndreasAugustin/actions-template-sync@v2
         with:
           github_token: ${{ steps.generate_token.outputs.token }}
           source_repo_path: <owner/repo>
@@ -169,7 +169,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: actions-template-sync
-        uses: AndreasAugustin/actions-template-sync@v1
+        uses: AndreasAugustin/actions-template-sync@v2
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           source_repo_path: ${{ secrets.SOURCE_REPO_PATH }} # <owner/repo>, should be within secrets
@@ -223,7 +223,7 @@ jobs:
           token: ${{ secrets.CUSTOM_GITHUB_PAT }}
 
       - name: Test action step PAT
-        uses: AndreasAugustin/actions-template-sync@v1
+        uses: AndreasAugustin/actions-template-sync@v2
         with:
           github_token: ${{ secrets.CUSTOM_GITHUB_PAT }}
           source_repo_path: ${{ secrets.SOURCE_REPO_PATH }} # <owner/repo>, should be within secrets
@@ -244,6 +244,7 @@ jobs:
 | pr_reviewers                | `[optional]` comma separated list of pull request reviewers.                                                  | `false`  |                                                                       |
 | pr_commit_msg               | `[optional]` commit message in the created pull request                                                       | `false`  | `chore(template): merge template changes :up:`                        |
 | hostname                    | `[optional]` the hostname of the repository                                                                   | `false`  | `github.com`                                                          |
+| is_git_lfs | `[optional]` set to `true` if you want to enalbe git lfs | `false` | `false` |
 | is_dry_run                  | `[optional]` set to `true` if you do not want to push the changes and not want to create a PR                 | `false`  |                                                                       |
 | is_allow_hooks              | `[optional]` set to `true` if you want to enable lifecycle hooks. Use this with caution!                      | `false`  | `false`                                                               |
 | hooks | `[optional]` please check the lifecycle hooks section below | `false` | |
@@ -371,7 +372,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: actions-template-sync
-        uses: AndreasAugustin/actions-template-sync@v1
+        uses: AndreasAugustin/actions-template-sync@v2
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           source_repo_path: <owner/repo>
@@ -407,7 +408,7 @@ E.q. for the installation phase you need to use commands like `apk add --update 
 
 ```yml
 - name: Test action step
-  uses: AndreasAugustin/actions-template-sync@v1
+  uses: AndreasAugustin/actions-template-sync@v2
   env:
     MY_VAR: "foo"  # possible to define envrionment variables
   with:
@@ -428,7 +429,7 @@ E.q. for the installation phase you need to use commands like `apk add --update 
 
 ```yml
 - name: Test action step
-  uses: AndreasAugustin/actions-template-sync@v1
+  uses: AndreasAugustin/actions-template-sync@v2
   with:
     source_repo_path: AndreasAugustin/template.git
     upstream_branch: main
@@ -527,7 +528,7 @@ You need to change the default one e.g. to `git_remote_pull_params: --allow-unre
                token: ${{ secrets.<secret_name> }}
 
            - name: actions-template-sync
-             uses: AndreasAugustin/actions-template-sync@v1
+             uses: AndreasAugustin/actions-template-sync@v2
              with:
                github_token: ${{ secrets.GITHUB_TOKEN }}
                source_repo_path: <owner/repo>
@@ -540,8 +541,13 @@ You need to change the default one e.g. to `git_remote_pull_params: --allow-unre
   Open your project `Settings > Actions > General` and select the checkbox `Allow GitHub Actions to create and approve pull requests`
 under the `Workflow permissions` section.
 
-## Release Updates
+## Release update notes
 
+* `v2`
+  * `git lfs` is no default anymore. Enable with `is_git_lfs` parameter.
+  * infrastructure change: now using [composite action][action-composite] instead of [docker action][action-docker]
+    to be more flexible to combine more actions (file system permissions).
+  * local `git config` now instead of global `git config --global` in respect to be more flexible in chaining actions.
 * :warning: starting with version `v1` (`v1.0.0`) the `upstream_branch` variable default is not `main` anymore. It is now set to the remote default branch.
 * starting with version v0.5.2-draft the `templateversionrc` file is not needed anymore. You can delete that file from the target repositories.
 
@@ -637,6 +643,8 @@ specification. Contributions of any kind are welcome!
 [enabling-debug-logging]: https://docs.github.com/en/actions/managing-workflow-runs/enabling-debug-logging
 [deployment-keys]: https://docs.github.com/en/developers/overview/managing-deploy-keys#deploy-keys
 [action-triggers]: https://docs.github.com/en/actions/reference/events-that-trigger-workflows
+[action-composite]: https://docs.github.com/en/actions/creating-actions/creating-a-composite-action
+[action-docker]: https://docs.github.com/en/actions/creating-actions/creating-a-docker-container-action
 [template]: https://github.com/AndreasAugustin/template
 [marketplace]: https://github.com/marketplace/actions/actions-template-sync
 [self-usage]: https://github.com/AndreasAugustin/actions-template-sync/blob/main/.github/workflows/actions_template_sync.yml
