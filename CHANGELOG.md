@@ -1,5 +1,16 @@
 # Changelog
 
+## [2.0.0](https://github.com/AndreasAugustin/actions-template-sync/compare/v1.12.0...v2.0.0) (2024-03-13)
+
+
+### ⚠ BREAKING CHANGES
+
+* :sparkles: migrate from docker action to composite action  ([#498](https://github.com/AndreasAugustin/actions-template-sync/issues/498))
+
+### Features
+
+* :sparkles: migrate from docker action to composite action  ([#498](https://github.com/AndreasAugustin/actions-template-sync/issues/498)) ([29d0434](https://github.com/AndreasAugustin/actions-template-sync/commit/29d04342d0bd6047538dd7f52a7e64a8ca2d4baa))
+
 ## [1.12.0](https://github.com/AndreasAugustin/actions-template-sync/compare/v1.11.0...v1.12.0) (2024-03-13)
 
 
