@@ -6,7 +6,7 @@ set -e
 
 SCRIPT_DIR="$(dirname "$(readlink -f "$0")")"
 
-# shellcheck source=./sync_template.sh
+# shellcheck source=src/sync_template.sh
 source "${SCRIPT_DIR}/sync_common.sh"
 
 ############################################
