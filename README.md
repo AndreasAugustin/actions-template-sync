@@ -247,6 +247,7 @@ jobs:
 | is_dry_run                  | `[optional]` set to `true` if you do not want to push the changes and not want to create a PR                 | `false`  |                                                                       |
 | is_allow_hooks              | `[optional]` set to `true` if you want to enable lifecycle hooks. Use this with caution!                      | `false`  | `false`                                                               |
 | hooks | `[optional]` please check the lifecycle hooks section below | `false` | |
+| is_force_push_pr            | `[optional]` set to `true` if you want to force push and pr update. Needs further permissions (see below) | `false`  | `false`                                                               |
 | is_pr_cleanup               | `[optional]` set to `true` if you want to cleanup older PRs targeting the same branch. Use this with caution! | `false`  | `false`                                                               |
 | is_not_source_github        | `[optional]` set to `true` if the source git provider is not GitHub                                           | `false`  | `false`                                                               |
 | is_force_deletion | `[optional]` set to `true` if you want to force delete files which are deleted within the source repository even if they contain changes. You need to also adjust `git_remote_pull_params` (see below for details) | `false` | `false` |
@@ -309,6 +310,18 @@ E.g. when you like to disable the sync for all files with exceptions, you need t
 ```txt
 :!newfile-1.txt
 *
+```
+
+## Force Push and PR
+
+If you set the input `is_force_push_pr` to `true` you are able to react to e.g. metadata changes within the workflow definition file.
+Please note that you need to add permissions for `repository-projects: read`. Compare the needed scope with [gh pr edit][github-gh-cli-pr-edit]
+
+```yaml
+  permissions:
+    contents: write
+    pull-requests: write
+    repository-projects: read
 ```
 
 ## Sign commits
@@ -645,3 +658,4 @@ specification. Contributions of any kind are welcome!
 [github-create-pat]: https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens#creating-a-fine-grained-personal-access-token
 [github-create-secret]: https://docs.github.com/en/actions/security-guides/using-secrets-in-github-actions#creating-secrets-for-a-repository
 [github-create-gpg-key]: https://docs.github.com/en/authentication/managing-commit-signature-verification/generating-a-new-gpg-key
+[github-gh-cli-pr-edit]: https://cli.github.com/manual/gh_pr_edit
