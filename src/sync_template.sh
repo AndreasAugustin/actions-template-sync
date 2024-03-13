@@ -42,6 +42,7 @@ if [[ -n "${SRC_SSH_PRIVATEKEY_ABS_PATH}" ]]; then
   export GIT_SSH_COMMAND="ssh -i ${SRC_SSH_PRIVATEKEY_ABS_PATH}"
 fi
 
+IS_FORCE_PUSH_PR="${IS_FORCE_PUSH_PR:-"false"}"
 GIT_REMOTE_PULL_PARAMS="${GIT_REMOTE_PULL_PARAMS:---allow-unrelated-histories --squash --strategy=recursive -X theirs}"
 
 cmd_from_yml "install"
@@ -240,11 +241,19 @@ function eventual_create_labels () {
 # push the changes
 # Arguments:
 #   branch
+#   is_force
 ##############################
 function push () {
   info "push changes"
   local branch=$1
-  git push --set-upstream origin "${branch}"
+  local is_force=$2
+
+  if [ "$is_force" == true ] ; then
+      warn "forcing the push."
+      git push --force --set-upstream origin "${branch}"
+  else
+    git push --set-upstream origin "${branch}"
+  fi
 }
 
 ####################################
@@ -256,7 +265,7 @@ function push () {
 #   labels
 #   reviewers
 ###################################
-function create_pr () {
+function create_pr() {
   info "create pr"
   local title=$1
   local body=$2
@@ -269,7 +278,38 @@ function create_pr () {
         --body "${body}" \
         --base "${branch}" \
         --label "${labels}" \
-        --reviewer "${reviewers}"
+        --reviewer "${reviewers}" || create_pr_has_issues=true
+
+  if [ "$create_pr_has_issues" == true ] ; then
+      warn "Creating the PR failed."
+      warn "Eventually it is already existent."
+      return 1
+  fi
+  return 0
+}
+
+####################################
+# creates or edits a pr if already existent
+# Arguments:
+#   title
+#   body
+#   branch
+#   labels
+#   reviewers
+###################################
+function create_or_edit_pr() {
+  info "create pr or edit the pr"
+  local title=$1
+  local body=$2
+  local branch=$3
+  local labels=$4
+  local reviewers=$5
+
+  create_pr "${title}" "${body}" "${branch}" "${labels}" "${reviewers}" || gh pr edit \
+    --title "${title}" \
+    --body "${body}" \
+    --add-label "${labels}" \
+    --add-reviewer "${reviewers}"
 }
 
 #########################################
@@ -315,6 +355,10 @@ function handle_templatesyncignore() {
 function prechecks() {
   info "prechecks"
   echo "::group::prechecks"
+  if [ "${IS_FORCE_PUSH_PR}" == "true" ]; then
+    warn "skipping prechecks because we force push and pr"
+    return 0
+  fi
   check_branch_remote_existing "${NEW_BRANCH}"
 
   check_if_commit_already_in_hist_graceful_exit "${TEMPLATE_REMOTE_GIT_HASH}"
@@ -393,9 +437,14 @@ function push_prepare_pr_create_pr() {
   echo "::group::push changes and create PR"
 
   cmd_from_yml "prepush"
-  push "${NEW_BRANCH}"
+  push "${NEW_BRANCH}" "${IS_FORCE_PUSH_PR}"
   cmd_from_yml "prepr"
-  create_pr "${PR_TITLE}" "${PR_BODY}" "${UPSTREAM_BRANCH}" "${PR_LABELS}" "${PR_REVIEWERS}"
+  if [ "$IS_FORCE_PUSH_PR" == true ] ; then
+    create_or_edit_pr "${PR_TITLE}" "${PR_BODY}" "${UPSTREAM_BRANCH}" "${PR_LABELS}" "${PR_REVIEWERS}"
+  else
+    create_pr "${PR_TITLE}" "${PR_BODY}" "${UPSTREAM_BRANCH}" "${PR_LABELS}" "${PR_REVIEWERS}"
+  fi
+
 
   echo "::endgroup::"
 }

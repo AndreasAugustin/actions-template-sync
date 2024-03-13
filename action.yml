@@ -42,6 +42,9 @@ inputs:
     default: "false"
   hooks:
     description: "[optional] define the hooks as yaml string input"
+  is_force_push_pr:
+    description: "[optional] set to true if you want to force push and pr update"
+    default: "false"
   is_pr_cleanup:
     description: "[optional] set to true if you want to cleanup older PRs targeting the same branch."
     default: "false"
@@ -92,6 +95,7 @@ runs:
         IS_DRY_RUN: ${{ inputs.is_dry_run }}
         IS_ALLOW_HOOKS: ${{ inputs.is_allow_hooks }}
         HOOKS: ${{ inputs.hooks }}
+        IS_FORCE_PUSH_PR: ${{ inputs.is_force_push_pr }}
         IS_GIT_LFS: ${{ inputs.is_git_lfs }}
         IS_PR_CLEANUP: ${{ inputs.is_pr_cleanup}}
         IS_NOT_SOURCE_GITHUB: ${{ inputs.is_not_source_github }}
