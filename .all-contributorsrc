@@ -19,7 +19,11 @@
         "question",
         "example",
         "content",
-        "blog"
+        "blog",
+        "maintenance",
+        "infra",
+        "platform",
+        "test"
       ]
     },
     {
