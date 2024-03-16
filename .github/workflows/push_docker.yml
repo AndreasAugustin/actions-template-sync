@@ -77,10 +77,10 @@ jobs:
           echo "Run tests"
           container-structure-test test \
             --image andyaugustin/${{ matrix.variant }}:${{ inputs.tag }}${{ matrix.target == 'dev' && '-dev' || '' }}\
-            --config docker-test-config.yaml
+            --config docker-test-config.yml
           container-structure-test test \
             --image ghcr.io/andreasaugustin/${{ matrix.variant }}:${{ inputs.tag }}${{ matrix.target == 'dev' && '-dev' || '' }}\
-            --config docker-test-config.yaml
+            --config docker-test-config.yml
       - name: push ${{ matrix.variant }}
         uses: docker/build-push-action@v5
         with:
