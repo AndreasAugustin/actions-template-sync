@@ -31,6 +31,7 @@ jobs:
     strategy:
       matrix:
         variant: ["actions-template-sync"]
+        target: ["prod", "dev"]
 
     steps:
       - name: checkout
@@ -53,14 +54,38 @@ jobs:
         uses: docker/metadata-action@v5
         with:
           images: |
-            andyAugustin/${{ matrix.variant }}
-            ghcr.io/AndreasAugustin/${{ matrix.variant }}
+            andyaugustin/${{ matrix.variant }}
+            ghcr.io/andreasaugustin/${{ matrix.variant }}
           tags: |
-            type=semver,pattern={{raw}},value=${{ inputs.tag }}
-      - name: Build and push ${{ matrix.variant }}
+            type=semver,pattern={{raw}},value=${{ inputs.tag }}${{ matrix.target == 'dev' && '-dev' || '' }}
+      - name: Build ${{ matrix.variant }}
         uses: docker/build-push-action@v5
         with:
-          context: ./src/
+          context: .
+          target: ${{ matrix.target }}
+          load: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+      - name: install container test tools
+        run: |
+          echo "Install container tools"
+          curl -LO https://storage.googleapis.com/container-structure-test/latest/container-structure-test-linux-amd64 \
+            && chmod +x container-structure-test-linux-amd64 \
+            && sudo mv container-structure-test-linux-amd64 /usr/local/bin/container-structure-test
+      - name: test docker image
+        run: |
+          echo "Run tests"
+          container-structure-test test \
+            --image andyaugustin/${{ matrix.variant }}:${{ inputs.tag }}${{ matrix.target == 'dev' && '-dev' || '' }}\
+            --config docker-test-config.yml
+          container-structure-test test \
+            --image ghcr.io/andreasaugustin/${{ matrix.variant }}:${{ inputs.tag }}${{ matrix.target == 'dev' && '-dev' || '' }}\
+            --config docker-test-config.yml
+      - name: push ${{ matrix.variant }}
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          target: ${{ matrix.target }}
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}

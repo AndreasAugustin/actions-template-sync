@@ -60,4 +60,4 @@ jobs:
           echo "Run tests"
           container-structure-test test \
             --image ${{ matrix.docker-image }}:${{ inputs.tag }} \
-            --config src/test-config.yaml
+            --config docker-test-config.yml

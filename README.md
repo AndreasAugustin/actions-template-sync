@@ -574,6 +574,7 @@ There are other great tools available within GitHub. Here you can find a compari
 | ignore files | :heavy_check_mark: | :x: | :x: | :heavy_check_mark: |
 | creates a PR | :heavy_check_mark: | :heavy_check_mark: | :x: | :heavy_check_mark: |
 | sign commits | :heavy_check_mark: | :x: | :x: | :x: |
+| docker images available | :heavy_check_mark: | :x: | :x: | :x: |
 | remarks | The action is placed within the target repositories | The action is placed within the target repositories | CLI meant for local use | The action will be based within the base repository with a list of dependent repositories |
 
 ## DEV

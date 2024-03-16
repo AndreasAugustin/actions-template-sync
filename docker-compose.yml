@@ -1,4 +1,4 @@
-version: '3.7'
+version: "3.7"
 
 services:
   dev:
@@ -26,6 +26,7 @@ services:
 
   prod:
     build:
-      context: ./src/
+      context: .
+      target: prod
     tty: true
     entrypoint: ["/bin/bash"]
