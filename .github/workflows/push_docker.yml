@@ -54,8 +54,8 @@ jobs:
         uses: docker/metadata-action@v5
         with:
           images: |
-            andyAugustin/${{ matrix.variant }}
-            ghcr.io/AndreasAugustin/${{ matrix.variant }}
+            andyaugustin/${{ matrix.variant }}
+            ghcr.io/andreasaugustin/${{ matrix.variant }}
           tags: |
             type=semver,pattern={{raw}},value=${{ inputs.tag }}${{ matrix.target == 'dev' && '-dev' || '' }}
       - name: Build ${{ matrix.variant }}
@@ -76,10 +76,10 @@ jobs:
         run: |
           echo "Run tests"
           container-structure-test test \
-            --image andyAugustin/${{ matrix.variant }}:${{ steps.meta.outputs.tags }} \
+            --image andyaugustin/${{ matrix.variant }}:${{ steps.meta.outputs.tags }} \
             --config src/test-config.yaml
           container-structure-test test \
-            --image ghcr.io/AndreasAugustin/${{ matrix.variant }}:${{ steps.meta.outputs.tags }} \
+            --image ghcr.io/andreasaugustin/${{ matrix.variant }}:${{ steps.meta.outputs.tags }} \
             --config src/test-config.yaml
       - name: push ${{ matrix.variant }}
         uses: docker/build-push-action@v5
