@@ -23,7 +23,7 @@ markdownlint: ## Validate markdown files
 
 .PHONY: zsh
 zsh: ## open dev container with build environment
-	docker-compose run --service-ports dev /bin/zsh
+	docker-compose run --service-ports dev
 
 .PHONY: prod
 prod: ## run the prod docker image with bash
