@@ -59,6 +59,9 @@ debug "NEW_BRANCH ${NEW_BRANCH}"
 debug "PR_BODY ${PR_BODY}"
 info "PR_BODY_TMP ${PR_BODY_TMP}"
 
+info "SOURCE_REPO ${SOURCE_REPO}"
+export TMP="${PR_BODY}"
+info "TMP ${TMP}"
 
 # Check if the Ignore File exists inside .github folder or if it doesn't exist at all
 if [[ -f ".github/${TEMPLATE_SYNC_IGNORE_FILE_PATH}" || ! -f "${TEMPLATE_SYNC_IGNORE_FILE_PATH}" ]]; then
