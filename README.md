@@ -239,7 +239,7 @@ jobs:
 | source_repo_ssh_private_key | `[optional]` private ssh key for the source repository. [see](#private-template-repository)                   | `false`  |                                                                       |
 | pr_branch_name_prefix       | `[optional]` the prefix of branches created by this action                                                    | `false`  | `chore/template_sync`                                                 |
 | pr_title                    | `[optional]` the title of PRs opened by this action. Must be already created.                                 | `false`  | `upstream merge template repository`                                  |
-| pr_body                     | `[optional]` the body of PRs opened by this action. | `false` | `Merge ${SOURCE_REPO_PATH} ${TEMPLATE_GIT_HASH}` |
+| pr_body                     | `[optional]` the body of PRs opened by this action. | `false` | `Merge ${SOURCE_REPO} ${TEMPLATE_GIT_HASH}` |
 | pr_labels                   | `[optional]` comma separated list. [pull request labels][pr-labels].                                          | `false`  | `sync_template`                                                       |
 | pr_reviewers                | `[optional]` comma separated list of pull request reviewers.                                                  | `false`  |                                                                       |
 | pr_commit_msg               | `[optional]` commit message in the created pull request                                                       | `false`  | `chore(template): merge template changes :up:`                        |
@@ -265,6 +265,7 @@ jobs:
 | output | description |
 | ------ | ----------- |
 | pr_branch | The name of the branch used for the pull request |
+| template_git_hash | The template source repository git hash |
 
 **Remarks** Please consider following edge cases
 
@@ -394,15 +395,14 @@ or you set the hooks input parameter within the action definition with a related
 
 The following hooks are supported (please check [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) for a better understanding of the lifecycles).
 
-* `install` is executed after the container has started and after reading and setting up the environment.
 * `prepull` is executed before the code is pulled from the source repository
 * `precommit` is executed before the code is commited
 * `prepush` is executed before the push is executed, right after the commit
 * `precleanup` is executed before older PRs targeting the same branch are closed
 * `prepr` is executed before the PR is done
 
-**Remark** The underlying OS is defined by an Alpine container.
-E.q. for the installation phase you need to use commands like `apk add --update --no-cache python3`
+**Remark** If you need to install aditional tools just install them in an additional step upfront the action invokation.
+If using the docker image the underlying OS is defined by an Alpine container.
 
 ### Example for the hooks input parameter
 
@@ -441,10 +441,6 @@ Please not the double quotes within the following `prepull echo` command
 
 ```yml
 hooks:
-  install:
-    commands:
-      - apk add --update --no-cache python3
-      - python3 --version
   prepull:
     commands:
       - echo "hi, we are within the prepull phase ${MY_VAR}"
