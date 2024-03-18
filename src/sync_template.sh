@@ -45,8 +45,6 @@ fi
 IS_FORCE_PUSH_PR="${IS_FORCE_PUSH_PR:-"false"}"
 GIT_REMOTE_PULL_PARAMS="${GIT_REMOTE_PULL_PARAMS:---allow-unrelated-histories --squash --strategy=recursive -X theirs}"
 
-cmd_from_yml "install"
-
 TEMPLATE_SYNC_IGNORE_FILE_PATH=".templatesyncignore"
 TEMPLATE_REMOTE_GIT_HASH=$(git ls-remote "${SOURCE_REPO}" HEAD | awk '{print $1}')
 NEW_TEMPLATE_GIT_HASH=$(git rev-parse --short "${TEMPLATE_REMOTE_GIT_HASH}")
@@ -449,6 +447,11 @@ function push_prepare_pr_create_pr() {
   echo "::endgroup::"
 }
 
+declare -A arr
+
+arr["pull"]=checkout_branch_and_pull
+arr["commit"]=commit
+arr["pr"]=push_prepare_pr_create_pr
 
 prechecks
 
