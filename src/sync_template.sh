@@ -51,20 +51,20 @@ SHORT_TEMPLATE_GIT_HASH=$(git rev-parse --short "${TEMPLATE_REMOTE_GIT_HASH}")
 
 export TEMPLATE_GIT_HASH=${SHORT_TEMPLATE_GIT_HASH}
 export NEW_BRANCH="${PR_BRANCH_NAME_PREFIX}_${TEMPLATE_GIT_HASH}"
-: "${PR_BODY:="Merge ${SOURCE_REPO_PATH} ${TEMPLATE_GIT_HASH}"}"
+# : "${PR_BODY:="Merge ${SOURCE_REPO_PATH} ${TEMPLATE_GIT_HASH}"}"
 PR_TITLE_TMP="${PR_TITLE:-"upstream merge template repository"}"
 
 debug "TEMPLATE_GIT_HASH ${TEMPLATE_GIT_HASH}"
 debug "NEW_BRANCH ${NEW_BRANCH}"
 info "PR_BODY ${PR_BODY}"
-info "PR_BODY_TMP ${PR_BODY_TMP}"
+# info "PR_BODY_TMP ${PR_BODY_TMP}"
 
 # shellcheck disable=SC2016
-PR_BODY=${PR_BODY//'${TEMPLATE_GIT_HASH}'/"${TEMPLATE_GIT_HASH}"}
-PR_BODY=${PR_BODY//'${SOURCE_REPO}'/"${SOURCE_REPO}"}
-info "SOURCE_REPO ${SOURCE_REPO}"
-export TMP="${PR_BODY}"
-info "TMP ${TMP}"
+# PR_BODY=${PR_BODY//'${TEMPLATE_GIT_HASH}'/"${TEMPLATE_GIT_HASH}"}
+# PR_BODY=${PR_BODY//'${SOURCE_REPO}'/"${SOURCE_REPO}"}
+# info "SOURCE_REPO ${SOURCE_REPO}"
+# export TMP="${PR_BODY}"
+# info "TMP ${TMP}"
 
 # Check if the Ignore File exists inside .github folder or if it doesn't exist at all
 if [[ -f ".github/${TEMPLATE_SYNC_IGNORE_FILE_PATH}" || ! -f "${TEMPLATE_SYNC_IGNORE_FILE_PATH}" ]]; then
