@@ -394,15 +394,14 @@ or you set the hooks input parameter within the action definition with a related
 
 The following hooks are supported (please check [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) for a better understanding of the lifecycles).
 
-* `install` is executed after the container has started and after reading and setting up the environment.
 * `prepull` is executed before the code is pulled from the source repository
 * `precommit` is executed before the code is commited
 * `prepush` is executed before the push is executed, right after the commit
 * `precleanup` is executed before older PRs targeting the same branch are closed
 * `prepr` is executed before the PR is done
 
-**Remark** The underlying OS is defined by an Alpine container.
-E.q. for the installation phase you need to use commands like `apk add --update --no-cache python3`
+**Remark** If you need to install aditional tools just install them in an additional step upfront the action invokation.
+If using the docker image the underlying OS is defined by an Alpine container.
 
 ### Example for the hooks input parameter
 
@@ -441,10 +440,6 @@ Please not the double quotes within the following `prepull echo` command
 
 ```yml
 hooks:
-  install:
-    commands:
-      - apk add --update --no-cache python3
-      - python3 --version
   prepull:
     commands:
       - echo "hi, we are within the prepull phase ${MY_VAR}"

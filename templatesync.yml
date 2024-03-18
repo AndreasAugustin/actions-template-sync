@@ -1,10 +1,10 @@
 # validate
 
 hooks:
-  install:
+  prepull:
     commands:
       - echo "foo ${MY_VAR}"
-      - echo 'hi, we are within the prepush phase'
+      - echo 'hi, we are within the prepull phase'
 
   prepush:
     commands:

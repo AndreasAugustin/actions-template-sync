@@ -45,14 +45,20 @@ fi
 IS_FORCE_PUSH_PR="${IS_FORCE_PUSH_PR:-"false"}"
 GIT_REMOTE_PULL_PARAMS="${GIT_REMOTE_PULL_PARAMS:---allow-unrelated-histories --squash --strategy=recursive -X theirs}"
 
-cmd_from_yml "install"
-
 TEMPLATE_SYNC_IGNORE_FILE_PATH=".templatesyncignore"
 TEMPLATE_REMOTE_GIT_HASH=$(git ls-remote "${SOURCE_REPO}" HEAD | awk '{print $1}')
-NEW_TEMPLATE_GIT_HASH=$(git rev-parse --short "${TEMPLATE_REMOTE_GIT_HASH}")
-NEW_BRANCH="${PR_BRANCH_NAME_PREFIX}_${NEW_TEMPLATE_GIT_HASH}"
-PR_BODY="${PR_BODY:-Merge ${SOURCE_REPO_PATH} ${NEW_TEMPLATE_GIT_HASH}}"
-debug "new Git HASH ${NEW_TEMPLATE_GIT_HASH}"
+SHORT_TEMPLATE_GIT_HASH=$(git rev-parse --short "${TEMPLATE_REMOTE_GIT_HASH}")
+
+TEMPLATE_GIT_HASH=${SHORT_TEMPLATE_GIT_HASH}
+NEW_BRANCH="${PR_BRANCH_NAME_PREFIX}_${TEMPLATE_GIT_HASH}"
+PR_BODY="${PR_BODY:-Merge ${SOURCE_REPO_PATH} ${TEMPLATE_GIT_HASH}}"
+PR_BODY_TMP=${PR_BODY}
+
+debug "TEMPLATE_GIT_HASH ${TEMPLATE_GIT_HASH}"
+debug "NEW_BRANCH ${NEW_BRANCH}"
+debug "PR_BODY ${PR_BODY}"
+info "PR_BODY_TMP ${PR_BODY_TMP}"
+
 
 # Check if the Ignore File exists inside .github folder or if it doesn't exist at all
 if [[ -f ".github/${TEMPLATE_SYNC_IGNORE_FILE_PATH}" || ! -f "${TEMPLATE_SYNC_IGNORE_FILE_PATH}" ]]; then
