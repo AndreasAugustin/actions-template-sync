@@ -47,10 +47,28 @@ GIT_REMOTE_PULL_PARAMS="${GIT_REMOTE_PULL_PARAMS:---allow-unrelated-histories --
 
 TEMPLATE_SYNC_IGNORE_FILE_PATH=".templatesyncignore"
 TEMPLATE_REMOTE_GIT_HASH=$(git ls-remote "${SOURCE_REPO}" HEAD | awk '{print $1}')
-NEW_TEMPLATE_GIT_HASH=$(git rev-parse --short "${TEMPLATE_REMOTE_GIT_HASH}")
-NEW_BRANCH="${PR_BRANCH_NAME_PREFIX}_${NEW_TEMPLATE_GIT_HASH}"
-PR_BODY="${PR_BODY:-Merge ${SOURCE_REPO_PATH} ${NEW_TEMPLATE_GIT_HASH}}"
-debug "new Git HASH ${NEW_TEMPLATE_GIT_HASH}"
+SHORT_TEMPLATE_GIT_HASH=$(git rev-parse --short "${TEMPLATE_REMOTE_GIT_HASH}")
+
+export TEMPLATE_GIT_HASH=${SHORT_TEMPLATE_GIT_HASH}
+export PR_BRANCH="${PR_BRANCH_NAME_PREFIX}_${TEMPLATE_GIT_HASH}"
+: "${PR_BODY:="Merge ${SOURCE_REPO} ${TEMPLATE_GIT_HASH}"}"
+: "${PR_TITLE:-"upstream merge template repository"}"
+
+# for some reasons the substitution is not working as expected
+# so we substitute manually
+# shellcheck disable=SC2016
+PR_BODY=${PR_BODY//'${TEMPLATE_GIT_HASH}'/"${TEMPLATE_GIT_HASH}"}
+# shellcheck disable=SC2016
+PR_BODY=${PR_BODY//'${SOURCE_REPO}'/"${SOURCE_REPO}"}
+
+# shellcheck disable=SC2016
+PR_TITLE=${PR_TITLE//'${TEMPLATE_GIT_HASH}'/"${TEMPLATE_GIT_HASH}"}
+# shellcheck disable=SC2016
+PR_TITLE=${PR_TITLE//'${SOURCE_REPO}'/"${SOURCE_REPO}"}
+
+debug "TEMPLATE_GIT_HASH ${TEMPLATE_GIT_HASH}"
+debug "PR_BRANCH ${PR_BRANCH}"
+debug "PR_BODY ${PR_BODY}"
 
 # Check if the Ignore File exists inside .github folder or if it doesn't exist at all
 if [[ -f ".github/${TEMPLATE_SYNC_IGNORE_FILE_PATH}" || ! -f "${TEMPLATE_SYNC_IGNORE_FILE_PATH}" ]]; then
@@ -66,11 +84,14 @@ fi
 # set the gh action outputs if run with github action.
 # Arguments:
 #   pr_branch
+#   template_git_hash
 #######################################
 function set_github_action_outputs() {
   echo "::group::set gh action outputs"
 
   local pr_branch=$1
+  local template_git_hash=$2
+
   info "set github action outputs"
 
   if [[ -z "${GITHUB_RUN_ID}" ]]; then
@@ -78,6 +99,7 @@ function set_github_action_outputs() {
   else
     # https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#setting-an-output-parameter
     echo "pr_branch=${pr_branch}" >> "$GITHUB_OUTPUT"
+    echo "template_git_hash=${template_git_hash}" >> "$GITHUB_OUTPUT"
   fi
   echo "::endgroup::"
 }
@@ -357,7 +379,7 @@ function prechecks() {
     warn "skipping prechecks because we force push and pr"
     return 0
   fi
-  check_branch_remote_existing "${NEW_BRANCH}"
+  check_branch_remote_existing "${PR_BRANCH}"
 
   check_if_commit_already_in_hist_graceful_exit "${TEMPLATE_REMOTE_GIT_HASH}"
 
@@ -371,8 +393,8 @@ function checkout_branch_and_pull() {
 
   echo "::group::checkout branch and pull"
 
-  debug "create new branch from default branch with name ${NEW_BRANCH}"
-  git checkout -b "${NEW_BRANCH}"
+  debug "create new branch from default branch with name ${PR_BRANCH}"
+  git checkout -b "${PR_BRANCH}"
   debug "pull changes from template"
 
   pull_source_changes "${SOURCE_REPO}" "${GIT_REMOTE_PULL_PARAMS}"
@@ -435,7 +457,7 @@ function push_prepare_pr_create_pr() {
   echo "::group::push changes and create PR"
 
   cmd_from_yml "prepush"
-  push "${NEW_BRANCH}" "${IS_FORCE_PUSH_PR}"
+  push "${PR_BRANCH}" "${IS_FORCE_PUSH_PR}"
   cmd_from_yml "prepr"
   if [ "$IS_FORCE_PUSH_PR" == true ] ; then
     create_or_edit_pr "${PR_TITLE}" "${PR_BODY}" "${UPSTREAM_BRANCH}" "${PR_LABELS}" "${PR_REVIEWERS}"
@@ -461,4 +483,4 @@ commit
 
 push_prepare_pr_create_pr
 
-set_github_action_outputs "${NEW_BRANCH}"
+set_github_action_outputs "${PR_BRANCH}" "${TEMPLATE_GIT_HASH}"

@@ -73,6 +73,9 @@ outputs:
   pr_branch:
     description: "The name of the PR branch"
     value: ${{ steps.sync.outputs.pr_branch }}
+  template_git_hash:
+    description: "The git hash of the template source repository"
+    value: ${{ steps.sync.outputs.template_git_hash }}
 runs:
   using: "composite"
   # image: "src/Dockerfile"
