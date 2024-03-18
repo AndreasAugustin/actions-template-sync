@@ -265,6 +265,7 @@ jobs:
 | output | description |
 | ------ | ----------- |
 | pr_branch | The name of the branch used for the pull request |
+| template_git_hash | The template source repository git hash |
 
 **Remarks** Please consider following edge cases
 

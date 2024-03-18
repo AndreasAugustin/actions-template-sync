@@ -84,11 +84,13 @@ fi
 # set the gh action outputs if run with github action.
 # Arguments:
 #   pr_branch
+#   template_git_hash
 #######################################
 function set_github_action_outputs() {
   echo "::group::set gh action outputs"
 
   local pr_branch=$1
+  local template_git_hash=$2
 
   info "set github action outputs"
 
@@ -97,6 +99,7 @@ function set_github_action_outputs() {
   else
     # https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#setting-an-output-parameter
     echo "pr_branch=${pr_branch}" >> "$GITHUB_OUTPUT"
+    echo "template_git_hash=${template_git_hash}" >> "$GITHUB_OUTPUT"
   fi
   echo "::endgroup::"
 }
@@ -475,4 +478,4 @@ commit
 
 push_prepare_pr_create_pr
 
-set_github_action_outputs "${PR_BRANCH}"
+set_github_action_outputs "${PR_BRANCH}" "${TEMPLATE_GIT_HASH}"
