@@ -357,8 +357,8 @@ function handle_templatesyncignore() {
   # we are checking the ignore file if it exists or is empty
   # -s is true if the file contains whitespaces
   if [ -s "${template_sync_ignore_file_path}" ]; then
-    debug "unstage files from template sync ignore"
-    git reset --pathspec-from-file="${template_sync_ignore_file_path}"
+    debug "unstage files from template sync ignore ${template_sync_ignore_file_path}"
+    < "${template_sync_ignore_file_path}" awk NF | xargs -r git reset --
 
     debug "clean untracked files"
     git clean -df
