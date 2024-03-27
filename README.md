@@ -39,6 +39,13 @@ Because of the nice community, several feature requests helped to go on with the
 
 ## Features
 
+This action is creating a pull request with the latest changes within the target repo whenever it runs with following exceptions
+
+* there is already an open PR created with the latest changes of the source repository.
+  * if there are new changes and a PR is already open, a new PR will be created (option to clean up older PRs)
+* related new changes are ignored within the `.templatesyncignore` file
+* the source repository is fully included within the target repository
+
 ```mermaid
 flowchart LR
     github_source("fa:fa-github <b>GitHub</b> source repository <b>[private|public]</b>")
@@ -89,7 +96,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         # https://github.com/actions/checkout#usage
-        # uncomment if you use submodules within the source repository
+        # uncomment if you use submodules within the repository
         # with:
         #   submodules: true
 
@@ -119,14 +126,16 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-     - name: Generate token to read from source repo # see: https://github.com/tibdex/github-app-token
+      - name: Generate token to read from source repo # see: https://github.com/tibdex/github-app-token
         id: generate_token
-        uses: tibdex/github-app-token@v1
+        # https://github.com/tibdex/github-app-token
+        uses: tibdex/github-app-token@v2
         with:
           app_id: ${{ secrets.APP_ID }}
           private_key: ${{ secrets.PRIVATE_KEY }}
 
       - name: Checkout
+        # https://github.com/actions/checkout#usage
         uses: actions/checkout@v4
         with:
           # submodules: true
@@ -163,6 +172,7 @@ jobs:
     steps:
       # To use this repository's private action, you must check out the repository
       - name: Checkout
+        # https://github.com/actions/checkout#usage
         uses: actions/checkout@v4
         with:
           # submodules: true
