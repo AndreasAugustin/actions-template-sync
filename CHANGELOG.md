@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.0.2](https://github.com/AndreasAugustin/actions-template-sync/compare/v2.0.1...v2.0.2) (2024-03-28)
+
+
+### Bug Fixes
+
+* **#510:** :bug: issue with blank lines within .templatesyncignore ([#512](https://github.com/AndreasAugustin/actions-template-sync/issues/512)) ([814f456](https://github.com/AndreasAugustin/actions-template-sync/commit/814f4564aa1ce6d354dcf48a34ea5b7a670327a5))
+
 ## [2.0.1](https://github.com/AndreasAugustin/actions-template-sync/compare/v2.0.0...v2.0.1) (2024-03-18)
 
 
