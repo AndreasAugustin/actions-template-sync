@@ -1,6 +1,6 @@
 # actions-template-sync
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-26-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-27-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
  [![actions-template-sync](https://github.com/AndreasAugustin/actions-template-sync/actions/workflows/actions_template_sync.yml/badge.svg)](https://github.com/AndreasAugustin/actions-template-sync/actions/workflows/actions_template_sync.yml)
@@ -38,6 +38,13 @@ The initial author of this repository faced that issue several times and decided
 Because of the nice community, several feature requests helped to go on with the development of the action. Now several other features are supported.
 
 ## Features
+
+This action is creating a pull request with the latest changes within the target repo whenever it runs with following exceptions
+
+* there is already an open PR created with the latest changes of the source repository.
+  * if there are new changes and a PR is already open, a new PR will be created (option to clean up older PRs)
+* related new changes are ignored within the `.templatesyncignore` file
+* the source repository is fully included within the target repository
 
 ```mermaid
 flowchart LR
@@ -89,7 +96,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         # https://github.com/actions/checkout#usage
-        # uncomment if you use submodules within the source repository
+        # uncomment if you use submodules within the repository
         # with:
         #   submodules: true
 
@@ -119,14 +126,16 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-     - name: Generate token to read from source repo # see: https://github.com/tibdex/github-app-token
+      - name: Generate token to read from source repo # see: https://github.com/tibdex/github-app-token
         id: generate_token
-        uses: tibdex/github-app-token@v1
+        # https://github.com/tibdex/github-app-token
+        uses: tibdex/github-app-token@v2
         with:
           app_id: ${{ secrets.APP_ID }}
           private_key: ${{ secrets.PRIVATE_KEY }}
 
       - name: Checkout
+        # https://github.com/actions/checkout#usage
         uses: actions/checkout@v4
         with:
           # submodules: true
@@ -163,6 +172,7 @@ jobs:
     steps:
       # To use this repository's private action, you must check out the repository
       - name: Checkout
+        # https://github.com/actions/checkout#usage
         uses: actions/checkout@v4
         with:
           # submodules: true
@@ -625,6 +635,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/kevin-aude"><img src="https://avatars.githubusercontent.com/u/98819045?v=4?s=100" width="100px;" alt="Kevin AUDE"/><br /><sub><b>Kevin AUDE</b></sub></a><br /><a href="#ideas-kevin-aude" title="Ideas, Planning, & Feedback">🤔</a> <a href="https://github.com/AndreasAugustin/actions-template-sync/commits?author=kevin-aude" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/Jnig"><img src="https://avatars.githubusercontent.com/u/3729585?v=4?s=100" width="100px;" alt="Jakob"/><br /><sub><b>Jakob</b></sub></a><br /><a href="https://github.com/AndreasAugustin/actions-template-sync/pulls?q=is%3Apr+reviewed-by%3Ajnig" title="Reviewed Pull Requests">👀</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://kevin.deldycke.com"><img src="https://avatars.githubusercontent.com/u/159718?v=4?s=100" width="100px;" alt="Kevin Deldycke"/><br /><sub><b>Kevin Deldycke</b></sub></a><br /><a href="https://github.com/AndreasAugustin/actions-template-sync/issues?q=author%3Akdeldycke" title="Bug reports">🐛</a> <a href="#ideas-kdeldycke" title="Ideas, Planning, & Feedback">🤔</a> <a href="https://github.com/AndreasAugustin/actions-template-sync/commits?author=kdeldycke" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/JessicaS11"><img src="https://avatars.githubusercontent.com/u/11756442?v=4?s=100" width="100px;" alt="Jessica Scheick"/><br /><sub><b>Jessica Scheick</b></sub></a><br /><a href="https://github.com/AndreasAugustin/actions-template-sync/issues?q=author%3AJessicaS11" title="Bug reports">🐛</a></td>
     </tr>
   </tbody>
 </table>
