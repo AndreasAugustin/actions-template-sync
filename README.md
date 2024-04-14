@@ -395,6 +395,34 @@ jobs:
 
 ```
 
+## Lifecycle actions
+
+The action has different phases which are executed in the following order
+
+* **preparation** prepare and configure git related things
+  * init git
+  * auth related (ssh or github auth)
+  * [optional] gpg setup
+* **prechecks** run some prechecks
+  * skipped if `is_force_push_pr` parameter is set to `true`
+  * check if the sync branch is already existing in target repository
+  * check if new changes of the source repository are already within history
+* **pull** pull the changes from the remote repository into the action runtime
+* **commit** commit the changes within the action runtime
+* **push**
+  * if `is_force_push_pr` is set to true then a force push will be executed
+* **pr**
+  * eventual create registered labels (:ninja: emojis are supported)
+  * create a new PR
+  * if `is_force_push_pr` is set to true then the PR will be created or edited
+  * [optional] **cleanup** eventual cleanup older PRs of the action
+* set **github action outputs**
+
+If `is_dry_run` parameter is set to true then all stages modifying the github state are not run (e.g. push, cleanup and pr).
+
+It is possible to run a subset of the mentioned lifecycle actions.
+**preparation** and **github action outputs** will be run every time.
+
 ## Lifecycle hooks
 
 Different lifecycle hooks are supported. You need to enable the functionality with the option `is_allow_hooks` and set it to `true`

@@ -372,7 +372,7 @@ function handle_templatesyncignore() {
 # Logic
 #######################################################
 
-function prechecks() {
+function arr_prechecks() {
   info "prechecks"
   echo "::group::prechecks"
   if [ "${IS_FORCE_PUSH_PR}" == "true" ]; then
@@ -387,7 +387,7 @@ function prechecks() {
 }
 
 
-function checkout_branch_and_pull() {
+function arr_checkout_branch_and_pull() {
   info "checkout branch and pull"
   cmd_from_yml "prepull"
 
@@ -409,7 +409,7 @@ function checkout_branch_and_pull() {
 }
 
 
-function commit() {
+function arr_commit() {
   info "commit"
 
   cmd_from_yml "precommit"
@@ -428,7 +428,20 @@ function commit() {
 }
 
 
-function push_prepare_pr_create_pr() {
+function arr_push() {
+  info "push"
+
+  echo "::group::push"
+  if [ "$IS_DRY_RUN" == "true" ]; then
+    warn "dry_run option is set to on. skipping push"
+    return 0
+  fi
+  cmd_from_yml "prepush"
+  push "${PR_BRANCH}" "${IS_FORCE_PUSH_PR}"
+  echo "::endgroup::"
+}
+
+function arr_push_prepare_pr_create_pr() {
   info "push_prepare_pr_create_pr"
   if [ "$IS_DRY_RUN" == "true" ]; then
     warn "dry_run option is set to on. skipping labels check, cleanup older PRs, push and create pr"
@@ -456,8 +469,6 @@ function push_prepare_pr_create_pr() {
 
   echo "::group::push changes and create PR"
 
-  cmd_from_yml "prepush"
-  push "${PR_BRANCH}" "${IS_FORCE_PUSH_PR}"
   cmd_from_yml "prepr"
   if [ "$IS_FORCE_PUSH_PR" == true ] ; then
     create_or_edit_pr "${PR_TITLE}" "${PR_BODY}" "${UPSTREAM_BRANCH}" "${PR_LABELS}" "${PR_REVIEWERS}"
@@ -471,16 +482,16 @@ function push_prepare_pr_create_pr() {
 
 declare -A arr
 
-arr["pull"]=checkout_branch_and_pull
-arr["commit"]=commit
-arr["pr"]=push_prepare_pr_create_pr
+arr["prechecks"]=arr_prechecks
+arr["pull"]=arr_checkout_branch_and_pull
+arr["commit"]=arr_commit
+arr["push"]=arr_push
+arr["pr"]=arr_push_prepare_pr_create_pr
 
-prechecks
-
-checkout_branch_and_pull
-
-commit
-
-push_prepare_pr_create_pr
+${arr["prechecks"]}
+${arr["pull"]}
+${arr["commit"]}
+${arr["push"]}
+${arr["pr"]}
 
 set_github_action_outputs "${PR_BRANCH}" "${TEMPLATE_GIT_HASH}"
