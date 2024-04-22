@@ -267,6 +267,7 @@ jobs:
 | git_remote_pull_params      | `[optional]` set remote pull parameters                                                                       | `false`  | `--allow-unrelated-histories --squash --strategy=recursive -X theirs` |
 | gpg_private_key | `[optional]` set if you want to sign commits | `false` | |
 | gpg_passphrase | `[optional]` set if your optionial gpg private key has a passphrase | `false` | |
+| steps | `[optional] add the steps you want to execute within the action` | `false` | all steps will be executed |
 
 ### Action Outputs
 
@@ -422,6 +423,51 @@ If `is_dry_run` parameter is set to true then all stages modifying the github st
 
 It is possible to run a subset of the mentioned lifecycle actions.
 **preparation** and **github action outputs** will be run every time.
+
+:warning: Advanced feature. Use with care (possibly set `is_dry_run: true` configuration parameter for testing purposes)
+
+e.g.
+
+```yaml
+# File: .github/workflows/test_steps.yml
+
+on:
+    # cronjob trigger
+  schedule:
+  - cron:  "0 0 1 * *"
+  # manual trigger
+  workflow_dispatch:
+jobs:
+  repo-sync:
+    runs-on: ubuntu-latest
+    # https://docs.github.com/en/actions/using-jobs/assigning-permissions-to-jobs
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      # To use this repository's private action, you must check out the repository
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: actions-template-sync first steps
+        uses: AndreasAugustin/actions-template-sync@v2
+        with:
+          source_repo_path: <owner/repo>
+          steps: "prechecks,pull"  # order matters
+
+      - name: in between step
+        run: |
+          echo "I can do whatever I want"
+          git status
+
+      - name: actions-template-sync next steps
+        uses: AndreasAugustin/actions-template-sync@v2
+        with:
+          source_repo_path: <owner/repo>
+          steps: "commit,push,pr"  # order matters
+
+```
 
 ## Lifecycle hooks
 

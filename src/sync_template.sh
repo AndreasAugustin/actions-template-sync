@@ -441,8 +441,8 @@ function arr_push() {
   echo "::endgroup::"
 }
 
-function arr_push_prepare_pr_create_pr() {
-  info "push_prepare_pr_create_pr"
+function arr_prepare_pr_create_pr() {
+  info "prepare_pr_create_pr"
   if [ "$IS_DRY_RUN" == "true" ]; then
     warn "dry_run option is set to on. skipping labels check, cleanup older PRs, push and create pr"
     return 0
@@ -467,7 +467,7 @@ function arr_push_prepare_pr_create_pr() {
 
   echo "::endgroup::"
 
-  echo "::group::push changes and create PR"
+  echo "::group::create PR"
 
   cmd_from_yml "prepr"
   if [ "$IS_FORCE_PUSH_PR" == true ] ; then
@@ -480,18 +480,51 @@ function arr_push_prepare_pr_create_pr() {
   echo "::endgroup::"
 }
 
-declare -A arr
+declare -A cmd_arr
+declare -a orders;
 
-arr["prechecks"]=arr_prechecks
-arr["pull"]=arr_checkout_branch_and_pull
-arr["commit"]=arr_commit
-arr["push"]=arr_push
-arr["pr"]=arr_push_prepare_pr_create_pr
+cmd_arr["prechecks"]=arr_prechecks; orders+=("prechecks")
+cmd_arr["pull"]=arr_checkout_branch_and_pull; orders+=("pull")
+cmd_arr["commit"]=arr_commit; orders+=("commit")
+cmd_arr["push"]=arr_push; orders+=("push")
+cmd_arr["pr"]=arr_prepare_pr_create_pr; orders+=("pr")
 
-${arr["prechecks"]}
-${arr["pull"]}
-${arr["commit"]}
-${arr["push"]}
-${arr["pr"]}
+if [[ -z "${STEPS}" ]]; then
+  info "no steps provided. Default is to execute all."
+  for key in "${orders[@]}";
+  do
+    debug "execute cmd ${key}"
+    ${cmd_arr[${key}]}
+  done
+else
+  info "steps provided."
+  readarray -t steps < <(awk -F',' '{ for( i=1; i<=NF; i++ ) print $i }' <<<"${STEPS}")
+  # check if steps are supported
+  not_supported_steps=""
+  for step in "${steps[@]}";
+  do
+    matched=false
+    for key in "${orders[@]}";
+    do
+      debug "execute cmd ${key}"
+      if [[ "${step}" == "${key}" ]]; then
+        matched=true;
+      fi
+    done
+    if [[ "$matched" == 'false' ]]; then
+      not_supported_steps="${not_supported_steps} $step"
+    fi
+  done
+  if [[ -z "${not_supported_steps}" ]]; then
+    for step in "${steps[@]}";
+    do
+      debug "execute cmd ${step}"
+      ${cmd_arr[${step}]}
+    done
+  else
+    err "following steps are not supported ${not_supported_steps}"
+    exit 1
+  fi
+fi
 
 set_github_action_outputs "${PR_BRANCH}" "${TEMPLATE_GIT_HASH}"

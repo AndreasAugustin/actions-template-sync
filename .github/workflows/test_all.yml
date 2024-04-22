@@ -33,3 +33,9 @@ jobs:
     permissions:
       contents: write
       pull-requests: write
+  call_test_steps:
+    uses: ./.github/workflows/test_steps.yml
+    secrets: inherit
+    permissions:
+      contents: write
+      pull-requests: write
