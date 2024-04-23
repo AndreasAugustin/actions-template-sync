@@ -267,6 +267,7 @@ jobs:
 | git_remote_pull_params      | `[optional]` set remote pull parameters                                                                       | `false`  | `--allow-unrelated-histories --squash --strategy=recursive -X theirs` |
 | gpg_private_key | `[optional]` set if you want to sign commits | `false` | |
 | gpg_passphrase | `[optional]` set if your optionial gpg private key has a passphrase | `false` | |
+| steps | `[optional] add the steps you want to execute within the action` | `false` | all steps will be executed |
 
 ### Action Outputs
 
@@ -392,6 +393,79 @@ jobs:
           gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
           # uncomment if your key has a passpharse
           # gpg_passpharse: ${{ secrets.GPG_PASSPHRASE }}
+
+```
+
+## Lifecycle actions
+
+The action has different phases which are executed in the following order
+
+* **preparation** prepare and configure git related things
+  * init git
+  * auth related (ssh or github auth)
+  * [optional] gpg setup
+* **prechecks** run some prechecks
+  * skipped if `is_force_push_pr` parameter is set to `true`
+  * check if the sync branch is already existing in target repository
+  * check if new changes of the source repository are already within history
+* **pull** pull the changes from the remote repository into the action runtime
+* **commit** commit the changes within the action runtime
+* **push**
+  * if `is_force_push_pr` is set to true then a force push will be executed
+* **pr**
+  * eventual create registered labels (:ninja: emojis are supported)
+  * create a new PR
+  * if `is_force_push_pr` is set to true then the PR will be created or edited
+  * [optional] **cleanup** eventual cleanup older PRs of the action
+* set **github action outputs**
+
+If `is_dry_run` parameter is set to true then all stages modifying the github state are not run (e.g. push, cleanup and pr).
+
+It is possible to run a subset of the mentioned lifecycle actions.
+**preparation** and **github action outputs** will be run every time.
+
+:warning: Advanced feature. Use with care (possibly set `is_dry_run: true` configuration parameter for testing purposes)
+
+e.g.
+
+```yaml
+# File: .github/workflows/test_steps.yml
+
+on:
+    # cronjob trigger
+  schedule:
+  - cron:  "0 0 1 * *"
+  # manual trigger
+  workflow_dispatch:
+jobs:
+  repo-sync:
+    runs-on: ubuntu-latest
+    # https://docs.github.com/en/actions/using-jobs/assigning-permissions-to-jobs
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      # To use this repository's private action, you must check out the repository
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: actions-template-sync first steps
+        uses: AndreasAugustin/actions-template-sync@v2
+        with:
+          source_repo_path: <owner/repo>
+          steps: "prechecks,pull"  # order matters
+
+      - name: in between step
+        run: |
+          echo "I can do whatever I want"
+          git status
+
+      - name: actions-template-sync next steps
+        uses: AndreasAugustin/actions-template-sync@v2
+        with:
+          source_repo_path: <owner/repo>
+          steps: "commit,push,pr"  # order matters
 
 ```
 

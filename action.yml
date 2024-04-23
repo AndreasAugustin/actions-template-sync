@@ -67,6 +67,8 @@ inputs:
     description: "[optional] set the gpg private key if you want to sign your commits"
   gpg_passphrase:
     description: "[optional] set if your private gpg key has a password"
+  steps:
+    description: "[optional] set the steps to execute within the action"
 outputs:
   pr_branch:
     description: "The name of the PR branch"
@@ -108,3 +110,4 @@ runs:
         GIT_REMOTE_PULL_PARAMS: ${{ inputs.git_remote_pull_params }}
         GPG_PRIVATE_KEY: ${{ inputs.gpg_private_key }}
         GPG_PASSPHRASE: ${{ inputs.gpg_passphrase }}
+        STEPS: ${{ inputs.steps }}

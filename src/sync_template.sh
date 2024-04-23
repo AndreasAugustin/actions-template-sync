@@ -372,7 +372,7 @@ function handle_templatesyncignore() {
 # Logic
 #######################################################
 
-function prechecks() {
+function arr_prechecks() {
   info "prechecks"
   echo "::group::prechecks"
   if [ "${IS_FORCE_PUSH_PR}" == "true" ]; then
@@ -387,7 +387,7 @@ function prechecks() {
 }
 
 
-function checkout_branch_and_pull() {
+function arr_checkout_branch_and_pull() {
   info "checkout branch and pull"
   cmd_from_yml "prepull"
 
@@ -409,7 +409,7 @@ function checkout_branch_and_pull() {
 }
 
 
-function commit() {
+function arr_commit() {
   info "commit"
 
   cmd_from_yml "precommit"
@@ -428,8 +428,21 @@ function commit() {
 }
 
 
-function push_prepare_pr_create_pr() {
-  info "push_prepare_pr_create_pr"
+function arr_push() {
+  info "push"
+
+  echo "::group::push"
+  if [ "$IS_DRY_RUN" == "true" ]; then
+    warn "dry_run option is set to on. skipping push"
+    return 0
+  fi
+  cmd_from_yml "prepush"
+  push "${PR_BRANCH}" "${IS_FORCE_PUSH_PR}"
+  echo "::endgroup::"
+}
+
+function arr_prepare_pr_create_pr() {
+  info "prepare_pr_create_pr"
   if [ "$IS_DRY_RUN" == "true" ]; then
     warn "dry_run option is set to on. skipping labels check, cleanup older PRs, push and create pr"
     return 0
@@ -454,10 +467,8 @@ function push_prepare_pr_create_pr() {
 
   echo "::endgroup::"
 
-  echo "::group::push changes and create PR"
+  echo "::group::create PR"
 
-  cmd_from_yml "prepush"
-  push "${PR_BRANCH}" "${IS_FORCE_PUSH_PR}"
   cmd_from_yml "prepr"
   if [ "$IS_FORCE_PUSH_PR" == true ] ; then
     create_or_edit_pr "${PR_TITLE}" "${PR_BODY}" "${UPSTREAM_BRANCH}" "${PR_LABELS}" "${PR_REVIEWERS}"
@@ -469,13 +480,51 @@ function push_prepare_pr_create_pr() {
   echo "::endgroup::"
 }
 
+declare -A cmd_arr
+declare -a orders;
 
-prechecks
+cmd_arr["prechecks"]=arr_prechecks; orders+=("prechecks")
+cmd_arr["pull"]=arr_checkout_branch_and_pull; orders+=("pull")
+cmd_arr["commit"]=arr_commit; orders+=("commit")
+cmd_arr["push"]=arr_push; orders+=("push")
+cmd_arr["pr"]=arr_prepare_pr_create_pr; orders+=("pr")
 
-checkout_branch_and_pull
-
-commit
-
-push_prepare_pr_create_pr
+if [[ -z "${STEPS}" ]]; then
+  info "no steps provided. Default is to execute all."
+  for key in "${orders[@]}";
+  do
+    debug "execute cmd ${key}"
+    ${cmd_arr[${key}]}
+  done
+else
+  info "steps provided."
+  readarray -t steps < <(awk -F',' '{ for( i=1; i<=NF; i++ ) print $i }' <<<"${STEPS}")
+  # check if steps are supported
+  not_supported_steps=""
+  for step in "${steps[@]}";
+  do
+    matched=false
+    for key in "${orders[@]}";
+    do
+      debug "execute cmd ${key}"
+      if [[ "${step}" == "${key}" ]]; then
+        matched=true;
+      fi
+    done
+    if [[ "$matched" == 'false' ]]; then
+      not_supported_steps="${not_supported_steps} $step"
+    fi
+  done
+  if [[ -z "${not_supported_steps}" ]]; then
+    for step in "${steps[@]}";
+    do
+      debug "execute cmd ${step}"
+      ${cmd_arr[${step}]}
+    done
+  else
+    err "following steps are not supported ${not_supported_steps}"
+    exit 1
+  fi
+fi
 
 set_github_action_outputs "${PR_BRANCH}" "${TEMPLATE_GIT_HASH}"
