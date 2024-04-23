@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.1.0](https://github.com/AndreasAugustin/actions-template-sync/compare/v2.0.2...v2.1.0) (2024-04-23)
+
+
+### Features
+
+* **#478:** :sparkles: possible to execute single steps ([#516](https://github.com/AndreasAugustin/actions-template-sync/issues/516)) ([6b9bd88](https://github.com/AndreasAugustin/actions-template-sync/commit/6b9bd8844d2a75ecf2f4d2688b7f847fd86cffa3))
+
 ## [2.0.2](https://github.com/AndreasAugustin/actions-template-sync/compare/v2.0.1...v2.0.2) (2024-03-28)
 
 
