@@ -11,7 +11,7 @@ updates:
     time: "04:00"
   open-pull-requests-limit: 10
 - package-ecosystem: docker
-  directory: "/src"
+  directory: "/"
   schedule:
     interval: weekly
     time: "04:00"
