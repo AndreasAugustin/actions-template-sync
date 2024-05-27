@@ -1,7 +1,7 @@
 ########################################
 # prod image
 #######################################
-FROM alpine:3.19.1 as prod
+FROM alpine:3.20.0 as prod
 
 ARG GH_CLI_VER=2.44.1
 
