@@ -43,6 +43,7 @@ if [[ -n "${SRC_SSH_PRIVATEKEY_ABS_PATH}" ]]; then
 fi
 
 IS_FORCE_PUSH_PR="${IS_FORCE_PUSH_PR:-"false"}"
+IS_KEEP_BRANCH_ON_PR_CLEANUP="${IS_KEEP_BRANCH_ON_PR_CLEANUP:-"false"}"
 GIT_REMOTE_PULL_PARAMS="${GIT_REMOTE_PULL_PARAMS:---allow-unrelated-histories --squash --strategy=recursive -X theirs}"
 
 TEMPLATE_SYNC_IGNORE_FILE_PATH=".templatesyncignore"
@@ -137,8 +138,8 @@ function check_if_commit_already_in_hist_graceful_exit() {
 
   git cat-file -e "${template_remote_git_hash}" || commit_not_in_hist=true
   if [ "${commit_not_in_hist}" != true ] ; then
-      warn "repository is up to date!"
-      exit 0
+    warn "repository is up to date!"
+    exit 0
   fi
 
 }
@@ -176,29 +177,36 @@ function force_delete_files() {
 # Arguments:
 #   upstream_branch
 #   pr_labels
+#   is_keep_branch_on_pr_cleanup
 #######################################
 function cleanup_older_prs () {
   info "cleanup older prs"
 
   local upstream_branch=$1
   local pr_labels=$2
+  local is_keep_branch_on_pr_cleanup=$3
 
   if [[ -z "${pr_labels}" ]]; then
-     warn "env var 'PR_LABELS' is empty. Skipping older prs cleanup"
-     return 0
+    warn "env var 'PR_LABELS' is empty. Skipping older prs cleanup"
+    return 0
   fi
 
   older_prs=$(gh pr list \
-  --base "${upstream_branch}" \
-  --state open \
-  --label "${pr_labels}" \
-  --json number \
-  --template '{{range .}}{{printf "%v" .number}}{{"\n"}}{{end}}')
+    --base "${upstream_branch}" \
+    --state open \
+    --label "${pr_labels}" \
+    --json number \
+    --template '{{range .}}{{printf "%v" .number}}{{"\n"}}{{end}}')
 
   for older_pr in $older_prs
   do
-    gh pr close "$older_pr"
-    debug "Closed PR #${older_pr}"
+    if [ "$is_keep_branch_on_pr_cleanup" == true ] ; then
+      gh pr close -c -c "[actions-template-sync] :construction_worker: automatically closed because there is a new open PR. Branch is kept alive" "$older_pr"
+      debug "Closed PR #${older_pr} but kept the branch"
+    else
+      gh pr close -c "[actions-template-sync] :construction_worker: automatically closed because there is a new open PR" -d "$older_pr"
+      debug "Closed PR #${older_pr}"
+    fi
   done
 }
 
@@ -216,9 +224,9 @@ function pull_source_changes() {
   eval "git pull ${source_repo} ${git_remote_pull_params}" || pull_has_issues=true
 
   if [ "$pull_has_issues" == true ] ; then
-      warn "There had been some git pull issues."
-      warn "Maybe a merge issue."
-      warn "We go on but it is likely that you need to fix merge issues within the created PR."
+    warn "There had been some git pull issues."
+    warn "Maybe a merge issue."
+    warn "We go on but it is likely that you need to fix merge issues within the created PR."
   fi
 }
 
@@ -239,21 +247,21 @@ function eventual_create_labels () {
   readarray -t labels_array < <(awk -F',' '{ for( i=1; i<=NF; i++ ) print $i }' <<<"${pr_labels}")
   for label in "${labels_array[@]}"
   do
-      search_result=$(gh label list \
-      --search "${label}" \
-      --limit 1 \
-      --json name \
-      --template '{{range .}}{{printf "%v" .name}}{{"\n"}}{{end}}')
+    search_result=$(gh label list \
+    --search "${label}" \
+    --limit 1 \
+    --json name \
+    --template '{{range .}}{{printf "%v" .name}}{{"\n"}}{{end}}')
 
-      if [ "${search_result}" = "${label##[[:space:]]}" ]; then
-        info "label '${label##[[:space:]]}' was found in the repository"
+    if [ "${search_result}" = "${label##[[:space:]]}" ]; then
+      info "label '${label##[[:space:]]}' was found in the repository"
+    else
+      if gh label create "${label}"; then
+        info "label '${label}' was missing and has been created"
       else
-        if gh label create "${label}"; then
-          info "label '${label}' was missing and has been created"
-        else
-          warn "label creation did not work. For any reason the former check sometimes is failing"
-        fi
+        warn "label creation did not work. For any reason the former check sometimes is failing"
       fi
+    fi
   done
 }
 
@@ -269,8 +277,8 @@ function push () {
   local is_force=$2
 
   if [ "$is_force" == true ] ; then
-      warn "forcing the push."
-      git push --force --set-upstream origin "${branch}"
+    warn "forcing the push."
+    git push --force --set-upstream origin "${branch}"
   else
     git push --set-upstream origin "${branch}"
   fi
@@ -294,16 +302,16 @@ function create_pr() {
   local reviewers=$5
 
   gh pr create \
-        --title "${title}" \
-        --body "${body}" \
-        --base "${branch}" \
-        --label "${labels}" \
-        --reviewer "${reviewers}" || create_pr_has_issues=true
+    --title "${title}" \
+    --body "${body}" \
+    --base "${branch}" \
+    --label "${labels}" \
+    --reviewer "${reviewers}" || create_pr_has_issues=true
 
   if [ "$create_pr_has_issues" == true ] ; then
-      warn "Creating the PR failed."
-      warn "Eventually it is already existent."
-      return 1
+    warn "Creating the PR failed."
+    warn "Eventually it is already existent."
+    return 1
   fi
   return 0
 }
@@ -459,7 +467,7 @@ function arr_prepare_pr_create_pr() {
     warn "env var 'PR_LABELS' is empty. Skipping older prs cleanup"
     else
       cmd_from_yml "precleanup"
-      cleanup_older_prs "${UPSTREAM_BRANCH}" "${PR_LABELS}"
+      cleanup_older_prs "${UPSTREAM_BRANCH}" "${PR_LABELS}" "${IS_KEEP_BRANCH_ON_PR_CLEANUP}"
     fi
   else
     warn "is_pr_cleanup option is set to off. Skipping older prs cleanup"
