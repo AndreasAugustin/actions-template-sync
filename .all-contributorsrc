@@ -279,6 +279,15 @@
       "contributions": [
         "bug"
       ]
+    },
+    {
+      "login": "gasbi",
+      "name": "Gaspar Melsion",
+      "avatar_url": "https://avatars.githubusercontent.com/u/10176387?v=4",
+      "profile": "https://github.com/gasbi",
+      "contributions": [
+        "ideas"
+      ]
     }
   ],
   "contributorsPerLine": 7,
