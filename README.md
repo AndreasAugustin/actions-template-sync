@@ -1,6 +1,6 @@
 # actions-template-sync
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-27-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-28-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
  [![actions-template-sync](https://github.com/AndreasAugustin/actions-template-sync/actions/workflows/actions_template_sync.yml/badge.svg)](https://github.com/AndreasAugustin/actions-template-sync/actions/workflows/actions_template_sync.yml)
@@ -710,6 +710,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/Jnig"><img src="https://avatars.githubusercontent.com/u/3729585?v=4?s=100" width="100px;" alt="Jakob"/><br /><sub><b>Jakob</b></sub></a><br /><a href="https://github.com/AndreasAugustin/actions-template-sync/pulls?q=is%3Apr+reviewed-by%3Ajnig" title="Reviewed Pull Requests">👀</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://kevin.deldycke.com"><img src="https://avatars.githubusercontent.com/u/159718?v=4?s=100" width="100px;" alt="Kevin Deldycke"/><br /><sub><b>Kevin Deldycke</b></sub></a><br /><a href="https://github.com/AndreasAugustin/actions-template-sync/issues?q=author%3Akdeldycke" title="Bug reports">🐛</a> <a href="#ideas-kdeldycke" title="Ideas, Planning, & Feedback">🤔</a> <a href="https://github.com/AndreasAugustin/actions-template-sync/commits?author=kdeldycke" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/JessicaS11"><img src="https://avatars.githubusercontent.com/u/11756442?v=4?s=100" width="100px;" alt="Jessica Scheick"/><br /><sub><b>Jessica Scheick</b></sub></a><br /><a href="https://github.com/AndreasAugustin/actions-template-sync/issues?q=author%3AJessicaS11" title="Bug reports">🐛</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/gasbi"><img src="https://avatars.githubusercontent.com/u/10176387?v=4?s=100" width="100px;" alt="Gaspar Melsion"/><br /><sub><b>Gaspar Melsion</b></sub></a><br /><a href="#ideas-gasbi" title="Ideas, Planning, & Feedback">🤔</a></td>
     </tr>
   </tbody>
 </table>
