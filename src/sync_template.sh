@@ -201,7 +201,7 @@ function cleanup_older_prs () {
   for older_pr in $older_prs
   do
     if [ "$is_keep_branch_on_pr_cleanup" == true ] ; then
-      gh pr close -c -c "[actions-template-sync] :construction_worker: automatically closed because there is a new open PR. Branch is kept alive" "$older_pr"
+      gh pr close -c "[actions-template-sync] :construction_worker: automatically closed because there is a new open PR. Branch is kept alive" "$older_pr"
       debug "Closed PR #${older_pr} but kept the branch"
     else
       gh pr close -c "[actions-template-sync] :construction_worker: automatically closed because there is a new open PR" -d "$older_pr"
