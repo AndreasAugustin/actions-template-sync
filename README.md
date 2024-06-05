@@ -714,7 +714,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/gasbi"><img src="https://avatars.githubusercontent.com/u/10176387?v=4?s=100" width="100px;" alt="Gaspar Melsion"/><br /><sub><b>Gaspar Melsion</b></sub></a><br /><a href="#ideas-gasbi" title="Ideas, Planning, & Feedback">🤔</a></td>
     </tr>
     <tr>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/kanno41"><img src="https://avatars.githubusercontent.com/u/2818651?v=4?s=100" width="100px;" alt="Ken Harding"/><br /><sub><b>Ken Harding</b></sub></a><br /><a href="https://github.com/AndreasAugustin/actions-template-sync/commits?author=kanno41" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/kanno41"><img src="https://avatars.githubusercontent.com/u/2818651?v=4?s=100" width="100px;" alt="Ken Harding"/><br /><sub><b>Ken Harding</b></sub></a><br /><a href="https://github.com/AndreasAugustin/actions-template-sync/commits?author=kanno41" title="Code">💻</a> <a href="https://github.com/AndreasAugustin/actions-template-sync/issues?q=author%3Akanno41" title="Bug reports">🐛</a></td>
     </tr>
   </tbody>
 </table>
