@@ -295,7 +295,8 @@
       "avatar_url": "https://avatars.githubusercontent.com/u/2818651?v=4",
       "profile": "https://github.com/kanno41",
       "contributions": [
-        "code"
+        "code",
+        "bug"
       ]
     }
   ],
