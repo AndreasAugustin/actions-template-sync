@@ -666,6 +666,8 @@ The development environment targets are located in the [Makefile](Makefile)
 make help
 ```
 
+:ninja: contributiong of any kind are welcome. Please checkout the [contributing guidelines](.github/CONTRIBUTING.md).
+
 For some architectural notes please have a look at the [docs](./docs/README.md)
 
 ## Contributors ✨
