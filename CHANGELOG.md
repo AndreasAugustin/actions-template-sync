@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.2.1](https://github.com/AndreasAugustin/actions-template-sync/compare/v2.2.0...v2.2.1) (2024-06-06)
+
+
+### Bug Fixes
+
+* **#528:** :memo: small docs update ([4eb71ce](https://github.com/AndreasAugustin/actions-template-sync/commit/4eb71ce2acda4476ed387a8b42cd94846ca8474e))
+
 ## [2.2.0](https://github.com/AndreasAugustin/actions-template-sync/compare/v2.1.0...v2.2.0) (2024-05-27)
 
 
