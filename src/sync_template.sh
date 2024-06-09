@@ -178,6 +178,7 @@ function force_delete_files() {
 #   upstream_branch
 #   pr_labels
 #   is_keep_branch_on_pr_cleanup
+#   local_branch_name
 #######################################
 function cleanup_older_prs () {
   info "cleanup older prs"
@@ -185,6 +186,7 @@ function cleanup_older_prs () {
   local upstream_branch=$1
   local pr_labels=$2
   local is_keep_branch_on_pr_cleanup=$3
+  local local_branch_name=$4
 
   if [[ -z "${pr_labels}" ]]; then
     warn "env var 'PR_LABELS' is empty. Skipping older prs cleanup"
@@ -195,16 +197,24 @@ function cleanup_older_prs () {
     --base "${upstream_branch}" \
     --state open \
     --label "${pr_labels}" \
-    --json number \
-    --template '{{range .}}{{printf "%v" .number}}{{"\n"}}{{end}}')
+    --json number,headRefName \
+    --jq '.[]')
 
   for older_pr in $older_prs
   do
+    branch_name=$(echo "$older_pr" | jq -r .headRefName)
+    pr_number=$(echo "$older_pr" | jq -r .number)
+
+    if [ "$branch_name" == "$local_branch_name" ] ; then
+      warn "local branch name equals remot pr branch name ${local_branch_name}. Skipping pr cleanup for this branch"
+      continue
+    fi
+
     if [ "$is_keep_branch_on_pr_cleanup" == true ] ; then
-      gh pr close -c "[actions-template-sync] :construction_worker: automatically closed because there is a new open PR. Branch is kept alive" "$older_pr"
+      gh pr close -c "[actions-template-sync] :construction_worker: automatically closed because there is a new open PR. Branch is kept alive" "$pr_number"
       debug "Closed PR #${older_pr} but kept the branch"
     else
-      gh pr close -c "[actions-template-sync] :construction_worker: automatically closed because there is a new open PR" -d "$older_pr"
+      gh pr close -c "[actions-template-sync] :construction_worker: automatically closed because there is a new open PR" -d "$pr_number"
       debug "Closed PR #${older_pr}"
     fi
   done
@@ -467,7 +477,7 @@ function arr_prepare_pr_create_pr() {
     warn "env var 'PR_LABELS' is empty. Skipping older prs cleanup"
     else
       cmd_from_yml "precleanup"
-      cleanup_older_prs "${UPSTREAM_BRANCH}" "${PR_LABELS}" "${IS_KEEP_BRANCH_ON_PR_CLEANUP}"
+      cleanup_older_prs "${UPSTREAM_BRANCH}" "${PR_LABELS}" "${IS_KEEP_BRANCH_ON_PR_CLEANUP}" "${PR_BRANCH}"
     fi
   else
     warn "is_pr_cleanup option is set to off. Skipping older prs cleanup"
