@@ -331,7 +331,7 @@ function create_pr() {
 # Arguments:
 #   title
 #   body
-#   branch
+#   upstream_branch
 #   labels
 #   reviewers
 ###################################
@@ -339,11 +339,12 @@ function create_or_edit_pr() {
   info "create pr or edit the pr"
   local title=$1
   local body=$2
-  local branch=$3
+  local upstream_branch=$3
   local labels=$4
   local reviewers=$5
+  local pr_branch=$6
 
-  create_pr "${title}" "${body}" "${branch}" "${labels}" "${reviewers}" || gh pr edit \
+  create_pr "${title}" "${body}" "${upstream_branch}" "${labels}" "${reviewers}" || gh pr edit \
     --title "${title}" \
     --body "${body}" \
     --add-label "${labels}" \
