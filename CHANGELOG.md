@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.2.2](https://github.com/AndreasAugustin/actions-template-sync/compare/v2.2.1...v2.2.2) (2024-06-16)
+
+
+### Bug Fixes
+
+* **#529:** :bug: edge case with branch cleanup and force push ([#534](https://github.com/AndreasAugustin/actions-template-sync/issues/534)) ([ab9498f](https://github.com/AndreasAugustin/actions-template-sync/commit/ab9498f63d0cf03e677228c6a2f6828adf8b4662))
+
 ## [2.2.1](https://github.com/AndreasAugustin/actions-template-sync/compare/v2.2.0...v2.2.1) (2024-06-06)
 
 
