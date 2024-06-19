@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.2.3](https://github.com/AndreasAugustin/actions-template-sync/compare/v2.2.2...v2.2.3) (2024-06-19)
+
+
+### Bug Fixes
+
+* **#536:** :bug: issue with comments within .templatesyncignore ([#538](https://github.com/AndreasAugustin/actions-template-sync/issues/538)) ([aba0971](https://github.com/AndreasAugustin/actions-template-sync/commit/aba0971640d113cd858cfbb6b9eb2f4c2de09049))
+
 ## [2.2.2](https://github.com/AndreasAugustin/actions-template-sync/compare/v2.2.1...v2.2.2) (2024-06-16)
 
 
