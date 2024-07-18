@@ -298,6 +298,15 @@
         "code",
         "bug"
       ]
+    },
+    {
+      "login": "JakobHavtorn",
+      "name": "Jakob Drachmann Havtorn",
+      "avatar_url": "https://avatars.githubusercontent.com/u/10236734?v=4",
+      "profile": "https://jakobhavtorn.github.io/",
+      "contributions": [
+        "ideas"
+      ]
     }
   ],
   "contributorsPerLine": 7,
