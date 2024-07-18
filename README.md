@@ -78,9 +78,9 @@ Add this configuration to a GitHub action in the current repository:
 # File: .github/workflows/template-sync.yml
 
 on:
-    # cronjob trigger
+  # cronjob trigger
   schedule:
-  - cron:  "0 0 1 * *"
+  - cron: "0 0 1 * *"
   # manual trigger
   workflow_dispatch:
 jobs:
@@ -215,7 +215,7 @@ name: actions-template-sync
 on:
   # cronjob trigger At 00:00 on day-of-month 1. https://crontab.guru/every-month
   schedule:
-  - cron:  "0 0 1 * *"
+  - cron: "0 0 1 * *"
   # manual trigger
   workflow_dispatch:
 
@@ -366,9 +366,9 @@ If your key has a password, create another secret named `GPG_PASSPHRASE`.
 # File: .github/workflows/template-sync.yml
 
 on:
-    # cronjob trigger
+  # cronjob trigger
   schedule:
-  - cron:  "0 0 1 * *"
+  - cron: "0 0 1 * *"
   # manual trigger
   workflow_dispatch:
 jobs:
@@ -433,9 +433,9 @@ e.g.
 # File: .github/workflows/test_steps.yml
 
 on:
-    # cronjob trigger
+  # cronjob trigger
   schedule:
-  - cron:  "0 0 1 * *"
+  - cron: "0 0 1 * *"
   # manual trigger
   workflow_dispatch:
 jobs:
@@ -587,9 +587,9 @@ You need to change the default one e.g. to `git_remote_pull_params: --allow-unre
      # File: .github/workflows/template-sync.yml
 
      on:
-         # cronjob trigger
+       # cronjob trigger
        schedule:
-       - cron:  "0 0 1 * *"
+       - cron: "0 0 1 * *"
        # manual trigger
        workflow_dispatch:
      jobs:
