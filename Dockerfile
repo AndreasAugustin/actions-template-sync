@@ -1,7 +1,7 @@
 ########################################
 # prod image
 #######################################
-FROM alpine:3.20.2 as prod
+FROM alpine:3.20.2 AS prod
 
 ARG GH_CLI_VER=2.44.1
 
@@ -36,7 +36,7 @@ ENTRYPOINT ["/bin/bash", "/bin/entrypoint.sh"]
 #######################################
 # image for dev build environment
 ######################################
-FROM prod as dev
+FROM prod AS dev
 
 # install packages
 RUN apk add --update --no-cache make zsh tmux vim tig
@@ -54,7 +54,7 @@ ENTRYPOINT ["/bin/zsh"]
 #######################################
 # image for creating the documentation
 ######################################
-FROM node:22.6.0-alpine as docs
+FROM node:22.6.0-alpine AS docs
 
 # install packages
 RUN apk add --update --no-cache bash make git zsh curl tmux

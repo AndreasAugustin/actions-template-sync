@@ -19,20 +19,20 @@ help:  ## help target to show available commands with information
 
 .PHONY: markdownlint
 markdownlint: ## Validate markdown files
-	docker-compose run docs markdownlint .
+	docker compose run docs markdownlint .
 
 .PHONY: zsh
 zsh: ## open dev container with build environment
-	docker-compose run --service-ports dev
+	docker compose run --service-ports dev
 
 .PHONY: prod
 prod: ## run the prod docker image with bash
-	docker-compose run prod
+	docker compose run prod
 
 .PHONY: prune
 prune: ## delete the whole environment
-	docker-compose down -v --rmi all --remove-orphans
+	docker compose down -v --rmi all --remove-orphans
 
 .Phony: shellcheck
 shellcheck:  ## run shellcheck
-	docker-compose run shellcheck -x src/*.sh
+	docker compose run shellcheck -x src/*.sh
