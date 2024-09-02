@@ -392,8 +392,8 @@ jobs:
           git_user_name: # add the gpg username
           git_user_email: # add the gpg email
           gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
-          # uncomment if your key has a passpharse
-          # gpg_passpharse: ${{ secrets.GPG_PASSPHRASE }}
+          # uncomment if your key has a passphrase
+          # gpg_passphrase: ${{ secrets.GPG_PASSPHRASE }}
 
 ```
 
