@@ -1,6 +1,6 @@
 # actions-template-sync
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-32-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-33-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
  [![actions-template-sync](https://github.com/AndreasAugustin/actions-template-sync/actions/workflows/actions_template_sync.yml/badge.svg)](https://github.com/AndreasAugustin/actions-template-sync/actions/workflows/actions_template_sync.yml)
@@ -720,6 +720,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
       <td align="center" valign="top" width="14.28%"><a href="https://jakobhavtorn.github.io/"><img src="https://avatars.githubusercontent.com/u/10236734?v=4?s=100" width="100px;" alt="Jakob Drachmann Havtorn"/><br /><sub><b>Jakob Drachmann Havtorn</b></sub></a><br /><a href="#ideas-JakobHavtorn" title="Ideas, Planning, & Feedback">🤔</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/brian6932"><img src="https://avatars.githubusercontent.com/u/18603393?v=4?s=100" width="100px;" alt="Brian"/><br /><sub><b>Brian</b></sub></a><br /><a href="https://github.com/AndreasAugustin/actions-template-sync/commits?author=brian6932" title="Documentation">📖</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/MuriloChianfa"><img src="https://avatars.githubusercontent.com/u/60560085?v=4?s=100" width="100px;" alt="MuriloChianfa"/><br /><sub><b>MuriloChianfa</b></sub></a><br /><a href="https://github.com/AndreasAugustin/actions-template-sync/commits?author=MuriloChianfa" title="Documentation">📖</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/davidsnyder"><img src="https://avatars.githubusercontent.com/u/229108?v=4?s=100" width="100px;" alt="David Snyder"/><br /><sub><b>David Snyder</b></sub></a><br /><a href="#research-davidsnyder" title="Research">🔬</a></td>
     </tr>
   </tbody>
 </table>
