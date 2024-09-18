@@ -325,6 +325,15 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "davidsnyder",
+      "name": "David Snyder",
+      "avatar_url": "https://avatars.githubusercontent.com/u/229108?v=4",
+      "profile": "https://github.com/davidsnyder",
+      "contributions": [
+        "research"
+      ]
     }
   ],
   "contributorsPerLine": 7,
