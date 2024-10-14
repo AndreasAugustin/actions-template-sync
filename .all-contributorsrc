@@ -334,6 +334,16 @@
       "contributions": [
         "research"
       ]
+    },
+    {
+      "login": "TechnicallyJoe",
+      "name": "Jonathan Østrup",
+      "avatar_url": "https://avatars.githubusercontent.com/u/7877957?v=4",
+      "profile": "https://technicallyjoe.net/",
+      "contributions": [
+        "ideas",
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
