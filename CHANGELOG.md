@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.3.0](https://github.com/AndreasAugustin/actions-template-sync/compare/v2.2.3...v2.3.0) (2024-10-14)
+
+
+### Features
+
+* **#547:** :sparkles: add option to include git tags ([#561](https://github.com/AndreasAugustin/actions-template-sync/issues/561)) ([01f7623](https://github.com/AndreasAugustin/actions-template-sync/commit/01f7623dbfc8f73ccaf1635d64cb629a699acc9a))
+
 ## [2.2.3](https://github.com/AndreasAugustin/actions-template-sync/compare/v2.2.2...v2.2.3) (2024-06-19)
 
 
