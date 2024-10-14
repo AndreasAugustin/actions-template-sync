@@ -73,7 +73,7 @@ inputs:
   steps:
     description: "[optional] set the steps to execute within the action"
   template_sync_ignore_file_path:
-    description: "[optional] set the path to the ignore file."
+    description: "[optional] set the path to the ignore file"
     default: ".templatesyncignore"
 outputs:
   pr_branch:
