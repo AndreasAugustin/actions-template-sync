@@ -72,6 +72,9 @@ inputs:
     description: "[optional] set if your private gpg key has a password"
   steps:
     description: "[optional] set the steps to execute within the action"
+  is_with_tags:
+    description: "[optional] set to true if tags should be synced"
+    default: "false"
 outputs:
   pr_branch:
     description: "The name of the PR branch"
@@ -115,3 +118,4 @@ runs:
         GPG_PRIVATE_KEY: ${{ inputs.gpg_private_key }}
         GPG_PASSPHRASE: ${{ inputs.gpg_passphrase }}
         STEPS: ${{ inputs.steps }}
+        IS_WITH_TAGS: ${{ inputs.is_with_tags }}
