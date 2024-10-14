@@ -118,4 +118,4 @@ runs:
         GPG_PRIVATE_KEY: ${{ inputs.gpg_private_key }}
         GPG_PASSPHRASE: ${{ inputs.gpg_passphrase }}
         STEPS: ${{ inputs.steps }}
-        TEMPLATE_SYNC_IGNORE_FILE_PATH: ${{ inputs.ignore_file_path }}
+        TEMPLATE_SYNC_IGNORE_FILE_PATH: ${{ inputs.template_sync_ignore_file_path }}
