@@ -28,8 +28,8 @@ if ! [ -x "$(command -v gh)" ]; then
   exit 1;
 fi
 
-if [[ -z "${IGNORE_FILE_PATH}" ]]; then
-  err "Missing env variable 'IGNORE_FILE_PATH'";
+if [[ -z "${TEMPLATE_SYNC_IGNPRE_FILE_PATH}" ]]; then
+  err "Missing env variable 'TEMPLATE_SYNC_IGNPRE_FILE_PATH'";
   exit 1;
 fi
 
