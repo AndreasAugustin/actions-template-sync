@@ -72,6 +72,9 @@ inputs:
     description: "[optional] set if your private gpg key has a password"
   steps:
     description: "[optional] set the steps to execute within the action"
+  template_sync_ignore_file_path:
+    description: "[optional] set the path to the ignore file."
+    default: ".templatesyncignore"
 outputs:
   pr_branch:
     description: "The name of the PR branch"
@@ -115,3 +118,4 @@ runs:
         GPG_PRIVATE_KEY: ${{ inputs.gpg_private_key }}
         GPG_PASSPHRASE: ${{ inputs.gpg_passphrase }}
         STEPS: ${{ inputs.steps }}
+        TEMPLATE_SYNC_IGNORE_FILE_PATH: ${{ inputs.ignore_file_path }}

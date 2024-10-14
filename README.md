@@ -269,6 +269,7 @@ jobs:
 | gpg_private_key | `[optional]` set if you want to sign commits | `false` | |
 | gpg_passphrase | `[optional]` set if your optionial gpg private key has a passphrase | `false` | |
 | steps | `[optional] add the steps you want to execute within the action` | `false` | all steps will be executed |
+| template_sync_ignore_file_path | `[optional] set the path to the ignore file.` | false |`.templatesyncignore` |
 
 ### Action Outputs
 
