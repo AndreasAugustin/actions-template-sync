@@ -319,6 +319,8 @@ It can also be stored inside `.github` folder.
 The `template_sync_ignore_file_path` parameter allows you to specify a path to an ignore file. This variable defaults to `.templatesyncignore`.
 Changing this allows you to support template sync with more than one repository using different ignore files.
 
+The action will look for the path specified within `.` or `.github/`
+
 _Note: It is not possible to sync also the `.templatesyncignore` itself. Any changes from the template repository will be restored automatically._
 
 **Remark** reading the [gitglossary][git-glossary] (_pathspec_ section) you see a slight difference to the `.gitignore` file

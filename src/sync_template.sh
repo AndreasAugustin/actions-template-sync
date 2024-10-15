@@ -76,6 +76,12 @@ debug "TEMPLATE_GIT_HASH ${TEMPLATE_GIT_HASH}"
 debug "PR_BRANCH ${PR_BRANCH}"
 debug "PR_BODY ${PR_BODY}"
 
+# Check if the Ignore File exists inside .github folder or if it doesn't exist at all
+if [[ -f ".github/${TEMPLATE_SYNC_IGNORE_FILE_PATH}" || ! -f "${TEMPLATE_SYNC_IGNORE_FILE_PATH}" ]]; then
+  debug "using ignore file as in .github folder"
+    TEMPLATE_SYNC_IGNORE_FILE_PATH=".github/${TEMPLATE_SYNC_IGNORE_FILE_PATH}"
+fi
+
 #####################################################
 # Functions
 #####################################################
