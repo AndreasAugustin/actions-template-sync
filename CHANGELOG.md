@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.4.1](https://github.com/AndreasAugustin/actions-template-sync/compare/v2.4.0...v2.4.1) (2024-10-15)
+
+
+### Bug Fixes
+
+* incorrect argument passing to git push ([#574](https://github.com/AndreasAugustin/actions-template-sync/issues/574)) ([44e59ba](https://github.com/AndreasAugustin/actions-template-sync/commit/44e59ba38bf03b73ddf96462365826b01cf7f1b8))
+
 ## [2.4.0](https://github.com/AndreasAugustin/actions-template-sync/compare/v2.3.0...v2.4.0) (2024-10-15)
 
 
