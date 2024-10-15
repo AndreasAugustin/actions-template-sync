@@ -293,19 +293,19 @@ function push () {
   local is_force=$2
   local is_with_tags=$3
 
-  local additional_params=" "
+  args=(--set-upstream origin "${branch}")
 
   if [ "$is_force" == true ] ; then
     warn "forcing the push."
-    additional_params="${additional_params}--force "
+    args+=(--force)
   fi
 
   if [ "$is_with_tags" == true ] ; then
     warn "include tags."
-    additional_params="${additional_params}--tags "
+    args+=(--tags)
   fi
 
-  git push "${additional_params}"--set-upstream origin "${branch}"
+  git push "${args[@]}"
 }
 
 ####################################
