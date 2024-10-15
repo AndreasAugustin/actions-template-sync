@@ -72,6 +72,9 @@ inputs:
     description: "[optional] set if your private gpg key has a password"
   steps:
     description: "[optional] set the steps to execute within the action"
+  template_sync_ignore_file_path:
+    description: "[optional] set the path to the ignore file"
+    default: ".templatesyncignore"
   is_with_tags:
     description: "[optional] set to true if tags should be synced"
     default: "false"
@@ -118,4 +121,5 @@ runs:
         GPG_PRIVATE_KEY: ${{ inputs.gpg_private_key }}
         GPG_PASSPHRASE: ${{ inputs.gpg_passphrase }}
         STEPS: ${{ inputs.steps }}
+        TEMPLATE_SYNC_IGNORE_FILE_PATH: ${{ inputs.template_sync_ignore_file_path }}
         IS_WITH_TAGS: ${{ inputs.is_with_tags }}
