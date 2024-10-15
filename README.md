@@ -270,6 +270,7 @@ jobs:
 | gpg_passphrase | `[optional]` set if your optionial gpg private key has a passphrase | `false` | |
 | steps | `[optional] add the steps you want to execute within the action` | `false` | all steps will be executed |
 | template_sync_ignore_file_path | `[optional] set the path to the ignore file.` | false |`.templatesyncignore` |
+| is_with_tags | `[optional]` set to `true` if tags should be synced | `false` | `false` |
 
 ### Action Outputs
 
@@ -574,6 +575,30 @@ This feature will force delete files if those are deelted within the source repo
 :warning: it is highly related to the `git_remote_pull_params` config parameter and won't work with the default.
 You need to change the default one e.g. to `git_remote_pull_params: --allow-unrelated-histories --strategy=recursive --no-edit`.
 
+## GHES and custom runners
+
+Some notes if you use GitHub Enterprise Server (GHES) and/or custom runners.
+The action script is based on bash. That means your runner must be able to run bash scripts.
+Furthermore you need to have the following command line tools installed:
+
+* ssh
+* [GitHub cli][gh-cli]
+* git
+* optional (dependent the features you are using)
+  * [git lfs][git-lfs] if you are using the lfs functionality
+  * [yq][yq] if you are using the hook functionality
+  * gpg if you are using the git signing functionality
+
+Furthermore most likely you have a custom domain name. Therefore you should configure the `hostname` GitHub action parameter.
+
+### Remark
+
+:whale: There is also a docker image available which has all needed tools installed. This is helpful e.g. if you are not able to use a remote action.
+The idea is to use the [docker action][action-docker]
+
+* [GitHub registry][github-repo]
+* [Dockerhub registry][dockerhub-repo]
+
 ## Troubleshooting
 
 * refusing to allow a GitHub App to create or update workflow `.github/workflows/******.yml` without `workflows` permission
@@ -767,3 +792,6 @@ specification. Contributions of any kind are welcome!
 [github-create-secret]: https://docs.github.com/en/actions/security-guides/using-secrets-in-github-actions#creating-secrets-for-a-repository
 [github-create-gpg-key]: https://docs.github.com/en/authentication/managing-commit-signature-verification/generating-a-new-gpg-key
 [github-gh-cli-pr-edit]: https://cli.github.com/manual/gh_pr_edit
+[gh-cli]: https://github.com/cli/cli
+[yq]: https://github.com/mikefarah/yq
+[git-lfs]: https://github.com/git-lfs/git-lfs
