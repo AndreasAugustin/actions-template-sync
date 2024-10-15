@@ -344,6 +344,16 @@
         "ideas",
         "code"
       ]
+    },
+    {
+      "login": "icco",
+      "name": "Nat Welch",
+      "avatar_url": "https://avatars.githubusercontent.com/u/20201?v=4",
+      "profile": "https://natwelch.com",
+      "contributions": [
+        "bug",
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
