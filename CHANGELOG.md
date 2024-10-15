@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.4.0](https://github.com/AndreasAugustin/actions-template-sync/compare/v2.3.0...v2.4.0) (2024-10-15)
+
+
+### Features
+
+* **#567:** Add the name of the .templatesyncignore file as a parameter  ([#568](https://github.com/AndreasAugustin/actions-template-sync/issues/568)) ([03661a8](https://github.com/AndreasAugustin/actions-template-sync/commit/03661a8560de11c0fb0203642f69799f481286bd))
+
 ## [2.3.0](https://github.com/AndreasAugustin/actions-template-sync/compare/v2.2.3...v2.3.0) (2024-10-14)
 
 
