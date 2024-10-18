@@ -32,12 +32,16 @@ fi
 ############################################
 
 DEFAULT_REPO_HOSTNAME="github.com"
+DEFAULT_REPO_PROTO="https"
+DEFAULT_REPO_PORT="443"
 SOURCE_REPO_HOSTNAME="${HOSTNAME:-${DEFAULT_REPO_HOSTNAME}}"
+SOURCE_REPO_PROTO="${SOURCE_REPO_PROTO:-${DEFAULT_REPO_PROTO}}"
+SOURCE_REPO_PORT="${SOURCE_REPO_PORT:-${DEFAULT_REPO_PORT}}"
 GIT_USER_NAME="${GIT_USER_NAME:-${GITHUB_ACTOR}}"
 GIT_USER_EMAIL="${GIT_USER_EMAIL:-github-action@actions-template-sync.noreply.${SOURCE_REPO_HOSTNAME}}"
 
 # In case of ssh template repository this will be overwritten
-SOURCE_REPO_PREFIX="https://${SOURCE_REPO_HOSTNAME}/"
+SOURCE_REPO_PREFIX="${SOURCE_REPO_PROTO}://${SOURCE_REPO_HOSTNAME}:${SOURCE_REPO_PORT}/"
 
 ################################################
 # Functions
@@ -170,7 +174,14 @@ function git_init() {
 if [[ -n "${SSH_PRIVATE_KEY_SRC}" ]] &>/dev/null; then
   ssh_setup "${SSH_PRIVATE_KEY_SRC}" "${SOURCE_REPO_HOSTNAME}"
 elif [[ "${SOURCE_REPO_HOSTNAME}" != "${DEFAULT_REPO_HOSTNAME}" ]]; then
-  gh auth login --git-protocol "https" --hostname "${SOURCE_REPO_HOSTNAME}" --with-token <<< "${GITHUB_TOKEN}"
+  if [[ "${IS_TARGET_GITEA}" == 'true' ]]; then
+    while IFS='/' read -ra SR; do
+      SOURCE_REPO_USER=${SR[0]}
+    done <<< "$SOURCE_REPO_PATH"
+    tea login add --name source --url "${SOURCE_REPO_PREFIX}" --user ${SOURCE_REPO_USER} --password <<< "${GITHUB_TOKEN}" --token <<< "${GITHUB_TOKEN}"
+  else
+    gh auth login --git-protocol "https" --hostname "${SOURCE_REPO_HOSTNAME}" --with-token <<< "${GITHUB_TOKEN}"
+  fi
 fi
 
 export SOURCE_REPO="${SOURCE_REPO_PREFIX}${SOURCE_REPO_PATH}"

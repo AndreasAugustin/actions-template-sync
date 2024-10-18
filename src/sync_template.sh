@@ -198,6 +198,11 @@ function cleanup_older_prs () {
     return 0
   fi
 
+  if [[ "${IS_TARGET_GITEA}" ]]; then
+    gitea_cleanup_older_prs "${upstream_branch}" "${pr_labels}" "${is_keep_branch_on_pr_cleanup}" "${local_branch_name}"
+    return
+  fi
+
   older_prs=$(gh pr list \
     --base "${upstream_branch}" \
     --state open \
@@ -224,6 +229,50 @@ function cleanup_older_prs () {
     fi
   done
 }
+
+#######################################
+# gitea adjusted cleanup older prs based on labels.
+# Arguments:
+#   upstream_branch
+#   pr_labels
+#   is_keep_branch_on_pr_cleanup
+#   local_branch_name
+#######################################
+function gitea_cleanup_older_prs () {
+  local upstream_branch=$1
+  local pr_labels=$2
+  local is_keep_branch_on_pr_cleanup=$3
+  local local_branch_name=$4
+
+  older_prs=$(tea pr list \
+    --base "${upstream_branch}" \
+    --state open \
+    --label "${pr_labels}" \
+    --json number,headRefName \
+    --jq '.[]')
+
+  for older_pr in $older_prs
+  do
+    branch_name=$(echo "$older_pr" | jq -r .headRefName)
+    pr_number=$(echo "$older_pr" | jq -r .number)
+
+    if [ "$branch_name" == "$local_branch_name" ] ; then
+      warn "local branch name equals remote pr branch name ${local_branch_name}. Skipping pr cleanup for this branch"
+      continue
+    fi
+
+    if [ "$is_keep_branch_on_pr_cleanup" == true ] ; then
+      tea comment 
+      tea pr close -c "[actions-template-sync] :construction_worker: automatically closed because there is a new open PR. Branch is kept alive" "$pr_number"
+      debug "Closed PR #${older_pr} but kept the branch"
+    else
+      tea comment 
+      tea pr close -c "[actions-template-sync] :construction_worker: automatically closed because there is a new open PR" -d "$pr_number"
+      debug "Closed PR #${older_pr}"
+    fi
+  done
+}
+
 
 ##################################
 # pull source changes
@@ -259,6 +308,11 @@ function eventual_create_labels () {
     retun 0
   fi
 
+  if [[ "${IS_TARGET_GITEA}" ]]; then
+    gitea_create_labels "${pr_labels}" 
+    return
+  fi
+
   readarray -t labels_array < <(awk -F',' '{ for( i=1; i<=NF; i++ ) print $i }' <<<"${pr_labels}")
   for label in "${labels_array[@]}"
   do
@@ -267,6 +321,31 @@ function eventual_create_labels () {
     --limit 1 \
     --json name \
     --template '{{range .}}{{printf "%v" .name}}{{"\n"}}{{end}}')
+
+    if [ "${search_result}" = "${label##[[:space:]]}" ]; then
+      info "label '${label##[[:space:]]}' was found in the repository"
+    else
+      if gh label create "${label}"; then
+        info "label '${label}' was missing and has been created"
+      else
+        warn "label creation did not work. For any reason the former check sometimes is failing"
+      fi
+    fi
+  done
+}
+
+#######################################
+# eventual create labels (if they are not existent).
+# Arguments:
+#   pr_labels
+#######################################
+function gitea_create_labels () {
+  local pr_labels=$1
+
+  readarray -t labels_array < <(awk -F',' '{ for( i=1; i<=NF; i++ ) print $i }' <<<"${pr_labels}")
+  for label in "${labels_array[@]}"
+  do
+    search_result=$(tea label list --output csv | cut -d "," -f 3 | tr -d \")
 
     if [ "${search_result}" = "${label##[[:space:]]}" ]; then
       info "label '${label##[[:space:]]}' was found in the repository"
@@ -325,12 +404,49 @@ function create_pr() {
   local labels=$4
   local reviewers=$5
 
+  if [[ "${IS_TARGET_GITEA}" ]]; then
+    gitea_create_pr "${title}" "${body}" "${branch}" "${labels}" "${reviewers}"
+    return
+  fi
+
   gh pr create \
     --title "${title}" \
     --body "${body}" \
     --base "${branch}" \
     --label "${labels}" \
     --reviewer "${reviewers}" || create_pr_has_issues=true
+
+  if [ "$create_pr_has_issues" == true ] ; then
+    warn "Creating the PR failed."
+    warn "Eventually it is already existent."
+    return 1
+  fi
+  return 0
+}
+
+####################################
+# gitea modified creates a pr
+# Arguments:
+#   title
+#   body
+#   branch
+#   labels
+#   reviewers
+###################################
+function gitea_create_pr() {
+  info "create pr"
+  local title=$1
+  local body=$2
+  local branch=$3
+  local labels=$4
+  local reviewers=$5
+
+  tea pr create \
+    --title "${title}" \
+    --description "${body}" \
+    --base "${branch}" \
+    --labels "${labels}" \
+    --assignees "${reviewers}" || create_pr_has_issues=true
 
   if [ "$create_pr_has_issues" == true ] ; then
     warn "Creating the PR failed."
@@ -357,6 +473,11 @@ function create_or_edit_pr() {
   local labels=$4
   local reviewers=$5
   local pr_branch=$6
+
+  if [[ "${IS_TARGET_GITEA}" ]]; then
+    gitea_create_pr "${title}" "${body}" "${upstream_branch}" "${labels}" "${reviewers}" || error "Unable to edit PRs in gitea"
+    return
+  fi
 
   create_pr "${title}" "${body}" "${upstream_branch}" "${labels}" "${reviewers}" || gh pr edit \
     --title "${title}" \

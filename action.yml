@@ -123,3 +123,6 @@ runs:
         STEPS: ${{ inputs.steps }}
         TEMPLATE_SYNC_IGNORE_FILE_PATH: ${{ inputs.template_sync_ignore_file_path }}
         IS_WITH_TAGS: ${{ inputs.is_with_tags }}
+        IS_TARGET_GITEA: ${{ inputs.is_target_gitea }}
+        SOURCE_REPO_PROTO: ${{ inputs.source_repo_proto }}
+        
