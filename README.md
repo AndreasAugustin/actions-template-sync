@@ -1,4 +1,10 @@
 # actions-template-sync
+
+Fork of [![actions-template-sync](https://github.com/AndreasAugustin/actions-template-sync/) to enable syncing TO gitea
+
+
+
+
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
 [![All Contributors](https://img.shields.io/badge/all_contributors-35-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
