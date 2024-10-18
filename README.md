@@ -1,6 +1,6 @@
 # actions-template-sync
 
-Fork of [![actions-template-sync](https://github.com/AndreasAugustin/actions-template-sync/) to enable syncing TO gitea
+Fork of [actions-template-sync](https://github.com/AndreasAugustin/actions-template-sync/) to enable syncing TO gitea
 
 
 
