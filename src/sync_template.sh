@@ -262,12 +262,13 @@ function gitea_cleanup_older_prs () {
     fi
 
     if [ "$is_keep_branch_on_pr_cleanup" == true ] ; then
-      tea comment 
-      tea pr close -c "[actions-template-sync] :construction_worker: automatically closed because there is a new open PR. Branch is kept alive" "$pr_number"
+      tea comment $pr_number "[actions-template-sync] :construction_worker: automatically closed because there is a new open PR. Branch is kept alive" 
+      tea pr close $pr_number
       debug "Closed PR #${older_pr} but kept the branch"
     else
-      tea comment 
-      tea pr close -c "[actions-template-sync] :construction_worker: automatically closed because there is a new open PR" -d "$pr_number"
+      tea comment $pr_number "[actions-template-sync] :construction_worker: automatically closed because there is a new open PR" 
+      tea pr close $pr_number
+      tea pr clean $pr_number
       debug "Closed PR #${older_pr}"
     fi
   done
@@ -343,14 +344,13 @@ function gitea_create_labels () {
   local pr_labels=$1
 
   readarray -t labels_array < <(awk -F',' '{ for( i=1; i<=NF; i++ ) print $i }' <<<"${pr_labels}")
+  readarray -t search_result < <(tea label list --output csv | cut -d "," -f 3 | tr -d \" | tail -n +2)
   for label in "${labels_array[@]}"
   do
-    search_result=$(tea label list --output csv | cut -d "," -f 3 | tr -d \")
-
-    if [ "${search_result}" = "${label##[[:space:]]}" ]; then
-      info "label '${label##[[:space:]]}' was found in the repository"
+    if [[ $(echo ${search_result[@]} | fgrep -w $label) ]]; then
+      info "label '${label}' was found in the repository"
     else
-      if gh label create "${label}"; then
+      if tea label create --name "${label}"; then
         info "label '${label}' was missing and has been created"
       else
         warn "label creation did not work. For any reason the former check sometimes is failing"

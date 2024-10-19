@@ -78,6 +78,12 @@ inputs:
   is_with_tags:
     description: "[optional] set to true if tags should be synced"
     default: "false"
+  is_target_gitea:
+    description: "[optional] set to true if the target repo is in gitea (use `tea` intead of `gh` for cli commands)"
+    default: "false"
+  source_repo_proto:
+    description: "[optional] protocol used to pull source repo. Options: 'http' or 'https' (default)"
+    default: "https"
 outputs:
   pr_branch:
     description: "The name of the PR branch"
