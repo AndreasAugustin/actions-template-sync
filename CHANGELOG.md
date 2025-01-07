@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.4.2](https://github.com/AndreasAugustin/actions-template-sync/compare/v2.4.1...v2.4.2) (2025-01-07)
+
+
+### Bug Fixes
+
+* **#551:** fix issue with file deletion ([#596](https://github.com/AndreasAugustin/actions-template-sync/issues/596)) ([1641155](https://github.com/AndreasAugustin/actions-template-sync/commit/164115568a2f8a4ea67dda06f786a9c90624971d))
+* **#591:** add missing gh cli precheck ([#594](https://github.com/AndreasAugustin/actions-template-sync/issues/594)) ([574812a](https://github.com/AndreasAugustin/actions-template-sync/commit/574812a4ea91dcaa3ffe39ace616fd329b209e43))
+
 ## [2.4.1](https://github.com/AndreasAugustin/actions-template-sync/compare/v2.4.0...v2.4.1) (2024-10-15)
 
 
