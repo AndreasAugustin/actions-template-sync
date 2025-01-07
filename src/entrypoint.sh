@@ -27,6 +27,11 @@ if [[ -z "${HOME}" ]]; then
   exit 1
 fi
 
+if ! [ -x "$(command -v gh)" ]; then
+  err "github-cli gh is not installed. 'https://github.com/cli/cli'";
+  exit 1;
+fi
+
 ############################################
 # Variables
 ############################################
