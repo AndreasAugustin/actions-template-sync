@@ -55,6 +55,9 @@ GIT_REMOTE_PULL_PARAMS="${GIT_REMOTE_PULL_PARAMS:---allow-unrelated-histories --
 
 TEMPLATE_REMOTE_GIT_HASH=$(git ls-remote "${SOURCE_REPO}" HEAD | awk '{print $1}')
 SHORT_TEMPLATE_GIT_HASH=$(git rev-parse --short "${TEMPLATE_REMOTE_GIT_HASH}")
+LOCAL_CURRENT_GIT_HASH=$(git rev-parse HEAD)  # need to be run before a pull to get the current local git hash
+
+info "current git hash: ${LOCAL_CURRENT_GIT_HASH}"
 
 export TEMPLATE_GIT_HASH=${SHORT_TEMPLATE_GIT_HASH}
 export PR_BRANCH="${PR_BRANCH_NAME_PREFIX}_${TEMPLATE_GIT_HASH}"
@@ -162,11 +165,13 @@ function check_staged_files_available_graceful_exit() {
 
 #######################################
 # force source file deletion if they had been deleted
+# Arguments:
+#    local_current_git_hash
 #######################################
 function force_delete_files() {
   info "force delete files"
   warn "force file deletion is enabled. Deleting files which are deleted within the target repository"
-  local_current_git_hash=$(git rev-parse HEAD)
+  local local_current_git_hash=$1
 
   info "current git hash: ${local_current_git_hash}"
 
@@ -435,7 +440,7 @@ function arr_checkout_branch_and_pull() {
   restore_templatesyncignore_file "${TEMPLATE_SYNC_IGNORE_FILE_PATH}"
 
   if [ "$IS_FORCE_DELETION" == "true" ]; then
-    force_delete_files
+    force_delete_files "${LOCAL_CURRENT_GIT_HASH}"
   fi
 
   echo "::endgroup::"
