@@ -5,8 +5,8 @@ branding:
   icon: cloud
   color: green
 inputs:
-  github_token:
-    description: 'Token for the repo. Can be passed in using $\{{ secrets.GITHUB_TOKEN }}'
+  org_github_token:
+    description: 'GitHub Organization Token for the repo to be synced from. Can be passed in using $\{{ secrets.ORG_GITHUB_TOKEN }}'
     required: true
     default: ${{ github.token }}
   source_repo_path:
@@ -95,7 +95,7 @@ runs:
       shell: bash
       id: sync
       env:
-        GITHUB_TOKEN: ${{ inputs.github_token }}
+        ORG_GITHUB_TOKEN: ${{ inputs.org_github_token }}
         SOURCE_REPO_PATH: ${{ inputs.source_repo_path }}
         UPSTREAM_BRANCH: ${{ inputs.upstream_branch }}
         SSH_PRIVATE_KEY_SRC: ${{ inputs.source_repo_ssh_private_key }}
