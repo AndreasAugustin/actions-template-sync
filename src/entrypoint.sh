@@ -12,8 +12,8 @@ source "${SCRIPT_DIR}/sync_common.sh"
 # Precheks
 ##########################################
 
-if [[ -z "${GITHUB_TOKEN}" ]]; then
-    err "Missing input 'github_token: \${{ secrets.GITHUB_TOKEN }}'.";
+if [[ -z "${ORG_GITHUB_TOKEN}" ]]; then
+    err "Missing input 'org_github_token: \${{ secrets.ORG_GITHUB_TOKEN }}'.";
     exit 1;
 fi
 
@@ -175,7 +175,7 @@ function git_init() {
 if [[ -n "${SSH_PRIVATE_KEY_SRC}" ]] &>/dev/null; then
   ssh_setup "${SSH_PRIVATE_KEY_SRC}" "${SOURCE_REPO_HOSTNAME}"
 elif [[ "${SOURCE_REPO_HOSTNAME}" != "${DEFAULT_REPO_HOSTNAME}" ]]; then
-  gh auth login --git-protocol "https" --hostname "${SOURCE_REPO_HOSTNAME}" --with-token <<< "${GITHUB_TOKEN}"
+  gh auth login --git-protocol "https" --hostname "${SOURCE_REPO_HOSTNAME}" --with-token <<< "${ORG_GITHUB_TOKEN}"
 fi
 
 export SOURCE_REPO="${SOURCE_REPO_PREFIX}${SOURCE_REPO_PATH}"
