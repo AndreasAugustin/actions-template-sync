@@ -263,7 +263,7 @@ function pull_source_changes() {
     unset GH_TOKEN     
 
     info "logging in into the target with hostname ${GITHUB_SERVER_URL}"
-    gh auth login --git-protocol "https" --hostname "github.com"
+    gh auth login --git-protocol "https" --hostname "github.com" --with-token <<<"${TARGET_GH_TOKEN}"
     gh auth switch --hostname "${GITHUB_SERVER_URL}"   
   fi
 
