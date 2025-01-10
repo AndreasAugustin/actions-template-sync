@@ -256,16 +256,12 @@ function pull_source_changes() {
 
   if [[ -n "${SRC_SSH_PRIVATEKEY_ABS_PATH}" ]] &>/dev/null; then
     info "we are using ssh for the source repo. No need to logout."
-  else     
-        # Check if there is an active session before logging out
-    gh auth status --hostname "${SOURCE_REPO_HOSTNAME}"
-    gh auth logout --hostname "${SOURCE_REPO_HOSTNAME}"
-    info "logged out from ${SOURCE_REPO_HOSTNAME}"    
-    
-    info "logging in into the target with hostname ${HOSTNAME}"
-    gh auth login --git-protocol "https" --hostname "${HOSTNAME}" --with-token <<< "${GH_TOKEN}"
-    info "logged in"
-    gh auth switch --hostname "${HOSTNAME}"
+  else
+    gh auth status --hostname "${SOURCE_REPO_HOSTNAME}"    
+    gh auth logout --hostname "${SOURCE_REPO_HOSTNAME}" --user "github-actions[bot]"
+
+    info "logging in into the target with hostname ${GITHUB_SERVER_URL}"
+    gh auth login --git-protocol "https" --hostname "${GITHUB_SERVER_URL}"
   fi
 
   if [ "$pull_has_issues" == true ] ; then
