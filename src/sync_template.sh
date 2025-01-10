@@ -259,6 +259,7 @@ function pull_source_changes() {
   else 
     info "logging in into the target with hostname ${HOSTNAME}"
     gh auth login --git-protocol "https" --hostname "${HOSTNAME}" --with-token <<< "${GH_TOKEN}"
+    info "logged in"
     gh auth switch --hostname "${HOSTNAME}"
   fi
 
