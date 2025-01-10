@@ -258,7 +258,7 @@ function pull_source_changes() {
     info "we are using ssh for the source repo. No need to logout."
   else 
     info "logging in into the target with hostname ${GITHUB_SERVER_URL}"   
-    gh auth switch --hostname "${GITHUB_SERVER_URL}"
+    gh auth switch --hostname "github.com/alexvanderberkel/actions-template-sync"
   fi
 
   if [ "$pull_has_issues" == true ] ; then
