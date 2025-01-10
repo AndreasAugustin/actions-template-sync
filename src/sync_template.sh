@@ -260,7 +260,7 @@ function pull_source_changes() {
     gh auth status --hostname "${SOURCE_REPO_HOSTNAME}"     
 
     info "logging in into the target with hostname ${GITHUB_SERVER_URL}"
-    gh auth login --git-protocol "https" --hostname "${GITHUB_SERVER_URL}"
+    gh auth login --git-protocol "https" --hostname "github.com"
     gh auth switch --hostname "${GITHUB_SERVER_URL}"   
   fi
 
