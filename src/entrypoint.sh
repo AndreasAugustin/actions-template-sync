@@ -160,6 +160,8 @@ function git_init() {
     mkdir -p "${HOME}"/.ssh
     ssh-keyscan -t rsa "${source_repo_hostname}" >> "${HOME}"/.ssh/known_hosts
   else
+    
+    info "Storing the target token"
     TARGET_GH_TOKEN=$(gh auth token)
     
     info "the source repository is located within GitHub."
