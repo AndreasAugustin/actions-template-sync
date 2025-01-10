@@ -259,7 +259,7 @@ function pull_source_changes() {
   else
     gh auth status --hostname "${SOURCE_REPO_HOSTNAME}"  
     gh auth status --active  
-    gh auth logout --hostname "${GITHUB_SERVER_URL}" --user "github-actions[bot]"
+    gh auth login --with-token   
 
     info "logging in into the target with hostname ${GITHUB_SERVER_URL}"
     gh auth login --git-protocol "https" --hostname "${GITHUB_SERVER_URL}"
