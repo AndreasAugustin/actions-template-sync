@@ -163,7 +163,7 @@ function git_init() {
     
     info "Storing the target token"
     TARGET_GH_TOKEN=$(gh auth token)
-    info "print ${TARGET_GH_TOKEN}"
+    
     
     info "the source repository is located within GitHub."
     gh auth setup-git --hostname "${source_repo_hostname}"

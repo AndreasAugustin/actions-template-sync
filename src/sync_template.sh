@@ -258,13 +258,10 @@ function pull_source_changes() {
     info "we are using ssh for the source repo. No need to logout."
   else
     gh auth status --hostname "${SOURCE_REPO_HOSTNAME}" 
-    gh auth status --active    
-
-    # Clear the GH_TOKEN environment variable
-    unset GH_TOKEN
+    gh auth status --active        
 
     info "logging in into the target with hostname ${GITHUB_SERVER_URL}"
-    gh auth login --git-protocol "https" --hostname "github.com" --with-token <<<"${TARGET_GH_TOKEN}"
+    gh auth login --git-protocol "https" --hostname "github.com" --with-token <<< "${TARGET_GH_TOKEN}"
     gh auth switch --hostname "${GITHUB_SERVER_URL}"   
   fi
 
