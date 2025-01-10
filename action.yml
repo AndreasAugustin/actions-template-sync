@@ -5,8 +5,8 @@ branding:
   icon: cloud
   color: green
 inputs:
-  org_github_token:
-    description: 'GitHub Organization Token for the repo to be synced from. Can be passed in using $\{{ secrets.ORG_GITHUB_TOKEN }}'
+  github_token:
+    description: 'GitHub Organization Token for the repo to be synced from. Can be passed in using $\{{ secrets.GITHUB_TOKEN }}'
     required: true
     default: ${{ github.token }}
   source_repo_path:
@@ -78,6 +78,9 @@ inputs:
   is_with_tags:
     description: "[optional] set to true if tags should be synced"
     default: "false"
+  target_github_token:
+    description: "[optional] the token of the target github repo"
+    default: ${{ github.token }}
 outputs:
   pr_branch:
     description: "The name of the PR branch"
@@ -95,7 +98,7 @@ runs:
       shell: bash
       id: sync
       env:
-        ORG_GITHUB_TOKEN: ${{ inputs.org_github_token }}
+        SOURCE_REPO_GITHUB_TOKEN: ${{ inputs.github_token }}
         SOURCE_REPO_PATH: ${{ inputs.source_repo_path }}
         UPSTREAM_BRANCH: ${{ inputs.upstream_branch }}
         SSH_PRIVATE_KEY_SRC: ${{ inputs.source_repo_ssh_private_key }}
@@ -123,3 +126,4 @@ runs:
         STEPS: ${{ inputs.steps }}
         TEMPLATE_SYNC_IGNORE_FILE_PATH: ${{ inputs.template_sync_ignore_file_path }}
         IS_WITH_TAGS: ${{ inputs.is_with_tags }}
+        GH_TOKEN: ${{ inputs.target_github_token }}
