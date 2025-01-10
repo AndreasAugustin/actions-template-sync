@@ -258,7 +258,7 @@ function pull_source_changes() {
     info "we are using ssh for the source repo. No need to logout."
   else
     gh auth status --hostname "${SOURCE_REPO_HOSTNAME}"  
-    gh auth --active  
+    gh auth status --active  
     gh auth logout --hostname "${GITHUB_SERVER_URL}" --user "github-actions[bot]"
 
     info "logging in into the target with hostname ${GITHUB_SERVER_URL}"
