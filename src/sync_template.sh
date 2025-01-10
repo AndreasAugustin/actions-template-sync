@@ -257,7 +257,7 @@ function pull_source_changes() {
   if [[ -n "${SRC_SSH_PRIVATEKEY_ABS_PATH}" ]] &>/dev/null; then
     info "we are using ssh for the source repo. No need to logout."
   else 
-    info "logging in into the target with hostname ${DEFAULT_REPO_HOSTNAME}"
+    info "logging in into the target with hostname ${HOSTNAME}"
     gh auth login --git-protocol "https" --hostname "${HOSTNAME}" --with-token <<< "${GH_TOKEN}"
     gh auth switch --hostname "${HOSTNAME}"
   fi
