@@ -177,8 +177,10 @@ elif [[ "${SOURCE_REPO_HOSTNAME}" != "${DEFAULT_REPO_HOSTNAME}" ]]; then
 
   if [[ "${SOURCE_GITHUB_TOKEN}" == "" ]]; then
     gh auth login --git-protocol "https" --hostname "${SOURCE_REPO_HOSTNAME}" --with-token <<< "${GH_TOKEN}"
+    info "default value used"
   else
     gh auth login --git-protocol "https" --hostname "${SOURCE_REPO_HOSTNAME}" --with-token <<< "${SOURCE_REPO_GITHUB_TOKEN}"
+    "github app used"
   fi
 fi
 
