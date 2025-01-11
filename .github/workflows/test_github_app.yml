@@ -1,0 +1,43 @@
+name: test-github_app
+
+on:
+  push:
+  #   branches:
+  #     - "!main"
+  # pull_request:
+  workflow_call:
+  workflow_dispatch:
+
+jobs:
+  test-implementation-job:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      # To use this repository's private action, you must check out the repository
+      - name: token-generation
+        uses: actions/create-github-app-token@v1
+        id: app-token
+        with:
+          app-id: ${{ secrets.GITHUB_APP_ID }}
+          private-key: ${{ secrets.APP_PEM_FILE }}
+          owner: alexvanderberkel
+          repositories: public-resources
+      
+      - name: Checkout
+        # https://github.com/actions/checkout#usage
+        uses: actions/checkout@v4
+        with:          
+          token: ${{ steps.app-token.outputs.token }}             
+      
+      - name: Test action step
+        uses: ./ # Uses an action in the root directory
+        env:
+          MY_VAR: "bar"
+        with:
+          source_repo_path: AndreasAugustin/template.git
+          source_github_token: ${{ steps.app-token.outputs.token }}
+          upstream_branch: main
+          is_dry_run: true
+          is_allow_hooks: true
