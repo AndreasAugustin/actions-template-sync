@@ -78,9 +78,9 @@ inputs:
   is_with_tags:
     description: "[optional] set to true if tags should be synced"
     default: "false"
-  target_github_token:
+  source_github_token:
     description: "[optional] the token of the target github repo"
-    default: ${{ github.token }}
+    default: ""    
 outputs:
   pr_branch:
     description: "The name of the PR branch"
@@ -98,7 +98,7 @@ runs:
       shell: bash
       id: sync
       env:
-        SOURCE_REPO_GITHUB_TOKEN: ${{ inputs.github_token }}
+        SOURCE_REPO_GITHUB_TOKEN: ${{ inputs.source_github_token}}
         SOURCE_REPO_PATH: ${{ inputs.source_repo_path }}
         UPSTREAM_BRANCH: ${{ inputs.upstream_branch }}
         SSH_PRIVATE_KEY_SRC: ${{ inputs.source_repo_ssh_private_key }}
@@ -126,4 +126,4 @@ runs:
         STEPS: ${{ inputs.steps }}
         TEMPLATE_SYNC_IGNORE_FILE_PATH: ${{ inputs.template_sync_ignore_file_path }}
         IS_WITH_TAGS: ${{ inputs.is_with_tags }}
-        GH_TOKEN: ${{ inputs.target_github_token }}        
+        GH_TOKEN: ${{ inputs.github_token }}        
