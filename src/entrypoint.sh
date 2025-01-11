@@ -159,11 +159,11 @@ function git_init() {
     mkdir -p "${HOME}"/.ssh
     ssh-keyscan -t rsa "${source_repo_hostname}" >> "${HOME}"/.ssh/known_hosts
   else
-    info "the source repository is located within GitHub."
-    unset GITHUB_TOKEN
-    gh auth login --git-protocol "https" --hostname "${SOURCE_REPO_HOSTNAME}" --with-token <<< "${SOURCE_GITHUB_TOKEN}"
+    info "the source repository is located within GitHub."       
     gh auth setup-git --hostname "${source_repo_hostname}"
     gh auth status --hostname "${source_repo_hostname}"
+    gh auth logout --hostname "${source_repo_hostname}"
+    gh auth login --git-protocol "https" --hostname "${SOURCE_REPO_HOSTNAME}" --with-token <<< "${SOURCE_GITHUB_TOKEN}"
   fi
   echo "::endgroup::"
 }
