@@ -38,7 +38,7 @@ jobs:
         with:
           source_repo_path: alexvanderberkel/public-resources.git
           source_github_token: ${{ steps.app-token.outputs.token }}
-          gh_token: ${{ steps.app-token.outputs.token }}
+          github_token: ${{ steps.app-token.outputs.token }}
           upstream_branch: main
           is_dry_run: true
           is_allow_hooks: true
