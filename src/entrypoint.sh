@@ -160,6 +160,7 @@ function git_init() {
     ssh-keyscan -t rsa "${source_repo_hostname}" >> "${HOME}"/.ssh/known_hosts
   else
     info "the source repository is located within GitHub."
+    gh auth login --git-protocol "https" --hostname "${SOURCE_REPO_HOSTNAME}" --with-token <<< "${SOURCE_REPO_GITHUB_TOKEN}"
     gh auth setup-git --hostname "${source_repo_hostname}"
     gh auth status --hostname "${source_repo_hostname}"
   fi
