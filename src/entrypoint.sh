@@ -13,8 +13,7 @@ source "${SCRIPT_DIR}/sync_common.sh"
 ##########################################
 
 if [[ -z "${SOURCE_REPO_GITHUB_TOKEN}" ]]; then
-    err "Missing input 'github_token: \${{ secrets.GITHUB_TOKEN }}'.";
-    exit 1;
+   info "Missing input for source_github_token. Will use \${{ secrets.GITHUB_TOKEN }}'.";
 fi
 
 if [[ -z "${SOURCE_REPO_PATH}" ]]; then
