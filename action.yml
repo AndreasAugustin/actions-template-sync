@@ -11,7 +11,7 @@ inputs:
     default: ""
   target_gh_token:
     description: 'GitHub Token for the repo to be synced from. Can be passed in using $\{{ secrets.GITHUB_TOKEN }}'
-    required: true
+    required: false
     default: ${{ github.token }}
   source_repo_path:
     description: "Repository path of the template"
