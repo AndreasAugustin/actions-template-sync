@@ -5,10 +5,14 @@ branding:
   icon: cloud
   color: green
 inputs:
-  github_token:
+  source_gh_token:
     description: 'GitHub Token for the repo to be synced from. Can be passed in using $\{{ secrets.GITHUB_TOKEN }}'
     required: true
-    default: ${{ github.token }}
+    default: ""
+  target_gh_token:
+    description: 'GitHub Token for the repo to be synced from. Can be passed in using $\{{ secrets.GITHUB_TOKEN }}'
+    required: true
+    default: ""
   source_repo_path:
     description: "Repository path of the template"
     required: true
