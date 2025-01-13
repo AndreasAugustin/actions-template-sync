@@ -162,6 +162,7 @@ function git_init() {
     info "the source repository is located within GitHub."       
     gh auth setup-git --hostname "${source_repo_hostname}"
     gh auth status --hostname "${source_repo_hostname}"
+    gh api /user | jq .login
     gh auth logout --hostname "template-sync-test-github-app"
     gh auth login --git-protocol "https" --hostname "${SOURCE_REPO_HOSTNAME}" --with-token <<< "${SOURCE_GITHUB_TOKEN}"
   fi
