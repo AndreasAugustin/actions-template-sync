@@ -37,7 +37,8 @@ jobs:
           MY_VAR: "bar"
         with:
           source_repo_path: alexvanderberkel/public-resources.git
-          source_gh_token: ${{ steps.app-token.outputs.token }}           
+          source_gh_token: ${{ steps.app-token.outputs.token }}     
+          target_gh_token: ${{ github.token }}      
           upstream_branch: main
           is_dry_run: true
           is_allow_hooks: true
