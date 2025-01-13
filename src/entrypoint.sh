@@ -12,7 +12,7 @@ source "${SCRIPT_DIR}/sync_common.sh"
 # Precheks
 ##########################################
 
-if [[ -z "${SOURCE_REPO_GITHUB_TOKEN}" ]]; then
+if [[ -z "${SOURCE_GH_TOKEN}" ]]; then
    info "Missing input for source_github_token. Will use \${{ secrets.GITHUB_TOKEN }}'.";
 fi
 
