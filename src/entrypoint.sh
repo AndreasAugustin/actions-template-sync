@@ -171,7 +171,7 @@ function git_init() {
     gh auth status --hostname "${source_repo_hostname}"
     gh auth setup-git --hostname "${source_repo_hostname}"
     info "done set git global configuration"          
-    
+    gh auth switch
     gh auth status --hostname "${source_repo_hostname}"
   fi
   echo "::endgroup::"
