@@ -165,6 +165,7 @@ function git_init() {
   else
     info "the source repository is located within GitHub."               
     gh auth login --git-protocol "https" --hostname "${SOURCE_REPO_HOSTNAME}" --with-token <<< "${SOURCE_GH_TOKEN}"
+    gh auth status --hostname "${source_repo_hostname}"
     info "login to the target repository"
     gh auth login --git-protocol "https" --hostname "${SOURCE_REPO_HOSTNAME}" --with-token <<< "${TARGET_GH_TOKEN}"
     gh auth status --hostname "${source_repo_hostname}"
