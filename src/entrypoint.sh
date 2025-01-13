@@ -181,13 +181,13 @@ if [[ -n "${SSH_PRIVATE_KEY_SRC}" ]] &>/dev/null; then
   ssh_setup "${SSH_PRIVATE_KEY_SRC}" "${SOURCE_REPO_HOSTNAME}"
 elif [[ "${SOURCE_REPO_HOSTNAME}" != "${DEFAULT_REPO_HOSTNAME}" ]]; then
 
-  gh auth login --git-protocol "https" --hostname "${SOURCE_REPO_HOSTNAME}" --with-token <<< "${SOURCE_GITHUB_TOKEN}"
+  gh auth login --git-protocol "https" --hostname "${SOURCE_REPO_HOSTNAME}" --with-token <<< "${SOURCE_GH_TOKEN}"
 
-  if [[ "${SOURCE_GITHUB_TOKEN}" == "" ]]; then
+  if [[ "${SOURCE_GH_TOKEN}" == "" ]]; then
     gh auth login --git-protocol "https" --hostname "${SOURCE_REPO_HOSTNAME}" --with-token <<< "${TARGET_GH_TOKEN}"
     info "default value used"
   else
-    gh auth login --git-protocol "https" --hostname "${SOURCE_REPO_HOSTNAME}" --with-token <<< "${SOURCE_GITHUB_TOKEN}"
+    gh auth login --git-protocol "https" --hostname "${SOURCE_REPO_HOSTNAME}" --with-token <<< "${SOURCE_GH_TOKEN}"
     "github app used"
   fi
 fi
