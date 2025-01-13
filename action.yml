@@ -98,7 +98,8 @@ runs:
       shell: bash
       id: sync
       env:
-        SOURCE_REPO_GITHUB_TOKEN: ${{ inputs.source_github_token}}
+        SOURCE_GH_TOKEN: ${{ inputs.source_github_token}}
+        TARGET_GH_TOKEN: ${{ inputs.github_token }}        
         SOURCE_REPO_PATH: ${{ inputs.source_repo_path }}
         UPSTREAM_BRANCH: ${{ inputs.upstream_branch }}
         SSH_PRIVATE_KEY_SRC: ${{ inputs.source_repo_ssh_private_key }}
@@ -126,4 +127,4 @@ runs:
         STEPS: ${{ inputs.steps }}
         TEMPLATE_SYNC_IGNORE_FILE_PATH: ${{ inputs.template_sync_ignore_file_path }}
         IS_WITH_TAGS: ${{ inputs.is_with_tags }}
-        GH_TOKEN: ${{ inputs.github_token }}        
+        
