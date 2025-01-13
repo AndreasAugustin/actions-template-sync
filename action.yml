@@ -99,7 +99,7 @@ runs:
       shell: bash
       id: sync
       env:
-        SOURCE_GH_TOKEN: ${{ inputs.source_g_token}}
+        SOURCE_GH_TOKEN: ${{ inputs.source_gh_token}}
         TARGET_GH_TOKEN: ${{ inputs.github_token }}        
         SOURCE_REPO_PATH: ${{ inputs.source_repo_path }}
         UPSTREAM_BRANCH: ${{ inputs.upstream_branch }}
