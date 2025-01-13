@@ -82,9 +82,6 @@ inputs:
   is_with_tags:
     description: "[optional] set to true if tags should be synced"
     default: "false"
-  source_github_token:
-    description: "[optional] the token of the target github repo"
-    default: ""    
 outputs:
   pr_branch:
     description: "The name of the PR branch"
@@ -102,7 +99,7 @@ runs:
       shell: bash
       id: sync
       env:
-        SOURCE_GH_TOKEN: ${{ inputs.source_gh_token}}
+        SOURCE_GH_TOKEN: ${{ inputs.source_g_token}}
         TARGET_GH_TOKEN: ${{ inputs.github_token }}        
         SOURCE_REPO_PATH: ${{ inputs.source_repo_path }}
         UPSTREAM_BRANCH: ${{ inputs.upstream_branch }}
