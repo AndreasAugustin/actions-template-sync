@@ -42,8 +42,6 @@ info "prechecks passed"
 # Variables
 ########################################################
 
-gh status
-
 if [[ -z "${UPSTREAM_BRANCH}" ]]; then
   UPSTREAM_BRANCH="$(git remote show origin | awk '/HEAD branch/ {print $NF}')"
   info "Missing env variable 'UPSTREAM_BRANCH' setting to remote default ${UPSTREAM_BRANCH}";
@@ -53,6 +51,8 @@ if [[ -n "${SRC_SSH_PRIVATEKEY_ABS_PATH}" ]]; then
   debug "using ssh private key for private source repository"
   export GIT_SSH_COMMAND="ssh -i ${SRC_SSH_PRIVATEKEY_ABS_PATH}"
 fi
+
+info "first steps done"
 
 TEMPLATE_SYNC_IGNORE_FILE_PATH="${TEMPLATE_SYNC_IGNORE_FILE_PATH:-".templatesyncignore"}"
 IS_WITH_TAGS="${IS_WITH_TAGS:-"false"}"
