@@ -36,7 +36,7 @@ jobs:
         env:
           MY_VAR: "bar"
         with:
-          source_repo_path: alexvanderberkel/private-test-repo.git
+          source_repo_path: alexvanderberkel/private-test-repo
           source_gh_token: ${{ steps.app-token.outputs.token }}     
           target_gh_token: ${{ github.token }}      
           upstream_branch: main
