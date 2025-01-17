@@ -62,11 +62,11 @@ GIT_REMOTE_PULL_PARAMS="${GIT_REMOTE_PULL_PARAMS:---allow-unrelated-histories --
 info "logged in as"
 gh auth status --hostname "${source_repo_hostname}"
 # Check if the repository exists
-REPO="alexvanderberkel/private-test-repo"
-if gh repo view "$REPO" &>/dev/null; then
-  info "Successfully accessed the repository $REPO"
+
+if gh repo view "$SOURCE_REPO" &>/dev/null; then
+  info "Successfully accessed the repository $SOURCE_REPO"
 else
-  err "Failed to access the repository $REPO"
+  err "Failed to access the repository $SOURCE_REPO"
   exit 1
 fi
 
