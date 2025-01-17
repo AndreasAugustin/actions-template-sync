@@ -54,6 +54,8 @@ fi
 
 info "first steps done"
 
+gh auth status --hostname "${source_repo_hostname}"
+
 TEMPLATE_SYNC_IGNORE_FILE_PATH="${TEMPLATE_SYNC_IGNORE_FILE_PATH:-".templatesyncignore"}"
 IS_WITH_TAGS="${IS_WITH_TAGS:-"false"}"
 IS_FORCE_PUSH_PR="${IS_FORCE_PUSH_PR:-"false"}"
