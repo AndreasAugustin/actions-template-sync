@@ -167,15 +167,21 @@ function git_init() {
     if [[ -n "${SOURCE_GH_TOKEN}" ]]; then
       info "login to the source repository"
       gh auth login --git-protocol "https" --hostname "${SOURCE_REPO_HOSTNAME}" --with-token <<< "${SOURCE_GH_TOKEN}"
+      info "login to the target repository"
+      gh auth login --git-protocol "https" --hostname "${SOURCE_REPO_HOSTNAME}" --with-token <<< "${TARGET_GH_TOKEN}"
+      gh auth status --hostname "${source_repo_hostname}"
+      gh auth setup-git --hostname "${source_repo_hostname}"
+      info "done set git global configuration"          
+      gh auth switch
+      gh auth status --hostname "${source_repo_hostname}"
+      info "done"      
+    else
+      gh auth login --git-protocol "https" --hostname "${SOURCE_REPO_HOSTNAME}" --with-token <<< "${TARGET_GH_TOKEN}"
+      gh auth setup-git --hostname "${source_repo_hostname}"
     fi    
-    info "login to the target repository"
-    gh auth login --git-protocol "https" --hostname "${SOURCE_REPO_HOSTNAME}" --with-token <<< "${TARGET_GH_TOKEN}"
-    gh auth status --hostname "${source_repo_hostname}"
-    gh auth setup-git --hostname "${source_repo_hostname}"
-    info "done set git global configuration"          
-    gh auth switch
-    gh auth status --hostname "${source_repo_hostname}"
-    info "done"
+   
+    
+  
   fi
   echo "::endgroup::"
 }
