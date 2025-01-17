@@ -91,6 +91,8 @@ if [[ -f ".github/${TEMPLATE_SYNC_IGNORE_FILE_PATH}" || ! -f "${TEMPLATE_SYNC_IG
   TEMPLATE_SYNC_IGNORE_FILE_PATH=".github/${TEMPLATE_SYNC_IGNORE_FILE_PATH}"
 fi
 
+info "variables done"
+
 #####################################################
 # Functions
 #####################################################
