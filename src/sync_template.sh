@@ -63,9 +63,6 @@ info "logged in as"
 gh auth status --hostname "${source_repo_hostname}"
 # Check if the repository exists
 
-unset GH_TOKEN
-export GH_TOKEN="${SOURCE_GH_TOKEN}"
-
 gh repo list --visibility public
 gh auth status --active
 gh repo list --visibility private
