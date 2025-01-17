@@ -63,7 +63,7 @@ info "logged in as"
 gh auth status --hostname "${source_repo_hostname}"
 # Check if the repository exists
 
-export GH_TOKEN = "${SOURCE_GH_TOKEN}"
+export GH_TOKEN="${SOURCE_GH_TOKEN}"
 
 if gh repo view "$SOURCE_REPO" &>/dev/null; then
   info "Successfully accessed the repository $SOURCE_REPO"
