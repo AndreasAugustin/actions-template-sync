@@ -42,6 +42,8 @@ info "prechecks passed"
 # Variables
 ########################################################
 
+gh status
+
 if [[ -z "${UPSTREAM_BRANCH}" ]]; then
   UPSTREAM_BRANCH="$(git remote show origin | awk '/HEAD branch/ {print $NF}')"
   info "Missing env variable 'UPSTREAM_BRANCH' setting to remote default ${UPSTREAM_BRANCH}";
