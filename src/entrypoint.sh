@@ -16,7 +16,7 @@ if [[ -z "${SOURCE_GH_TOKEN}" ]]; then
    info "Missing input for SOURCE_GH_TOKEN. Will use \${{ secrets.GITHUB_TOKEN }}'.";
 fi
 
-if [[ -z "${TARGET_GH_TOKEN}" ]]; then
+if [[ -z "${GH_TOKEN}" ]]; then
    err "Missing input for TARGET_GH_TOKEN. Will use \${{ secrets.GITHUB_TOKEN }}'.";
 fi
 
@@ -169,7 +169,7 @@ function git_init() {
       gh auth login --git-protocol "https" --hostname "${SOURCE_REPO_HOSTNAME}" --with-token <<< "${SOURCE_GH_TOKEN}"
     fi    
     info "login to the target repository"
-    gh auth login --git-protocol "https" --hostname "${SOURCE_REPO_HOSTNAME}" --with-token <<< "${TARGET_GH_TOKEN}"
+    gh auth login --git-protocol "https" --hostname "${SOURCE_REPO_HOSTNAME}" --with-token <<< "${GH_TOKEN}"
     gh auth status --hostname "${source_repo_hostname}"
     gh auth setup-git --hostname "${source_repo_hostname}"
     info "done set git global configuration"          
