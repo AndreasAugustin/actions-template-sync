@@ -66,7 +66,7 @@ gh auth status --hostname "${source_repo_hostname}"
 export GH_TOKEN="${SOURCE_GH_TOKEN}"
 
 gh repo list --visibility public
-gh auth token 
+gh auth status --active
 gh repo list --visibility private
 
 if gh repo view "$SOURCE_REPO" &>/dev/null; then
