@@ -37,6 +37,7 @@ if [[ -z "${TEMPLATE_SYNC_IGNORE_FILE_PATH}" ]]; then
   exit 1;
 fi
 
+info "prechecks passed"
 ########################################################
 # Variables
 ########################################################

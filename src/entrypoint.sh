@@ -173,10 +173,7 @@ function git_init() {
       gh auth switch
       gh auth status --hostname "${source_repo_hostname}"
       gh auth setup-git --hostname "${source_repo_hostname}"
-      info "done set git global configuration"         
-      
-      
-      info "done"      
+      info "done set git global configuration"    
     else
       gh auth login --git-protocol "https" --hostname "${SOURCE_REPO_HOSTNAME}" --with-token <<< "${TARGET_GH_TOKEN}"
       gh auth setup-git --hostname "${source_repo_hostname}"
@@ -188,6 +185,7 @@ function git_init() {
 ###################################################
 # Logic
 ###################################################
+
 
 # Forward to /dev/null to swallow the output of the private key
 if [[ -n "${SSH_PRIVATE_KEY_SRC}" ]] &>/dev/null; then
