@@ -58,22 +58,6 @@ IS_FORCE_PUSH_PR="${IS_FORCE_PUSH_PR:-"false"}"
 IS_KEEP_BRANCH_ON_PR_CLEANUP="${IS_KEEP_BRANCH_ON_PR_CLEANUP:-"false"}"
 GIT_REMOTE_PULL_PARAMS="${GIT_REMOTE_PULL_PARAMS:---allow-unrelated-histories --squash --strategy=recursive -X theirs}"
 
-# Error is located here
-info "logged in as"
-gh auth status --hostname "${source_repo_hostname}"
-# Check if the repository exists
-
-gh repo list --visibility public
-gh auth status --active
-gh repo list --visibility private
-
-if gh repo view "$SOURCE_REPO" &>/dev/null; then
-  info "Successfully accessed the repository $SOURCE_REPO"
-else
-  err "Failed to access the repository $SOURCE_REPO"
-  exit 1
-fi
-
 TEMPLATE_REMOTE_GIT_HASH=$(git ls-remote "${SOURCE_REPO}" HEAD | awk '{print $1}')
 SHORT_TEMPLATE_GIT_HASH=$(git rev-parse --short "${TEMPLATE_REMOTE_GIT_HASH}")
 LOCAL_CURRENT_GIT_HASH=$(git rev-parse HEAD)  # need to be run before a pull to get the current local git hash
@@ -271,8 +255,7 @@ function pull_source_changes() {
 
   if [[ -n "${SRC_SSH_PRIVATEKEY_ABS_PATH}" ]] &>/dev/null; then
     info "we are using ssh for the source repo. No need to logout."
-  elif [[ -n "${SOURCE_GH_TOKEN}" ]] &>/dev/null; then
-    gh auth status --hostname "${SOURCE_REPO_HOSTNAME}"
+  elif [[ -n "${SOURCE_GH_TOKEN}" ]] &>/dev/null; then    
     gh auth switch      
   fi
 

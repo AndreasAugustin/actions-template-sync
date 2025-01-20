@@ -157,22 +157,17 @@ function git_init() {
   else
     info "the source repository is located within GitHub."               
     if [[ -n "${SOURCE_GH_TOKEN}" ]]; then      
-      unset GITHUB_TOKEN
-      info "login to the source repository"      
-      gh auth login --git-protocol "https" --hostname "${SOURCE_REPO_HOSTNAME}" --with-token <<< "${SOURCE_GH_TOKEN}"  
-      info "login to the target repository"
+      unset GITHUB_TOKEN      
+      gh auth login --git-protocol "https" --hostname "${SOURCE_REPO_HOSTNAME}" --with-token <<< "${SOURCE_GH_TOKEN}"        
       if [[ -n "${TARGET_GH_TOKEN}" ]]; then
         gh auth login --git-protocol "https" --hostname "${SOURCE_REPO_HOSTNAME}" --with-token <<< "${TARGET_GH_TOKEN}"
-      fi      
-      gh auth status --hostname "${source_repo_hostname}"
-      gh auth switch
-      gh auth status --hostname "${source_repo_hostname}"
+      fi            
+      gh auth switch      
       gh auth setup-git --hostname "${source_repo_hostname}"
       info "done set git global configuration"    
     else
       info "default token to be used" 
-      gh auth setup-git --hostname "${source_repo_hostname}"
-      gh auth status --hostname "${source_repo_hostname}"
+      gh auth setup-git --hostname "${source_repo_hostname}"      
     fi       
   fi
   echo "::endgroup::"
