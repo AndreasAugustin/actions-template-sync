@@ -156,8 +156,7 @@ function git_init() {
     ssh-keyscan -t rsa "${source_repo_hostname}" >> "${HOME}"/.ssh/known_hosts
   else
     info "the source repository is located within GitHub."               
-    if [[ -n "${SOURCE_GH_TOKEN}" ]]; then
-      unset GH_TOKEN
+    if [[ -n "${SOURCE_GH_TOKEN}" ]]; then      
       info "login to the source repository"      
       gh auth login --git-protocol "https" --hostname "${SOURCE_REPO_HOSTNAME}" --with-token <<< "${SOURCE_GH_TOKEN}"  
       info "login to the target repository"
@@ -190,7 +189,7 @@ elif [[ "${SOURCE_REPO_HOSTNAME}" != "${DEFAULT_REPO_HOSTNAME}" ]]; then
   if [[ -n "${SOURCE_GH_TOKEN}" ]]; then
   gh auth login --git-protocol "https" --hostname "${SOURCE_REPO_HOSTNAME}" --with-token <<< "${SOURCE_GH_TOKEN}"
   else
-  gh auth login --git-protocol "https" --hostname "${SOURCE_REPO_HOSTNAME}" --with-token <<< "${GITHUB_TOKEN}"
+  gh auth login --git-protocol "https" --hostname "${SOURCE_REPO_HOSTNAME}" --with-token <<< "${TARGET_GH_TOKEN}"
   fi  
 fi
 
