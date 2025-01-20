@@ -169,9 +169,11 @@ function git_init() {
       gh auth setup-git --hostname "${source_repo_hostname}"
       info "done set git global configuration"    
     else
+      if [[ -n "${GITHUB_TOKEN}" ]]; then
         gh auth login --git-protocol "https" --hostname "${SOURCE_REPO_HOSTNAME}" --with-token <<< "${GITHUB_TOKEN}"
-        gh auth setup-git --hostname "${source_repo_hostname}"
-        gh auth status --hostname "${source_repo_hostname}"
+      fi
+      gh auth setup-git --hostname "${source_repo_hostname}"
+      gh auth status --hostname "${source_repo_hostname}"
     fi       
   fi
   echo "::endgroup::"
