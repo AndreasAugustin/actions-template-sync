@@ -16,8 +16,8 @@ if [[ -z "${SOURCE_GH_TOKEN}" ]]; then
    info "Missing input for SOURCE_GH_TOKEN. Will use \${{ secrets.GITHUB_TOKEN }}'.";
 fi
 
-if [[ -z "${TARGET_GH_TOKEN}" ]]; then
-   err "Missing input for TARGET_GH_TOKEN. Will use \${{ secrets.GITHUB_TOKEN }}'.";
+if [[ -z "${GITHUB_TOKEN}" ]]; then
+   err "Missing input for GITHUB_TOKEN. Will use \${{ secrets.GITHUB_TOKEN }}'.";
 fi
 
 if [[ -z "${SOURCE_REPO_PATH}" ]]; then
