@@ -12,11 +12,6 @@ source "${SCRIPT_DIR}/sync_common.sh"
 # Precheks
 ##########################################
 
-
-if [[ -z "${GITHUB_TOKEN}" ]]; then
-   err "Missing input for GITHUB_TOKEN. Will use \${{ secrets.GITHUB_TOKEN }}'.";
-fi
-
 if [[ -z "${SOURCE_REPO_PATH}" ]]; then
   err "Missing input 'source_repo_path: \${{ input.source_repo_path }}'.";
   exit 1
