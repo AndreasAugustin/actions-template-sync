@@ -23,6 +23,7 @@ jobs:
         uses: ./ # Uses an action in the root directory
         with:
           source_repo_path: AndreasAugustin/template.git
+          target_gh_token: ${{ github.token }}      
           is_dry_run: true
           is_force_push_pr: true
       - name: print output
@@ -44,6 +45,7 @@ jobs:
         uses: ./ # Uses an action in the root directory
         with:
           source_repo_path: AndreasAugustin/template.git
+          target_gh_token: ${{ github.token }}      
           is_dry_run: false
           is_force_push_pr: true
       - name: print output
