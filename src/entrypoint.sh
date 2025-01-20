@@ -12,9 +12,6 @@ source "${SCRIPT_DIR}/sync_common.sh"
 # Precheks
 ##########################################
 
-if [[ -z "${SOURCE_GH_TOKEN}" ]]; then
-   info "Missing input for SOURCE_GH_TOKEN. Will use \${{ secrets.GITHUB_TOKEN }}'.";
-fi
 
 if [[ -z "${GITHUB_TOKEN}" ]]; then
    err "Missing input for GITHUB_TOKEN. Will use \${{ secrets.GITHUB_TOKEN }}'.";
@@ -166,17 +163,20 @@ function git_init() {
     info "the source repository is located within GitHub."               
     if [[ -n "${SOURCE_GH_TOKEN}" ]]; then
       info "login to the source repository"      
-      gh auth login --git-protocol "https" --hostname "${SOURCE_REPO_HOSTNAME}" --with-token <<< "${SOURCE_GH_TOKEN}"
+      gh auth login --git-protocol "https" --hostname "${SOURCE_REPO_HOSTNAME}" --with-token <<< "${SOURCE_GH_TOKEN}"  
       info "login to the target repository"
-      gh auth login --git-protocol "https" --hostname "${SOURCE_REPO_HOSTNAME}" --with-token <<< "${GITHUB_TOKEN}"
+      if [[ -n "${TARGET_GH_TOKEN}" ]]; then
+        gh auth login --git-protocol "https" --hostname "${SOURCE_REPO_HOSTNAME}" --with-token <<< "${TARGET_GH_TOKEN}"
+      fi
+      gh auth login --git-protocol "https" --hostname "${SOURCE_REPO_HOSTNAME}" --with-token <<< "${TARGET_GH_TOKEN}"
       gh auth status --hostname "${source_repo_hostname}"
       gh auth switch
       gh auth status --hostname "${source_repo_hostname}"
       gh auth setup-git --hostname "${source_repo_hostname}"
       info "done set git global configuration"    
     else
-      gh auth login --git-protocol "https" --hostname "${SOURCE_REPO_HOSTNAME}" --with-token <<< "${GITHUB_TOKEN}"
-      gh auth setup-git --hostname "${source_repo_hostname}"
+        gh auth setup-git --hostname "${source_repo_hostname}"
+        gh auth status --hostname "${source_repo_hostname}"
     fi       
   fi
   echo "::endgroup::"
