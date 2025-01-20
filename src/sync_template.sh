@@ -271,7 +271,7 @@ function pull_source_changes() {
 
   if [[ -n "${SRC_SSH_PRIVATEKEY_ABS_PATH}" ]] &>/dev/null; then
     info "we are using ssh for the source repo. No need to logout."
-  else
+  elif [[ -n "${SOURCE_GH_TOKEN}" ]] &>/dev/null; then
     gh auth status --hostname "${SOURCE_REPO_HOSTNAME}"
     gh auth switch      
   fi

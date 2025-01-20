@@ -12,14 +12,6 @@ source "${SCRIPT_DIR}/sync_common.sh"
 # Precheks
 ##########################################
 
-if [[ -z "${SOURCE_GH_TOKEN}" ]]; then
-   info "Missing input for SOURCE_GH_TOKEN. Will use \${{ secrets.GITHUB_TOKEN }}'.";
-fi
-
-if [[ -z "${TARGET_GH_TOKEN}" ]]; then
-   err "Missing input for TARGET_GH_TOKEN. Will use \${{ secrets.GITHUB_TOKEN }}'.";
-fi
-
 if [[ -z "${SOURCE_REPO_PATH}" ]]; then
   err "Missing input 'source_repo_path: \${{ input.source_repo_path }}'.";
   exit 1
@@ -164,19 +156,23 @@ function git_init() {
     ssh-keyscan -t rsa "${source_repo_hostname}" >> "${HOME}"/.ssh/known_hosts
   else
     info "the source repository is located within GitHub."               
-    if [[ -n "${SOURCE_GH_TOKEN}" ]]; then
-      info "login to the source repository"
-      gh auth login --git-protocol "https" --hostname "${SOURCE_REPO_HOSTNAME}" --with-token <<< "${SOURCE_GH_TOKEN}"
+    if [[ -n "${SOURCE_GH_TOKEN}" ]]; then      
+      unset GITHUB_TOKEN
+      info "login to the source repository"      
+      gh auth login --git-protocol "https" --hostname "${SOURCE_REPO_HOSTNAME}" --with-token <<< "${SOURCE_GH_TOKEN}"  
       info "login to the target repository"
-      gh auth login --git-protocol "https" --hostname "${SOURCE_REPO_HOSTNAME}" --with-token <<< "${TARGET_GH_TOKEN}"
+      if [[ -n "${TARGET_GH_TOKEN}" ]]; then
+        gh auth login --git-protocol "https" --hostname "${SOURCE_REPO_HOSTNAME}" --with-token <<< "${TARGET_GH_TOKEN}"
+      fi      
       gh auth status --hostname "${source_repo_hostname}"
       gh auth switch
       gh auth status --hostname "${source_repo_hostname}"
       gh auth setup-git --hostname "${source_repo_hostname}"
       info "done set git global configuration"    
     else
-      gh auth login --git-protocol "https" --hostname "${SOURCE_REPO_HOSTNAME}" --with-token <<< "${TARGET_GH_TOKEN}"
+      info "default token to be used" 
       gh auth setup-git --hostname "${source_repo_hostname}"
+      gh auth status --hostname "${source_repo_hostname}"
     fi       
   fi
   echo "::endgroup::"
@@ -191,7 +187,11 @@ function git_init() {
 if [[ -n "${SSH_PRIVATE_KEY_SRC}" ]] &>/dev/null; then
   ssh_setup "${SSH_PRIVATE_KEY_SRC}" "${SOURCE_REPO_HOSTNAME}"
 elif [[ "${SOURCE_REPO_HOSTNAME}" != "${DEFAULT_REPO_HOSTNAME}" ]]; then
-  gh auth login --git-protocol "https" --hostname "${SOURCE_REPO_HOSTNAME}" --with-token <<< "${SOURCE_GH_TOKEN}"  
+  if [[ -n "${SOURCE_GH_TOKEN}" ]]; then
+  gh auth login --git-protocol "https" --hostname "${SOURCE_REPO_HOSTNAME}" --with-token <<< "${SOURCE_GH_TOKEN}"
+  else
+  gh auth login --git-protocol "https" --hostname "${SOURCE_REPO_HOSTNAME}" --with-token <<< "${TARGET_GH_TOKEN}"
+  fi  
 fi
 
 export SOURCE_REPO="${SOURCE_REPO_PREFIX}${SOURCE_REPO_PATH}"
