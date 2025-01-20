@@ -169,6 +169,7 @@ function git_init() {
       gh auth setup-git --hostname "${source_repo_hostname}"
       info "done set git global configuration"    
     else
+      info "default token to be used" 
       gh auth setup-git --hostname "${source_repo_hostname}"
       gh auth status --hostname "${source_repo_hostname}"
     fi       
