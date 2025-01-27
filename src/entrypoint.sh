@@ -32,6 +32,10 @@ if [[ -z "${HOME}" ]]; then
   exit 1
 fi
 
+if [[ -z "${GITHUB_SERVER_URL}" ]]; then
+  err "Missing env variable 'GITHUB_SERVER_URL' of the target github server. E.g. https://github.com"
+fi
+
 if ! [ -x "$(command -v gh)" ]; then
   err "github-cli gh is not installed. 'https://github.com/cli/cli'";
   exit 1;
@@ -177,15 +181,19 @@ function git_init() {
       fi
       ###############################
       if [[ -z "${SOURCE_GH_TOKEN}" ]]; then
-        err "Missing input 'source_github_token: \${{ secrets.GITHUB_TOKEN }}'.";
+        err "Missing input 'source_gh_token: \${{ secrets.GITHUB_TOKEN }}'.";
         exit 1;
       fi
+      info "login to the source git repository"
       gh auth login --git-protocol "https" --hostname "${SOURCE_REPO_HOSTNAME}" --with-token <<< "${SOURCE_GH_TOKEN}"
       gh auth status
-      # if [[ -n "${TARGET_GH_TOKEN}" ]]; then
-      #   gh auth login --git-protocol "https" --hostname "${SOURCE_REPO_HOSTNAME}" --with-token <<< "${TARGET_GH_TOKEN}"
-      # fi
-      # gh auth switch
+      if [[ -n "${TARGET_GH_TOKEN}" ]]; then
+        info "login to the target git repository"
+        gh auth login --git-protocol "https" --hostname "${GITHUB_SERVER_URL}" --with-token <<< "${TARGET_GH_TOKEN}"
+        gh auth status
+      fi
+      gh auth switch
+      gh auth status
       gh auth setup-git --hostname "${source_repo_hostname}"
       info "done set git global configuration"
     else

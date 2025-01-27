@@ -23,10 +23,6 @@ if [[ -z "${SOURCE_REPO}" ]]; then
   exit 1;
 fi
 
-if [[ -z "${GITHUB_SERVER_URL}" ]]; then
-  err "Missing env variable 'GITHUB_SERVER_URL' of the target github server. E.g. https://github.com"
-fi
-
 if ! [ -x "$(command -v gh)" ]; then
   err "github-cli gh is not installed. 'https://github.com/cli/cli'";
   exit 1;
@@ -255,8 +251,8 @@ function pull_source_changes() {
 
   if [[ -n "${SRC_SSH_PRIVATEKEY_ABS_PATH}" ]] &>/dev/null; then
     info "we are using ssh for the source repo. No need to logout."
-  elif [[ -n "${SOURCE_GH_TOKEN}" ]] &>/dev/null; then    
-    gh auth switch      
+  elif [[ -n "${SOURCE_GH_TOKEN}" ]] &>/dev/null; then
+    gh auth switch
   fi
 
   if [ "$pull_has_issues" == true ] ; then
