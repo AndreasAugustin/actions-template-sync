@@ -201,14 +201,12 @@ elif [[ -n "${SOURCE_GH_TOKEN}" ]] || [[ -n "${GITHUB_TOKEN}" ]]; then
   info "login to the source git repository"
   info "source server url: ${SOURCE_REPO_HOSTNAME}"
   gh auth login --git-protocol "https" --hostname "${SOURCE_REPO_HOSTNAME}" --with-token <<< "${SOURCE_GH_TOKEN}"
-  gh auth status
   if [[ -n "${TARGET_GH_TOKEN}" ]]; then
     TARGET_REPO_HOSTNAME=$(echo "${GITHUB_SERVER_URL}" | cut -d '/' -f 3)
     export TARGET_REPO_HOSTNAME
     info "login to the target git repository"
     info "target server url: ${TARGET_REPO_HOSTNAME}"
     gh auth login --git-protocol "https" --hostname "${TARGET_REPO_HOSTNAME}" --with-token <<< "${TARGET_GH_TOKEN}"
-    gh auth status
   fi
   gh auth switch
   gh auth status
