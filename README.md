@@ -144,7 +144,7 @@ jobs:
       - name: actions-template-sync
         uses: AndreasAugustin/actions-template-sync@v2
         with:
-          source_github_token: ${{ steps.generate_token.outputs.token }}
+          source_gh_token: ${{ steps.generate_token.outputs.token }}
           source_repo_path: <owner/repo>
           upstream_branch: <target_branch> # defaults to main
           pr_labels: <label1>,<label2>[,...] # defaults to template_sync
@@ -181,7 +181,7 @@ jobs:
       - name: actions-template-sync
         uses: AndreasAugustin/actions-template-sync@v2
         with:
-          source_github_token: ${{ secrets.GITHUB_TOKEN }}
+          source_gh_token: ${{ secrets.GITHUB_TOKEN }}
           source_repo_path: ${{ secrets.SOURCE_REPO_PATH }} # <owner/repo>, should be within secrets
           upstream_branch: ${{ secrets.TARGET_BRANCH }} #<target_branch> # defaults to main
           pr_labels: <label1>,<label2>[,...] # defaults to template_sync
@@ -235,7 +235,7 @@ jobs:
       - name: Test action step PAT
         uses: AndreasAugustin/actions-template-sync@v2
         with:
-          source_github_token: ${{ secrets.CUSTOM_GITHUB_PAT }}
+          source_gh_token: ${{ secrets.CUSTOM_GITHUB_PAT }}
           source_repo_path: ${{ secrets.SOURCE_REPO_PATH }} # <owner/repo>, should be within secrets
 ```
 
@@ -396,7 +396,7 @@ jobs:
       - name: actions-template-sync
         uses: AndreasAugustin/actions-template-sync@v2
         with:
-          source_github_token: ${{ secrets.GITHUB_TOKEN }}
+          source_gh_token: ${{ secrets.GITHUB_TOKEN }}
           source_repo_path: <owner/repo>
           git_user_name: # add the gpg username
           git_user_email: # add the gpg email
@@ -644,7 +644,7 @@ The idea is to use the [docker action][action-docker]
            - name: actions-template-sync
              uses: AndreasAugustin/actions-template-sync@v2
              with:
-               source_github_token: ${{ secrets.GITHUB_TOKEN }}
+               source_gh_token: ${{ secrets.GITHUB_TOKEN }}
                source_repo_path: <owner/repo>
                upstream_branch: <target_branch> # defaults to main
                pr_labels: <label1>,<label2>[,...] # optional, no default

@@ -12,8 +12,13 @@ source "${SCRIPT_DIR}/sync_common.sh"
 # Precheks
 ##########################################
 
-if [[ -z "${TARGET_GITHUB_TOKEN}" ]]; then
-    err "Missing input 'target_github_token': \${{ secrets.GITHUB_TOKEN }}'.";
+if [[ -z "${TARGET_GH_TOKEN}" ]]; then
+    err "Missing input 'target_gh_token': \${{ secrets.GITHUB_TOKEN }}'.";
+    exit 1;
+fi
+
+if [[ -z "${SOURCE_GH_TOKEN}" ]]; then
+    err "Missing input 'source_gh_token': \${{ secrets.GITHUB_TOKEN }}'.";
     exit 1;
 fi
 
