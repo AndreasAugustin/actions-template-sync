@@ -203,6 +203,7 @@ elif [[ -n "${SOURCE_GH_TOKEN}" ]] || [[ -n "${GITHUB_TOKEN}" ]]; then
   gh auth status
   if [[ -n "${TARGET_GH_TOKEN}" ]]; then
     info "login to the target git repository"
+    info "server url ${GITHUB_SERVER_URL}"
     gh auth login --git-protocol "https" --hostname "${GITHUB_SERVER_URL}" --with-token <<< "${TARGET_GH_TOKEN}"
     gh auth status
   fi
