@@ -8,15 +8,15 @@ inputs:
   source_gh_token:
     description: 'GitHub Token for the repo to be synced from. Can be passed in using $\{{ secrets.GITHUB_TOKEN }}'
     required: false
-    default: ""
+    default: ${{ github.token }}
   target_gh_token:
     description: 'GitHub Token for the repo to be synced from. Can be passed in using $\{{ secrets.GITHUB_TOKEN }}'
     required: false
     default: ${{ github.token }}
   github_token:
+    deprecationMessage: 'please use source_gh_token instead to have a declarative name'
     description: 'GitHub Token for the repo to be synced from. Can be passed in using $\{{ secrets.GITHUB_TOKEN }}'
-    required: true
-    default: ${{ github.token }}
+    required: false
   source_repo_path:
     description: "Repository path of the template"
     required: true
@@ -104,8 +104,10 @@ runs:
       id: sync
       env:
         SOURCE_GH_TOKEN: ${{ inputs.source_gh_token}}
-        TARGET_GH_TOKEN: ${{ inputs.target_gh_token }}        
-        GITHUB_TOKEN: ${{ inputs.github_token }}        
+        TARGET_GH_TOKEN: ${{ inputs.target_gh_token }}
+        # GITHUB_TOKEN is deprecated and will be removed soon
+        GITHUB_TOKEN: ${{ inputs.github_token }}
+        #
         SOURCE_REPO_PATH: ${{ inputs.source_repo_path }}
         UPSTREAM_BRANCH: ${{ inputs.upstream_branch }}
         SSH_PRIVATE_KEY_SRC: ${{ inputs.source_repo_ssh_private_key }}
@@ -133,4 +135,3 @@ runs:
         STEPS: ${{ inputs.steps }}
         TEMPLATE_SYNC_IGNORE_FILE_PATH: ${{ inputs.template_sync_ignore_file_path }}
         IS_WITH_TAGS: ${{ inputs.is_with_tags }}
-        

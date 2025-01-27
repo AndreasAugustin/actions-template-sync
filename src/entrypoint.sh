@@ -12,6 +12,11 @@ source "${SCRIPT_DIR}/sync_common.sh"
 # Precheks
 ##########################################
 
+if [[ -z "${TARGET_GITHUB_TOKEN}" ]]; then
+    err "Missing input 'target_github_token': \${{ secrets.GITHUB_TOKEN }}'.";
+    exit 1;
+fi
+
 if [[ -z "${SOURCE_REPO_PATH}" ]]; then
   err "Missing input 'source_repo_path: \${{ input.source_repo_path }}'.";
   exit 1
@@ -156,13 +161,26 @@ function git_init() {
     ssh-keyscan -t rsa "${source_repo_hostname}" >> "${HOME}"/.ssh/known_hosts
   else
     info "the source repository is located within GitHub."
-    if [[ -n "${SOURCE_GH_TOKEN}" ]]; then
-      unset GITHUB_TOKEN
-      gh auth login --git-protocol "https" --hostname "${SOURCE_REPO_HOSTNAME}" --with-token <<< "${SOURCE_GH_TOKEN}"
-      if [[ -n "${TARGET_GH_TOKEN}" ]]; then
-        gh auth login --git-protocol "https" --hostname "${SOURCE_REPO_HOSTNAME}" --with-token <<< "${TARGET_GH_TOKEN}"
+    # GITHUB_TOKEN is deprecated and can be removed in the future
+    if [[ -n "${SOURCE_GH_TOKEN}" ]] || [[ -n "${GITHUB_TOKEN}" ]]; then
+      ################################
+      if [[ -n "${GITHUB_TOKEN}" ]]; then
+        warn "github_token parameter is deprecated please use source_gh_token."
+        info "setting SOURCE_GITHUB_TOKEN"
+        export SOURCE_GH_TOKEN="${GITHUB_TOKEN}"
+        unset GITHUB_TOKEN
       fi
-      gh auth switch
+      ###############################
+      if [[ -z "${SOURCE_GH_TOKEN}" ]]; then
+        err "Missing input 'source_github_token: \${{ secrets.GITHUB_TOKEN }}'.";
+        exit 1;
+      fi
+      gh auth login --git-protocol "https" --hostname "${SOURCE_REPO_HOSTNAME}" --with-token <<< "${SOURCE_GH_TOKEN}"
+      gh auth status
+      # if [[ -n "${TARGET_GH_TOKEN}" ]]; then
+      #   gh auth login --git-protocol "https" --hostname "${SOURCE_REPO_HOSTNAME}" --with-token <<< "${TARGET_GH_TOKEN}"
+      # fi
+      # gh auth switch
       gh auth setup-git --hostname "${source_repo_hostname}"
       info "done set git global configuration"
     else
