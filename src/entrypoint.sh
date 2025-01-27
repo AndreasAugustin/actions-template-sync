@@ -170,8 +170,39 @@ function git_init() {
     ssh-keyscan -t rsa "${source_repo_hostname}" >> "${HOME}"/.ssh/known_hosts
   else
     info "the source repository is located within GitHub."
-    gh auth setup-git --hostname "${source_repo_hostname}"
-    gh auth status --hostname "${source_repo_hostname}"
+    # GITHUB_TOKEN is deprecated and can be removed in the future
+    if [[ -n "${SOURCE_GH_TOKEN}" ]] || [[ -n "${GITHUB_TOKEN}" ]]; then
+      ################################
+      if [[ -n "${GITHUB_TOKEN}" ]]; then
+        warn "github_token parameter is deprecated please use source_gh_token."
+        info "setting SOURCE_GH_TOKEN"
+        export SOURCE_GH_TOKEN="${GITHUB_TOKEN}"
+        unset GITHUB_TOKEN
+      fi
+      ###############################
+      if [[ -z "${SOURCE_GH_TOKEN}" ]]; then
+        err "Missing input 'source_gh_token: \${{ secrets.GITHUB_TOKEN }}'.";
+        exit 1;
+      fi
+      info "login to the source git repository"
+      info "source server url: ${source_repo_hostname}"
+      gh auth login --git-protocol "https" --hostname "${source_repo_hostname}" --with-token <<< "${SOURCE_GH_TOKEN}"
+      gh auth status
+      if [[ -n "${TARGET_GH_TOKEN}" ]]; then
+        TARGET_REPO_HOSTNAME=$(echo "${GITHUB_SERVER_URL}" | cut -d '/' -f 3)
+        export TARGET_REPO_HOSTNAME
+        info "login to the target git repository"
+        info "target server url: ${TARGET_REPO_HOSTNAME}"
+        gh auth login --git-protocol "https" --hostname "${TARGET_REPO_HOSTNAME}" --with-token <<< "${TARGET_GH_TOKEN}"
+      fi
+      gh auth switch
+      gh auth status
+      gh auth setup-git --hostname "${source_repo_hostname}"
+      info "done set git global configuration"
+    else
+      info "default token to be used"
+      gh auth setup-git --hostname "${source_repo_hostname}"
+    fi
   fi
   echo "::endgroup::"
 }
@@ -184,35 +215,12 @@ function git_init() {
 # Forward to /dev/null to swallow the output of the private key
 if [[ -n "${SSH_PRIVATE_KEY_SRC}" ]] &>/dev/null; then
   ssh_setup "${SSH_PRIVATE_KEY_SRC}" "${SOURCE_REPO_HOSTNAME}"
-# GITHUB_TOKEN env variable is deprecated and can be removed in the future
-elif [[ -n "${SOURCE_GH_TOKEN}" ]] || [[ -n "${GITHUB_TOKEN}" ]]; then
-  ################################
-  if [[ -n "${GITHUB_TOKEN}" ]]; then
-    warn "github_token parameter is deprecated please use source_gh_token."
-    info "setting SOURCE_GITHUB_TOKEN"
-    export SOURCE_GH_TOKEN="${GITHUB_TOKEN}"
-    unset GITHUB_TOKEN
-  fi
-  ###############################
-  if [[ -z "${SOURCE_GH_TOKEN}" ]]; then
-    err "Missing input 'source_gh_token: \${{ secrets.GITHUB_TOKEN }}'.";
-    exit 1;
-  fi
-  info "login to the source git repository"
-  info "source server url: ${SOURCE_REPO_HOSTNAME}"
+elif [[ "${SOURCE_REPO_HOSTNAME}" != "${DEFAULT_REPO_HOSTNAME}" ]]; then
+  if [[ -n "${SOURCE_GH_TOKEN}" ]]; then
   gh auth login --git-protocol "https" --hostname "${SOURCE_REPO_HOSTNAME}" --with-token <<< "${SOURCE_GH_TOKEN}"
-  if [[ -n "${TARGET_GH_TOKEN}" ]]; then
-    TARGET_REPO_HOSTNAME=$(echo "${GITHUB_SERVER_URL}" | cut -d '/' -f 3)
-    export TARGET_REPO_HOSTNAME
-    info "login to the target git repository"
-    info "target server url: ${TARGET_REPO_HOSTNAME}"
-    gh auth login --git-protocol "https" --hostname "${TARGET_REPO_HOSTNAME}" --with-token <<< "${TARGET_GH_TOKEN}"
+  else
+  gh auth login --git-protocol "https" --hostname "${SOURCE_REPO_HOSTNAME}" --with-token <<< "${TARGET_GH_TOKEN}"
   fi
-  gh auth switch
-  gh auth status
-  info "done set git global configuration"
-else
-  info "default token to be used"
 fi
 
 export SOURCE_REPO="${SOURCE_REPO_PREFIX}${SOURCE_REPO_PATH}"
