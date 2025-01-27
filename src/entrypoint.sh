@@ -155,20 +155,20 @@ function git_init() {
     mkdir -p "${HOME}"/.ssh
     ssh-keyscan -t rsa "${source_repo_hostname}" >> "${HOME}"/.ssh/known_hosts
   else
-    info "the source repository is located within GitHub."               
-    if [[ -n "${SOURCE_GH_TOKEN}" ]]; then      
-      unset GITHUB_TOKEN      
-      gh auth login --git-protocol "https" --hostname "${SOURCE_REPO_HOSTNAME}" --with-token <<< "${SOURCE_GH_TOKEN}"        
+    info "the source repository is located within GitHub."
+    if [[ -n "${SOURCE_GH_TOKEN}" ]]; then
+      unset GITHUB_TOKEN
+      gh auth login --git-protocol "https" --hostname "${SOURCE_REPO_HOSTNAME}" --with-token <<< "${SOURCE_GH_TOKEN}"
       if [[ -n "${TARGET_GH_TOKEN}" ]]; then
         gh auth login --git-protocol "https" --hostname "${SOURCE_REPO_HOSTNAME}" --with-token <<< "${TARGET_GH_TOKEN}"
-      fi            
-      gh auth switch      
+      fi
+      gh auth switch
       gh auth setup-git --hostname "${source_repo_hostname}"
-      info "done set git global configuration"    
+      info "done set git global configuration"
     else
-      info "default token to be used" 
-      gh auth setup-git --hostname "${source_repo_hostname}"      
-    fi       
+      info "default token to be used"
+      gh auth setup-git --hostname "${source_repo_hostname}"
+    fi
   fi
   echo "::endgroup::"
 }
@@ -186,7 +186,7 @@ elif [[ "${SOURCE_REPO_HOSTNAME}" != "${DEFAULT_REPO_HOSTNAME}" ]]; then
   gh auth login --git-protocol "https" --hostname "${SOURCE_REPO_HOSTNAME}" --with-token <<< "${SOURCE_GH_TOKEN}"
   else
   gh auth login --git-protocol "https" --hostname "${SOURCE_REPO_HOSTNAME}" --with-token <<< "${TARGET_GH_TOKEN}"
-  fi  
+  fi
 fi
 
 export SOURCE_REPO="${SOURCE_REPO_PREFIX}${SOURCE_REPO_PATH}"
