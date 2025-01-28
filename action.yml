@@ -10,7 +10,7 @@ inputs:
     required: false
     default: ${{ github.token }}
   target_gh_token:
-    description: 'GitHub Token for the repo to be synced from. Can be passed in using $\{{ secrets.GITHUB_TOKEN }}'
+    description: 'GitHub Token for the repo to be synced to. Can be passed in using $\{{ secrets.GITHUB_TOKEN }}'
     required: false
     default: ${{ github.token }}
   github_token:
