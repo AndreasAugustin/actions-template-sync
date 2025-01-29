@@ -24,21 +24,21 @@ jobs:
           private-key: ${{ secrets.TEST_APP_PEM_FILE }}
           owner: alexvanderberkel
           repositories: private-test-repo
-      
+
       - name: Checkout
         # https://github.com/actions/checkout#usage
         uses: actions/checkout@v4
-        with:          
-          token: ${{ steps.app-token.outputs.token }}             
-      
+        with:
+          token: ${{ steps.app-token.outputs.token }}
+
       - name: Test action step
         uses: ./ # Uses an action in the root directory
         env:
           MY_VAR: "bar"
         with:
           source_repo_path: alexvanderberkel/private-test-repo
-          source_gh_token: ${{ steps.app-token.outputs.token }}     
-          target_gh_token: ${{ github.token }}      
+          source_gh_token: ${{ steps.app-token.outputs.token }}
+          # target_gh_token: ${{ github.token }}
           upstream_branch: main
           is_dry_run: true
           is_allow_hooks: true

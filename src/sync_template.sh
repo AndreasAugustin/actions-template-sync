@@ -274,15 +274,12 @@ function pull_source_changes() {
   eval "git pull ${source_repo} --tags ${git_remote_pull_params}" || pull_has_issues=true
 
   info "finished pulling from the source."
-  info "logging out from source ${SOURCE_REPO_HOSTNAME}."
 
   if [ "$pull_has_issues" == true ] ; then
     warn "There had been some git pull issues."
     warn "Maybe a merge issue."
     warn "We go on but it is likely that you need to fix merge issues within the created PR."
   fi
-
-  gh_login_target_github "${GITHUB_SERVER_URL}"
 }
 
 #######################################
@@ -477,6 +474,8 @@ function arr_checkout_branch_and_pull() {
   if [ "$IS_FORCE_DELETION" == "true" ]; then
     force_delete_files "${LOCAL_CURRENT_GIT_HASH}"
   fi
+
+  gh_login_target_github "${GITHUB_SERVER_URL}"
 
   echo "::endgroup::"
 }
