@@ -12,6 +12,16 @@ source "${SCRIPT_DIR}/sync_common.sh"
 # Precheks
 ##########################################
 
+if [[ -z "${TARGET_GH_TOKEN}" ]]; then
+    err "Missing input 'target_gh_token': \${{ secrets.GITHUB_TOKEN }}'.";
+    exit 1;
+fi
+
+if [[ -z "${SOURCE_GH_TOKEN}" ]]; then
+    err "Missing input 'source_gh_token': \${{ secrets.GITHUB_TOKEN }}'.";
+    exit 1;
+fi
+
 if [[ -z "${SOURCE_REPO_PATH}" ]]; then
   err "Missing input 'source_repo_path: \${{ input.source_repo_path }}'.";
   exit 1
@@ -20,6 +30,10 @@ fi
 if [[ -z "${HOME}" ]]; then
   err "Missing env variable HOME.";
   exit 1
+fi
+
+if [[ -z "${GITHUB_SERVER_URL}" ]]; then
+  err "Missing env variable 'GITHUB_SERVER_URL' of the target github server. E.g. https://github.com"
 fi
 
 if ! [ -x "$(command -v gh)" ]; then
@@ -155,20 +169,45 @@ function git_init() {
     mkdir -p "${HOME}"/.ssh
     ssh-keyscan -t rsa "${source_repo_hostname}" >> "${HOME}"/.ssh/known_hosts
   else
-    info "the source repository is located within GitHub."               
-    if [[ -n "${SOURCE_GH_TOKEN}" ]]; then      
-      unset GITHUB_TOKEN      
-      gh auth login --git-protocol "https" --hostname "${SOURCE_REPO_HOSTNAME}" --with-token <<< "${SOURCE_GH_TOKEN}"        
-      if [[ -n "${TARGET_GH_TOKEN}" ]]; then
-        gh auth login --git-protocol "https" --hostname "${SOURCE_REPO_HOSTNAME}" --with-token <<< "${TARGET_GH_TOKEN}"
-      fi            
-      gh auth switch      
-      gh auth setup-git --hostname "${source_repo_hostname}"
-      info "done set git global configuration"    
-    else
-      info "default token to be used" 
-      gh auth setup-git --hostname "${source_repo_hostname}"      
-    fi       
+    info "the source repository is located within GitHub."
+  fi
+  echo "::endgroup::"
+}
+
+#######################################
+# doing the login to the source repository using gh cli
+# Arguments:
+#   source_repo_hostname
+#######################################
+function gh_login_src_github() {
+  echo "::group::login src github"
+  local source_repo_hostname=$1
+  # GITHUB_TOKEN is deprecated and can be removed in the future
+  if [[ -n "${SOURCE_GH_TOKEN}" ]] || [[ -n "${GITHUB_TOKEN}" ]] &>/dev/null; then
+    ################################
+    if [[ -n "${GITHUB_TOKEN}" ]] &>/dev/null; then
+      warn "github_token parameter is deprecated please use source_gh_token."
+      info "setting SOURCE_GH_TOKEN"
+      export SOURCE_GH_TOKEN="${GITHUB_TOKEN}"
+      unset GITHUB_TOKEN
+    fi
+    ###############################
+    if [[ -z "${SOURCE_GH_TOKEN}" ]] &>/dev/null; then
+      err "Missing input 'source_gh_token: \${{ secrets.GITHUB_TOKEN }}'.";
+      exit 1;
+    fi
+    info "source server url: ${source_repo_hostname}"
+    info "logging out"
+    gh auth logout --hostname "${source_repo_hostname}" || debug "not logged in"
+    info "login to the source git repository"
+    gh auth login --git-protocol "https" --hostname "${source_repo_hostname}" --with-token <<< "${SOURCE_GH_TOKEN}"
+    gh auth status
+    gh auth setup-git --hostname "${source_repo_hostname}"
+    gh auth status --hostname "${source_repo_hostname}"
+  else
+    info "default token to be used"
+    gh auth setup-git --hostname "${source_repo_hostname}"
+    gh auth status --hostname "${source_repo_hostname}"
   fi
   echo "::endgroup::"
 }
@@ -177,21 +216,16 @@ function git_init() {
 # Logic
 ###################################################
 
+git_init "${GIT_USER_EMAIL}" "${GIT_USER_NAME}" "${SOURCE_REPO_HOSTNAME}"
 
 # Forward to /dev/null to swallow the output of the private key
 if [[ -n "${SSH_PRIVATE_KEY_SRC}" ]] &>/dev/null; then
   ssh_setup "${SSH_PRIVATE_KEY_SRC}" "${SOURCE_REPO_HOSTNAME}"
-elif [[ "${SOURCE_REPO_HOSTNAME}" != "${DEFAULT_REPO_HOSTNAME}" ]]; then
-  if [[ -n "${SOURCE_GH_TOKEN}" ]]; then
-  gh auth login --git-protocol "https" --hostname "${SOURCE_REPO_HOSTNAME}" --with-token <<< "${SOURCE_GH_TOKEN}"
-  else
-  gh auth login --git-protocol "https" --hostname "${SOURCE_REPO_HOSTNAME}" --with-token <<< "${TARGET_GH_TOKEN}"
-  fi  
+else
+  gh_login_src_github "${SOURCE_REPO_HOSTNAME}"
 fi
 
 export SOURCE_REPO="${SOURCE_REPO_PREFIX}${SOURCE_REPO_PATH}"
-
-git_init "${GIT_USER_EMAIL}" "${GIT_USER_NAME}" "${SOURCE_REPO_HOSTNAME}"
 
 if [[ -n "${GPG_PRIVATE_KEY}" ]] &>/dev/null; then
   gpg_setup "${GPG_PRIVATE_KEY}" "${GIT_USER_EMAIL}"

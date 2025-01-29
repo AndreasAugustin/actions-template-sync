@@ -144,7 +144,7 @@ jobs:
       - name: actions-template-sync
         uses: AndreasAugustin/actions-template-sync@v2
         with:
-          github_token: ${{ steps.generate_token.outputs.token }}
+          source_gh_token: ${{ steps.generate_token.outputs.token }}
           source_repo_path: <owner/repo>
           upstream_branch: <target_branch> # defaults to main
           pr_labels: <label1>,<label2>[,...] # defaults to template_sync
@@ -181,7 +181,7 @@ jobs:
       - name: actions-template-sync
         uses: AndreasAugustin/actions-template-sync@v2
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          source_gh_token: ${{ secrets.GITHUB_TOKEN }}
           source_repo_path: ${{ secrets.SOURCE_REPO_PATH }} # <owner/repo>, should be within secrets
           upstream_branch: ${{ secrets.TARGET_BRANCH }} #<target_branch> # defaults to main
           pr_labels: <label1>,<label2>[,...] # defaults to template_sync
@@ -235,7 +235,7 @@ jobs:
       - name: Test action step PAT
         uses: AndreasAugustin/actions-template-sync@v2
         with:
-          github_token: ${{ secrets.CUSTOM_GITHUB_PAT }}
+          source_gh_token: ${{ secrets.CUSTOM_GITHUB_PAT }}
           source_repo_path: ${{ secrets.SOURCE_REPO_PATH }} # <owner/repo>, should be within secrets
 ```
 
@@ -243,7 +243,9 @@ jobs:
 
 | Variable                    | Description                                                                                                   | Required | Default                                                           |
 |-----------------------------|---------------------------------------------------------------------------------------------------------------|----------|-----------------------------------------------------------------------|
-| github_token                | Token for the repo. Can be passed in using `${{ secrets.GITHUB_TOKEN }}`                                     | `true`   |   `${{ github.token }}`                                                                    |
+| github_token                | :warning: [Deprecated] please use `source_gh_token` instead to have a declarative name. Token for the repo. Can be passed in using `${{ secrets.GITHUB_TOKEN }}`                                     | `true`   |   `${{ github.token }}`                                                                    |
+| source_gh_token | `[optional]` used for the source github repo token. Can be passed in using `${{ secrets.GITHUB_TOKEN }}` | `false` | `${{ github.token }}` |
+| target_gh_token | `[optional]` used for the source github repo token. Can be passed in using `${{ secrets.GITHUB_TOKEN }}` | `false` | `${{ github.token }}` |
 | source_repo_path            | Repository path of the template                                                                               | `true`   |                                                                       |
 | upstream_branch             | The target branch                                                                                             | `false`  | The remote's default (usually `main`)                                                |
 | source_repo_ssh_private_key | `[optional]` private ssh key for the source repository. [see](#private-template-repository)                   | `false`  |                                                                       |
@@ -267,11 +269,10 @@ jobs:
 | git_user_email              | `[optional]` set the committer git user.email                                                                 | `false`  | `github-action@actions-template-sync.noreply.${SOURCE_REPO_HOSTNAME}` |
 | git_remote_pull_params      | `[optional]` set remote pull parameters                                                                       | `false`  | `--allow-unrelated-histories --squash --strategy=recursive -X theirs` |
 | gpg_private_key | `[optional]` set if you want to sign commits | `false` | |
-| gpg_passphrase | `[optional]` set if your optionial gpg private key has a passphrase | `false` | |
+| gpg_passphrase | `[optional]` set if your optional gpg private key has a passphrase | `false` | |
 | steps | `[optional] add the steps you want to execute within the action` | `false` | all steps will be executed |
 | template_sync_ignore_file_path | `[optional] set the path to the ignore file.` | false |`.templatesyncignore` |
 | is_with_tags | `[optional]` set to `true` if tags should be synced | `false` | `false` |
-| target_github_token | `[optional]` used for the target github repo token | `false` | `${{ github.token }}` |
 
 ### Action Outputs
 
@@ -395,7 +396,7 @@ jobs:
       - name: actions-template-sync
         uses: AndreasAugustin/actions-template-sync@v2
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          source_gh_token: ${{ secrets.GITHUB_TOKEN }}
           source_repo_path: <owner/repo>
           git_user_name: # add the gpg username
           git_user_email: # add the gpg email
@@ -643,7 +644,7 @@ The idea is to use the [docker action][action-docker]
            - name: actions-template-sync
              uses: AndreasAugustin/actions-template-sync@v2
              with:
-               github_token: ${{ secrets.GITHUB_TOKEN }}
+               source_gh_token: ${{ secrets.GITHUB_TOKEN }}
                source_repo_path: <owner/repo>
                upstream_branch: <target_branch> # defaults to main
                pr_labels: <label1>,<label2>[,...] # optional, no default
