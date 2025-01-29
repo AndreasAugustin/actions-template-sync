@@ -24,21 +24,30 @@ jobs:
           private-key: ${{ secrets.TEST_APP_PEM_FILE }}
           owner: alexvanderberkel
           repositories: private-test-repo
-      
+
+      - name: token-generation
+        uses: actions/create-github-app-token@v1
+        id: target-app-token
+        with:
+          app-id: ${{ secrets.TEST_2_GITHUB_APP_ID }}
+          private-key: ${{ secrets.TEST_2_APP_PEM_FILE }}
+          owner: alexvanderberkel
+          repositories: private-test-repo-2
+
       - name: Checkout
         # https://github.com/actions/checkout#usage
         uses: actions/checkout@v4
-        with:          
-          token: ${{ steps.source-app-token.outputs.token }}             
-      
+        with:
+          token: ${{ steps.source-app-token.outputs.token }}
+
       - name: Test action step
         uses: ./ # Uses an action in the root directory
         env:
           MY_VAR: "bar"
         with:
           source_repo_path: alexvanderberkel/private-test-repo
-          source_gh_token: ${{ steps.source-app-token.outputs.token }}     
-          target_gh_token: ${{ github.token }}      
+          source_gh_token: ${{ steps.source-app-token.outputs.token }}
+          target_gh_token: ${{ steps.target-app-token.outputs.token }}
           upstream_branch: main
           is_dry_run: true
           is_allow_hooks: true
