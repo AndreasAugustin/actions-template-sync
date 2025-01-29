@@ -16,7 +16,7 @@ jobs:
       contents: write
       pull-requests: write
   call_github_app_test_target_org:
-    uses: ./.github/workflows/test_github_app_target.yml
+    uses: ./.github/workflows/test_github_app _target_org.yml
     secrets: inherit
     permissions:
       contents: write
