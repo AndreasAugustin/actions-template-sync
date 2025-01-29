@@ -15,12 +15,18 @@ jobs:
     permissions:
       contents: write
       pull-requests: write
+  call_github_app_test_target_org:
+    uses: ./.github/workflows/test_github_app _target_org.yml
+    secrets: inherit
+    permissions:
+      contents: write
+      pull-requests: write
   call_github_app_test:
     uses: ./.github/workflows/test_github_app.yml
     secrets: inherit
     permissions:
       contents: write
-      pull-requests: write      
+      pull-requests: write
   call_test_ssh_gitlab:
     uses: ./.github/workflows/test_ssh_gitlab.yml
     secrets: inherit
