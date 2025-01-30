@@ -348,8 +348,9 @@ function push () {
   fi
 
   gh auth status
-
+  info "pushing"
   git push "${args[@]}"
+  info "pushed"
 }
 
 ####################################
