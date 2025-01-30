@@ -23,7 +23,7 @@ jobs:
           app-id: ${{ secrets.TEST_GITHUB_APP_ID }}
           private-key: ${{ secrets.TEST_APP_PEM_FILE }}
           owner: alexvanderberkel
-          repositories: private-test-repo, actions-template-sync
+          repositories: private-test-repo
 
       - name: Checkout
         # https://github.com/actions/checkout#usage
