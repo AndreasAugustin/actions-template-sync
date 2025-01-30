@@ -329,6 +329,7 @@ function eventual_create_labels () {
 ##############################
 function push () {
   info "push changes"
+  gh auth status
   local branch=$1
   local is_force=$2
   local is_with_tags=$3
