@@ -20,6 +20,9 @@ inputs:
   source_repo_path:
     description: "Repository path of the template"
     required: true
+  target_repo_path:   
+    description: "Repository path of the target"
+    required: false  
   upstream_branch:
     description: "The target branch"
   source_repo_ssh_private_key:
