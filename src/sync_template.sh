@@ -110,7 +110,8 @@ function gh_login_target_github() {
     target_repo_hostname=$(echo "${github_server_url}" | cut -d '/' -f 3)
     info "target server url: ${target_repo_hostname}"
     info "logging out of the target if logged in"
-    gh auth logout --hostname "${target_repo_hostname}" || debug "not logged in"       
+    gh auth logout --hostname "${target_repo_hostname}" || debug "not logged in"     
+    unset GH_TOKEN  
     info "login to the target git repository"
     gh auth login --git-protocol "https" --hostname "${target_repo_hostname}" --with-token <<< "${TARGET_GH_TOKEN}"
     gh auth setup-git --hostname "${target_repo_hostname}"
@@ -348,18 +349,6 @@ function push () {
   fi
 
   gh auth status
-  
-  # Clear any cached credentials
-  gh auth logout --hostname "${GITHUB_SERVER_URL}" || info "No active session found for ${GITHUB_SERVER_URL}, skipping logout"
-
-  # Set the correct token for the target repository
-  export GH_TOKEN="${TARGET_GH_TOKEN}"
-  info "Using target GH_TOKEN"
-
-  # Login with the target token
-  gh auth login --with-token <<< "${TARGET_GH_TOKEN}"
-  gh auth status --hostname "${GITHUB_SERVER_URL}"
-
   
   info "Listing Git credentials"
   git_user_name=$(git config --get user.name)
