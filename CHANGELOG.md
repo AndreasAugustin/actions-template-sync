@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.5.0](https://github.com/AndreasAugustin/actions-template-sync/compare/v2.4.2...v2.5.0) (2025-01-31)
+
+
+### Features
+
+* **#598:** enable possibility to have source repository in other organisation ([3247499](https://github.com/AndreasAugustin/actions-template-sync/commit/32474992795a695d4a42779a591f418e9175e665))
+
 ## [2.4.2](https://github.com/AndreasAugustin/actions-template-sync/compare/v2.4.1...v2.4.2) (2025-01-07)
 
 
