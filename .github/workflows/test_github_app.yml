@@ -41,7 +41,7 @@ jobs:
           source_gh_token: ${{ steps.source-app-token.outputs.token }}
           # target_gh_token: ${{ github.token }}
           upstream_branch: main
-          is_dry_run: true
+          is_dry_run: false
           is_allow_hooks: true
 
 

@@ -46,10 +46,9 @@ jobs:
         env:
           MY_VAR: "bar"
         with:
-          source_repo_path: alexvanderberkel/private-test-repo
-          target_repo_path: alexvanderberkel/private-test-repo-2
+          source_repo_path: alexvanderberkel/private-test-repo          
           source_gh_token: ${{ steps.source-app-token.outputs.token }}
           target_gh_token: ${{ steps.target-app-token.outputs.token }}
           upstream_branch: main
-          is_dry_run: false
+          is_dry_run: true
           is_allow_hooks: true
