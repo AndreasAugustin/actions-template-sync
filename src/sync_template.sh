@@ -110,7 +110,8 @@ function gh_login_target_github() {
     target_repo_hostname=$(echo "${github_server_url}" | cut -d '/' -f 3)
     info "target server url: ${target_repo_hostname}"
     info "logging out of the target if logged in"
-    gh auth logout --hostname "${target_repo_hostname}" || debug "not logged in"
+    gh auth logout --hostname "${target_repo_hostname}" || debug "not logged in"     
+    unset GH_TOKEN  
     info "login to the target git repository"
     gh auth login --git-protocol "https" --hostname "${target_repo_hostname}" --with-token <<< "${TARGET_GH_TOKEN}"
     gh auth setup-git --hostname "${target_repo_hostname}"
@@ -274,12 +275,15 @@ function pull_source_changes() {
   eval "git pull ${source_repo} --tags ${git_remote_pull_params}" || pull_has_issues=true
 
   info "finished pulling from the source."
+  info "logging out from source ${SOURCE_REPO_HOSTNAME}."
 
   if [ "$pull_has_issues" == true ] ; then
     warn "There had been some git pull issues."
     warn "Maybe a merge issue."
     warn "We go on but it is likely that you need to fix merge issues within the created PR."
   fi
+
+  gh_login_target_github "${GITHUB_SERVER_URL}"
 }
 
 #######################################
@@ -326,6 +330,8 @@ function eventual_create_labels () {
 ##############################
 function push () {
   info "push changes"
+  
+
   local branch=$1
   local is_force=$2
   local is_with_tags=$3
@@ -340,9 +346,10 @@ function push () {
   if [ "$is_with_tags" == true ] ; then
     warn "include tags."
     args+=(--tags)
-  fi
-
+  fi  
+  
   git push "${args[@]}"
+  
 }
 
 ####################################
@@ -474,8 +481,6 @@ function arr_checkout_branch_and_pull() {
   if [ "$IS_FORCE_DELETION" == "true" ]; then
     force_delete_files "${LOCAL_CURRENT_GIT_HASH}"
   fi
-
-  gh_login_target_github "${GITHUB_SERVER_URL}"
 
   echo "::endgroup::"
 }

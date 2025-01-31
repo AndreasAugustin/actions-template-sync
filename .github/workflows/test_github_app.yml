@@ -30,6 +30,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           token: ${{ steps.source-app-token.outputs.token }}
+          persist-credentials: false # Don't set this to true as otherwise the token will be stored in the local git config and the run will fail
 
       - name: Test action step
         uses: ./ # Uses an action in the root directory
@@ -40,5 +41,8 @@ jobs:
           source_gh_token: ${{ steps.source-app-token.outputs.token }}
           # target_gh_token: ${{ github.token }}
           upstream_branch: main
-          is_dry_run: true
+          is_dry_run: false
           is_allow_hooks: true
+
+
+
