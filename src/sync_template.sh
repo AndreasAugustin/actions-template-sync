@@ -349,6 +349,17 @@ function push () {
 
   gh auth status
   
+  # Clear any cached credentials
+  gh auth logout --hostname "${GITHUB_SERVER_URL}" || info "No active session found for ${GITHUB_SERVER_URL}, skipping logout"
+
+  # Set the correct token for the target repository
+  export GH_TOKEN="${TARGET_GH_TOKEN}"
+  info "Using target GH_TOKEN"
+
+  # Login with the target token
+  gh auth login --with-token <<< "${TARGET_GH_TOKEN}"
+  gh auth status --hostname "${GITHUB_SERVER_URL}"
+
   
   info "Listing Git credentials"
   git_user_name=$(git config --get user.name)
