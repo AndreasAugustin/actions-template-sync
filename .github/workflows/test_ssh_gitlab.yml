@@ -23,7 +23,6 @@ jobs:
         uses: ./ # Uses an action in the root directory
         with:
           hostname: ${{ secrets.SOURCE_REPO_GITLAB_HOSTNAME }}
-          github_token: ${{ secrets.GITHUB_TOKEN }}
           source_repo_path: ${{ secrets.SOURCE_REPO_GITLAB_PATH }} # <owner/repo>, should be within secrets
           source_repo_ssh_private_key: ${{ secrets.SOURCE_REPO_GITLAB_SSH_PRIVATE_KEY }} # contains the private ssh key of the private repository
           is_dry_run: true

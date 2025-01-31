@@ -22,7 +22,6 @@ jobs:
         if: github.repository_owner == 'AndreasAugustin'
         uses: ./ # Uses an action in the root directory
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
           source_repo_path: ${{ secrets.SOURCE_REPO_PATH_TEST }} # <owner/repo>, should be within secrets
           source_repo_ssh_private_key: ${{ secrets.SOURCE_REPO_SSH_PRIVATE_KEY }} # contains the private ssh key of the private repository
           is_dry_run: true
