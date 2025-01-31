@@ -353,6 +353,8 @@ function push () {
   info "Listing Git credentials"
   git_user_name=$(git config --get user.name)
   git_user_email=$(git config --get user.email)
+  info "Git user name: ${git_user_name}"
+  info "Git user email: ${git_user_email}"
   
   info "pushing"
   git push "${args[@]}"
