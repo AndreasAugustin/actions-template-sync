@@ -203,10 +203,19 @@ The workflow needs read access to the source repo.
 
 You need to set the scopes to read the source repo.
 
+###### Fine grained source repo
+
+* `contents` -> read
+* `metadata` -> read
+
+###### Classic source repo
+
 * `repo` -> all
 * `read:org`
 
 ![pat-scopes](docs/assets/pat_needed_scopes_source_repo.png)
+
+###### General source repo
 
 Furthermore, you need to set the access within the source repository to allow GitHub actions within the target repository.
 As mentioned before (you can see the note in the image) you need to set the target repository to private.
@@ -215,6 +224,20 @@ settings -> actions -> general.
 ![pat-source-repo-access](docs/assets/pat_needed_access_source_repo.png)
 
 ##### b. Target repo
+
+###### Fine grained target repo
+
+* `contents` -> write
+* `metadata` -> read
+* `pull requests` -> write
+
+If you are automatically adding reviewers you also need
+
+* `organisation:members` read permissions to the PAT token.
+
+![pat-scopes-fine-grained](docs/assets/pat_fine_grained_needed_scopes.png)
+
+###### Classic target repo
 
 When the action detects any changes, it will create a new branch and will push the updates to this branch.
 When no files are changed in the `.github/workflows` directory, this works well with the default `${{ github.token }}` token.
