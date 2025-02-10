@@ -614,18 +614,16 @@ The idea is to use the [docker action][action-docker]
 
 ## Troubleshooting
 
-* refusing to allow a GitHub App to create or update workflow `.github/workflows/******.yml` without `workflows` permission
-
-  This happens because the template repository is trying to overwrite some files inside `.github/workflows/`.
+* The error message `refusing to allow a GitHub App to create or update workflow '.github/workflows/<script-name>.yml' without 'workflows' permission)` is indicating that the PAT in the `target_gh_token` does not have the correct permissions. This happens because the template repository is trying to overwrite some files inside `.github/workflows/`.
 
   Currently `GITHUB_TOKEN` can't be given `workflow` permission.
-  You can grant our workflow with `workflows` permission using a PAT following the steps below:
+  You can grant our workflow with `workflow` permission using a PAT following the steps below:
 
-  1. [Create a PAT][github-create-pat] with these repository permissions granted: `contents:write`, `workflows:write`, `metadata:read`.
+  1. [Create a PAT][github-create-pat] with these repository permissions granted: `workflow`.
 
   2. Copy the generated token and [create a new secret for your target repository][github-create-secret].
 
-  3. Configure the `checkout` action to use the token in secrets like this:
+  3. Configure the `actions-template-sync` step to use the freshly generated token in `target_gh_token` like this:
 
      ```yaml
      # File: .github/workflows/template-sync.yml
@@ -650,12 +648,12 @@ The idea is to use the [docker action][action-docker]
              uses: actions/checkout@v4
              with:
                # submodules: true
-               token: ${{ secrets.<secret_name> }}
 
            - name: actions-template-sync
              uses: AndreasAugustin/actions-template-sync@v2
              with:
-               github_token: ${{ secrets.GITHUB_TOKEN }}
+               source_gh_token: ${{ secrets.GITHUB_TOKEN }}
+               target_gh_token: ${{ secrets.<secret_name> }}
                source_repo_path: <owner/repo>
                upstream_branch: <target_branch> # defaults to main
                pr_labels: <label1>,<label2>[,...] # optional, no default
