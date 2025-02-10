@@ -110,8 +110,8 @@ function gh_login_target_github() {
     target_repo_hostname=$(echo "${github_server_url}" | cut -d '/' -f 3)
     info "target server url: ${target_repo_hostname}"
     info "logging out of the target if logged in"
-    gh auth logout --hostname "${target_repo_hostname}" || debug "not logged in"     
-    unset GH_TOKEN  
+    gh auth logout --hostname "${target_repo_hostname}" || debug "not logged in"
+    unset GH_TOKEN
     info "login to the target git repository"
     gh auth login --git-protocol "https" --hostname "${target_repo_hostname}" --with-token <<< "${TARGET_GH_TOKEN}"
     gh auth setup-git --hostname "${target_repo_hostname}"
@@ -330,7 +330,7 @@ function eventual_create_labels () {
 ##############################
 function push () {
   info "push changes"
-  
+
 
   local branch=$1
   local is_force=$2
@@ -346,10 +346,10 @@ function push () {
   if [ "$is_with_tags" == true ] ; then
     warn "include tags."
     args+=(--tags)
-  fi  
-  
+  fi
+
   git push "${args[@]}"
-  
+
 }
 
 ####################################
