@@ -193,19 +193,37 @@ jobs:
 :warning: when the source repository is private using PATs, also the target repository must be private.
 Else it won't work.
 
-[Personal access token][github-pat] is an alternative to using passwords for authentication to GitHub. You can add a kind
-of password to your GitHub account. You need to set the scopes.
+[Personal access token][github-pat] is an alternative to using passwords for authentication to GitHub.
+You can add a kind of password to your GitHub account. The PAT needs a scope.
+We need different scopes for the source and target repo.
+
+##### a. Source repo
+
+The workflow needs read access to the source repo.
+
+You need to set the scopes to read the source repo.
 
 * `repo` -> all
 * `read:org`
 
-![pat-scopes](docs/assets/pat_needed_scopes.png)
+![pat-scopes](docs/assets/pat_needed_scopes_source_repo.png)
 
 Furthermore, you need to set the access within the source repository to allow GitHub actions within the target repository.
 As mentioned before (you can see the note in the image) you need to set the target repository to private.
 settings -> actions -> general.
 
 ![pat-source-repo-access](docs/assets/pat_needed_access_source_repo.png)
+
+##### b. Target repo
+
+When the action detects any changes, it will create a new branch and will push the updates to this branch.
+When no files are changed in the `.github/workflows` directory, this works well with the default `${{ github.token }}` token.
+This token does however not have `workflow` scope and can therefore not make any changes to these files.
+For this purpose a token must be created with the following scope as depicted in the figure below.
+
+* `workflow` -> will also enable `repo`
+* `admin:read`
+ ![pat-scopes](docs/assets/pat_needed_scopes_target_repo.png)
 
 example workflow definition
 
@@ -603,18 +621,18 @@ The idea is to use the [docker action][action-docker]
 
 ## Troubleshooting
 
-* refusing to allow a GitHub App to create or update workflow `.github/workflows/******.yml` without `workflows` permission
-
-  This happens because the template repository is trying to overwrite some files inside `.github/workflows/`.
+* The error message `refusing to allow a GitHub App to create or update workflow '.github/workflows/<script-name>.yml' without 'workflows' permission)`
+is indicating that the PAT in the `target_gh_token` does not have the correct permissions.
+This happens because the template repository is trying to overwrite some files inside `.github/workflows/`.
 
   Currently `GITHUB_TOKEN` can't be given `workflow` permission.
-  You can grant our workflow with `workflows` permission using a PAT following the steps below:
+  You can grant our workflow with `workflow` permission using a PAT following the steps below:
 
-  1. [Create a PAT][github-create-pat] with these repository permissions granted: `contents:write`, `workflows:write`, `metadata:read`.
+  1. [Create a PAT][github-create-pat] with these repository permissions granted: `workflow`.
 
   2. Copy the generated token and [create a new secret for your target repository][github-create-secret].
 
-  3. Configure the `checkout` action to use the token in secrets like this:
+  3. Configure the `actions-template-sync` step to use the freshly generated token in `target_gh_token` like this:
 
      ```yaml
      # File: .github/workflows/template-sync.yml
@@ -639,12 +657,12 @@ The idea is to use the [docker action][action-docker]
              uses: actions/checkout@v4
              with:
                # submodules: true
-               token: ${{ secrets.<secret_name> }}
 
            - name: actions-template-sync
              uses: AndreasAugustin/actions-template-sync@v2
              with:
                source_gh_token: ${{ secrets.GITHUB_TOKEN }}
+               target_gh_token: ${{ secrets.<secret_name> }}
                source_repo_path: <owner/repo>
                upstream_branch: <target_branch> # defaults to main
                pr_labels: <label1>,<label2>[,...] # optional, no default
