@@ -193,7 +193,9 @@ jobs:
 :warning: when the source repository is private using PATs, also the target repository must be private.
 Else it won't work.
 
-[Personal access token][github-pat] is an alternative to using passwords for authentication to GitHub. You can add a kind of password to your GitHub account. The PAT needs a scope. We need different scopes for the source and target repo.
+[Personal access token][github-pat] is an alternative to using passwords for authentication to GitHub. 
+You can add a kind of password to your GitHub account. The PAT needs a scope. 
+We need different scopes for the source and target repo.
 
 ##### a. Source repo
 The workflow needs read access to the source repo. 
@@ -213,7 +215,10 @@ settings -> actions -> general.
 
 
 ##### b. Target repo
-When the action detects any changes, it will create a new branch and will push the updates to this branch. When no files are changed in the `.github/workflows` directory, this works well with the default `${{ github.token }}` token. This token does however not have `workflow` scope and can therefore not make any changes to these files. For this purpose a token must be created with the following scope as depicted in the figure below. 
+When the action detects any changes, it will create a new branch and will push the updates to this branch. 
+When no files are changed in the `.github/workflows` directory, this works well with the default `${{ github.token }}` token. 
+This token does however not have `workflow` scope and can therefore not make any changes to these files. 
+For this purpose a token must be created with the following scope as depicted in the figure below. 
 * `workflow` -> will also enable `repo`
 * `admin:read`
  ![pat-scopes](docs/assets/pat_needed_scopes_target_repo.png)
@@ -614,7 +619,9 @@ The idea is to use the [docker action][action-docker]
 
 ## Troubleshooting
 
-* The error message `refusing to allow a GitHub App to create or update workflow '.github/workflows/<script-name>.yml' without 'workflows' permission)` is indicating that the PAT in the `target_gh_token` does not have the correct permissions. This happens because the template repository is trying to overwrite some files inside `.github/workflows/`.
+* The error message `refusing to allow a GitHub App to create or update workflow '.github/workflows/<script-name>.yml' without 'workflows' permission)` is
+indicating that the PAT in the `target_gh_token` does not have the correct permissions. 
+This happens because the template repository is trying to overwrite some files inside `.github/workflows/`.
 
   Currently `GITHUB_TOKEN` can't be given `workflow` permission.
   You can grant our workflow with `workflow` permission using a PAT following the steps below:
