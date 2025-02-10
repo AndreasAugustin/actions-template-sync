@@ -331,6 +331,17 @@ jobs:
   * If the remote repository already contains the source repository changes the action will exit and the output variable will be undefined
   * If there are no changes the action will exit and the output variable will be undefined
 
+### Change the target branch
+
+Per default the action is using the default branch as the target. To change this behaviour just add it to the checkout action
+
+```yaml
+  - name: Checkout
+    uses: actions/checkout@v4
+    with:
+      ref: <target_branch>  # defaults to the default branch
+```
+
 ### Docker
 
 There are docker images available. Please checkout [How to use docker](docs/DOCKER.md) for details.
