@@ -111,9 +111,9 @@ function gh_login_target_github() {
     info "target server url: ${target_repo_hostname}"
     info "logging out of the target if logged in"
     gh auth logout --hostname "${target_repo_hostname}" || debug "not logged in"
-    unset GITHUB_TOKEN
+    # unset GITHUB_TOKEN
     info "login to the target git repository"
-    gh auth login --git-protocol "https" --hostname "${target_repo_hostname}" --with-token <<< "${TARGET_GH_TOKEN}"
+    gh auth login --git-protocol "https" --hostname "${target_repo_hostname}" --with-token <<< "${TARGET_GH_TOKEN}" || warn "login with target token somehow did not work. Please consider using the \'target_github_token\` parameter."
     gh auth setup-git --hostname "${target_repo_hostname}"
     gh auth status --hostname "${target_repo_hostname}"
   fi
