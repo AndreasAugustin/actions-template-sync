@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.5.1](https://github.com/AndreasAugustin/actions-template-sync/compare/v2.5.0...v2.5.1) (2025-02-17)
+
+
+### Bug Fixes
+
+* **#608:** workaround ([#614](https://github.com/AndreasAugustin/actions-template-sync/issues/614)) ([fffd6ca](https://github.com/AndreasAugustin/actions-template-sync/commit/fffd6caf36570bf6f2099defe545cc8d4b9c625e))
+
 ## [2.5.0](https://github.com/AndreasAugustin/actions-template-sync/compare/v2.4.2...v2.5.0) (2025-01-31)
 
 
