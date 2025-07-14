@@ -17,7 +17,7 @@ jobs:
     steps:
       # To use this repository's private action, you must check out the repository
       - name: token-generation
-        uses: actions/create-github-app-token@v1
+        uses: actions/create-github-app-token@v2
         id: source-app-token
         with:
           app-id: ${{ secrets.TEST_GITHUB_APP_ID }}
