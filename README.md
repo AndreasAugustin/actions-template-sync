@@ -352,7 +352,7 @@ There are docker images available. Please checkout [How to use docker](docs/DOCK
 ### Example
 
 This repo uses this [template][template] and this action from the [marketplace][marketplace].
-See the definition [here][self-usage].
+See the definition within [self-usage][self-usage].
 
 If you look for a more detailed guide you can have a look at
 
