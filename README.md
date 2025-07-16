@@ -249,6 +249,7 @@ For this purpose a token must be created with the following scope as depicted in
  ![pat-scopes](docs/assets/pat_needed_scopes_target_repo.png)
 
 example workflow definition
+:warning: to the checkout action you need to add the parameter `persist-credentials: false` or you will most likely face an issue (#557 #627)
 
 ```yml
 name: actions-template-sync
@@ -272,6 +273,7 @@ jobs:
         with:
           # submodules: true
           token: ${{ secrets.CUSTOM_GITHUB_PAT }}
+          persist-credentials: false  # needed see #557 and #627
 
       - name: Test action step PAT
         uses: AndreasAugustin/actions-template-sync@v2
@@ -659,48 +661,51 @@ The idea is to use the [docker action][action-docker]
 is indicating that the PAT in the `target_gh_token` does not have the correct permissions.
 This happens because the template repository is trying to overwrite some files inside `.github/workflows/`.
 
-  Currently `GITHUB_TOKEN` can't be given `workflow` permission.
-  You can grant our workflow with `workflow` permission using a PAT following the steps below:
+    Currently `GITHUB_TOKEN` can't be given `workflow` permission.
+    You can grant our workflow with `workflow` permission using a PAT following the steps below:
 
-  1. [Create a PAT][github-create-pat] with these repository permissions granted: `workflow`.
+    1. [Create a PAT][github-create-pat] with these repository permissions granted: `workflow`.
 
-  2. Copy the generated token and [create a new secret for your target repository][github-create-secret].
+    2. Copy the generated token and [create a new secret for your target repository][github-create-secret].
 
-  3. Configure the `actions-template-sync` step to use the freshly generated token in `target_gh_token` like this:
+    3. Configure the `actions-template-sync` step to use the freshly generated token in `target_gh_token` like this:
 
-     ```yaml
-     # File: .github/workflows/template-sync.yml
+    ```yaml
+    # File: .github/workflows/template-sync.yml
 
-     on:
-       # cronjob trigger
-       schedule:
-       - cron: "0 0 1 * *"
-       # manual trigger
-       workflow_dispatch:
-     jobs:
-       repo-sync:
-         runs-on: ubuntu-latest
-         # https://docs.github.com/en/actions/using-jobs/assigning-permissions-to-jobs
-         permissions:
-           contents: write
-           pull-requests: write
+    on:
+      # cronjob trigger
+      schedule:
+      - cron: "0 0 1 * *"
+      # manual trigger
+      workflow_dispatch:
+    jobs:
+      repo-sync:
+        runs-on: ubuntu-latest
+        # https://docs.github.com/en/actions/using-jobs/assigning-permissions-to-jobs
+        permissions:
+          contents: write
+          pull-requests: write
 
-         steps:
-           # To use this repository's private action, you must check out the repository
-           - name: Checkout
-             uses: actions/checkout@v4
-             with:
-               # submodules: true
+        steps:
+          # To use this repository's private action, you must check out the repository
+          - name: Checkout
+            uses: actions/checkout@v4
+            with:
+              # submodules: true
+              persist-credentials: false # needed
 
-           - name: actions-template-sync
-             uses: AndreasAugustin/actions-template-sync@v2
-             with:
-               source_gh_token: ${{ secrets.GITHUB_TOKEN }}
-               target_gh_token: ${{ secrets.<secret_name> }}
-               source_repo_path: <owner/repo>
-               upstream_branch: <target_branch> # defaults to main
-               pr_labels: <label1>,<label2>[,...] # optional, no default
-     ```
+          - name: actions-template-sync
+            uses: AndreasAugustin/actions-template-sync@v2
+            with:
+              source_gh_token: ${{ secrets.GITHUB_TOKEN }}
+              target_gh_token: ${{ secrets.<secret_name> }}
+              source_repo_path: <owner/repo>
+              upstream_branch: <target_branch> # defaults to main
+              pr_labels: <label1>,<label2>[,...] # optional, no default
+    ```
+
+    :warning: you need to add `persist-credentials: false` to the checkout action
 
 * pull request create failed: GraphQL: GitHub Actions is not permitted to create or approve pull requests (createPullRequest)
 
