@@ -376,6 +376,16 @@
         "review",
         "test"
       ]
+    },
+    {
+      "login": "yuhengshen",
+      "name": "yuhengshen",
+      "avatar_url": "https://avatars.githubusercontent.com/u/29867660?v=4",
+      "profile": "https://github.com/yuhengshen",
+      "contributions": [
+        "bug",
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
