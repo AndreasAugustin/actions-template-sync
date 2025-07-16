@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.5.2](https://github.com/AndreasAugustin/actions-template-sync/compare/v2.5.1...v2.5.2) (2025-07-16)
+
+
+### Bug Fixes
+
+* **docs:** new markdownlint issue ([47e25cf](https://github.com/AndreasAugustin/actions-template-sync/commit/47e25cfd55b45f0ba5ef2f7bef611dfac766cdeb))
+
 ## [2.5.1](https://github.com/AndreasAugustin/actions-template-sync/compare/v2.5.0...v2.5.1) (2025-02-17)
 
 
