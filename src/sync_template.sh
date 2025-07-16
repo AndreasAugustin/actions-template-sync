@@ -435,7 +435,7 @@ function handle_templatesyncignore() {
   # -s is true if the file contains whitespaces
   if [ -s "${template_sync_ignore_file_path}" ]; then
     debug "unstage files from template sync ignore ${template_sync_ignore_file_path}"
-    sed '/^[[:blank:]]*#/d;s/#.*//' "${template_sync_ignore_file_path}" | awk NF | xargs -r git reset --
+    tr -d '\r' < "${template_sync_ignore_file_path}" | sed '/^[[:blank:]]*#/d;s/#.*//' | awk NF | xargs -r git reset --
 
     debug "clean untracked files"
     git clean -df
