@@ -58,7 +58,19 @@ IS_FORCE_PUSH_PR="${IS_FORCE_PUSH_PR:-"false"}"
 IS_KEEP_BRANCH_ON_PR_CLEANUP="${IS_KEEP_BRANCH_ON_PR_CLEANUP:-"false"}"
 GIT_REMOTE_PULL_PARAMS="${GIT_REMOTE_PULL_PARAMS:---allow-unrelated-histories --squash --strategy=recursive -X theirs}"
 
-TEMPLATE_REMOTE_GIT_HASH=$(git ls-remote "${SOURCE_REPO}" HEAD | awk '{print $1}')
+# Detect default branch of source repo if SOURCE_BRANCH is not set
+if [[ -z "${SOURCE_BRANCH}" ]]; then
+  SOURCE_BRANCH=$(git ls-remote --symref "${SOURCE_REPO}" HEAD 2>/dev/null | awk -F'/' '/^ref:/ {print $NF}' | tr -d '\r\n')
+  if [[ -z "${SOURCE_BRANCH}" ]]; then
+    SOURCE_BRANCH="main"
+    info "Could not detect default branch of source repo, falling back to 'main'"
+  else
+    info "Detected default branch of source repo: ${SOURCE_BRANCH}"
+  fi
+fi
+
+# Use SOURCE_BRANCH to get the correct remote commit hash
+TEMPLATE_REMOTE_GIT_HASH=$(git ls-remote "${SOURCE_REPO}" "refs/heads/${SOURCE_BRANCH}" | awk '{print $1}')
 SHORT_TEMPLATE_GIT_HASH=$(git rev-parse --short "${TEMPLATE_REMOTE_GIT_HASH}")
 LOCAL_CURRENT_GIT_HASH=$(git rev-parse HEAD)  # need to be run before a pull to get the current local git hash
 
@@ -272,7 +284,12 @@ function pull_source_changes() {
   local source_repo=$1
   local git_remote_pull_params=$2
 
-  eval "git pull ${source_repo} --tags ${git_remote_pull_params}" || pull_has_issues=true
+  if [[ -n "${SOURCE_BRANCH}" ]]; then
+    eval "git pull ${source_repo} ${SOURCE_BRANCH} --tags ${git_remote_pull_params}" || pull_has_issues=true
+  else
+    # fallback for legacy usage
+    eval "git pull ${source_repo} --tags ${git_remote_pull_params}" || pull_has_issues=true
+  fi
 
   info "finished pulling from the source."
   info "logging out from source ${SOURCE_REPO_HOSTNAME}."
@@ -492,6 +509,12 @@ function arr_commit() {
   cmd_from_yml "precommit"
 
   echo "::group::commit changes"
+
+  # Only commit if merge commit was not already created by git pull
+  if git log -1 --pretty=%B | grep -q "Merge"; then
+    info "Merge commit already created by git pull, skipping add/commit."
+    return 0
+  fi
 
   git add .
 
