@@ -21,7 +21,8 @@ LABEL org.opencontainers.image.description="contains actions-template-sync"
 RUN apk add --update --no-cache bash git curl musl openssh git-lfs yq gnupg
 
 RUN wget https://github.com/cli/cli/releases/download/v${GH_CLI_VER}/gh_${GH_CLI_VER}_linux_386.tar.gz -O ghcli.tar.gz
-RUN tar --strip-components=1 -xf ghcli.tar.gz
+RUN tar --strip-components=1 -xf ghcli.tar.gz \
+    && rm ghcli.tar.gz
 
 ADD src/*.sh /bin/
 RUN chmod +x /bin/entrypoint.sh \
