@@ -386,6 +386,15 @@
         "bug",
         "code"
       ]
+    },
+    {
+      "login": "ToshY",
+      "name": "ToshY",
+      "avatar_url": "https://avatars.githubusercontent.com/u/31921460?v=4",
+      "profile": "http://toshy.dev",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
