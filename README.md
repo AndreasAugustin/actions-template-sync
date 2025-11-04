@@ -290,6 +290,7 @@ jobs:
 | source_gh_token | `[optional]` used for the source github repo token. Can be passed in using `${{ secrets.GITHUB_TOKEN }}` | `false` | `${{ github.token }}` |
 | target_gh_token | `[optional]` used for the source github repo token. Can be passed in using `${{ secrets.GITHUB_TOKEN }}` | `false` | `${{ github.token }}` |
 | source_repo_path            | Repository path of the template                                                                               | `true`   |                                                                       |
+| source_branch | `[optional]` used for the source repository branch | `false` | remote default branch |
 | upstream_branch             | The target branch                                                                                             | `false`  | The remote's default (usually `main`)                                                |
 | source_repo_ssh_private_key | `[optional]` private ssh key for the source repository. [see](#private-template-repository)                   | `false`  |                                                                       |
 | pr_branch_name_prefix       | `[optional]` the prefix of branches created by this action                                                    | `false`  | `chore/template_sync`                                                 |
