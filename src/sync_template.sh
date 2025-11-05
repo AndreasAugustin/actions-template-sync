@@ -297,7 +297,7 @@ function eventual_create_labels () {
 
   if [[ -z "${pr_labels}" ]]; then
     info "'pr_labels' is empty. Skipping labels check"
-    retun 0
+    return 0
   fi
 
   readarray -t labels_array < <(awk -F',' '{ for( i=1; i<=NF; i++ ) print $i }' <<<"${pr_labels}")
