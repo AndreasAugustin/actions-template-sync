@@ -132,6 +132,7 @@ function set_github_action_outputs() {
 
   local pr_branch=$1
   local template_git_hash=$2
+  local pr_number=$3
 
   info "set github action outputs"
 
@@ -141,6 +142,7 @@ function set_github_action_outputs() {
     # https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#setting-an-output-parameter
     echo "pr_branch=${pr_branch}" >> "$GITHUB_OUTPUT"
     echo "template_git_hash=${template_git_hash}" >> "$GITHUB_OUTPUT"
+    echo "pr_number=${pr_number}" >> "$GITHUB_OUTPUT"
   fi
   echo "::endgroup::"
 }
@@ -553,7 +555,7 @@ function arr_prepare_pr_create_pr() {
     create_pr "${PR_TITLE}" "${PR_BODY}" "${UPSTREAM_BRANCH}" "${PR_LABELS}" "${PR_REVIEWERS}"
   fi
 
-
+  export PR_NUMBER="$(gh pr view "${{ steps.sync.outputs.pr_branch }}_123" --json number --jq '.number' 2>/dev/null || true)"
   echo "::endgroup::"
 }
 
@@ -604,4 +606,4 @@ else
   fi
 fi
 
-set_github_action_outputs "${PR_BRANCH}" "${TEMPLATE_GIT_HASH}"
+set_github_action_outputs "${PR_BRANCH}" "${TEMPLATE_GIT_HASH}" "${PR_NUMBER}"
