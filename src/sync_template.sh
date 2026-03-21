@@ -555,7 +555,7 @@ function arr_prepare_pr_create_pr() {
     create_pr "${PR_TITLE}" "${PR_BODY}" "${UPSTREAM_BRANCH}" "${PR_LABELS}" "${PR_REVIEWERS}"
   fi
 
-  export PR_NUMBER="$(gh pr view "${{ steps.sync.outputs.pr_branch }}_123" --json number --jq '.number' 2>/dev/null || true)"
+  export PR_NUMBER="$(gh pr view "$PR_BRANCH" --json number --jq '.number' 2>/dev/null || true)"
   echo "::endgroup::"
 }
 
