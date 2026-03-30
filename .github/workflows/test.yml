@@ -17,7 +17,7 @@ jobs:
     steps:
       # To use this repository's private action, you must check out the repository
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
       - name: Test action step
         id: test
         uses: ./ # Uses an action in the root directory
@@ -38,7 +38,7 @@ jobs:
     steps:
       # To use this repository's private action, you must check out the repository
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
       - name: Test action step
         id: test
         uses: ./ # Uses an action in the root directory
