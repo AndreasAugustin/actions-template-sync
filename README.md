@@ -136,7 +136,7 @@ jobs:
 
       - name: Checkout
         # https://github.com/actions/checkout#usage
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           # submodules: true
           token: ${{ steps.generate_token.outputs.token }}
@@ -173,7 +173,7 @@ jobs:
       # To use this repository's private action, you must check out the repository
       - name: Checkout
         # https://github.com/actions/checkout#usage
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           # submodules: true
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -269,7 +269,7 @@ jobs:
     steps:
       # To use this repository's private action, you must check out the repository
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           # submodules: true
           token: ${{ secrets.CUSTOM_GITHUB_PAT }}
@@ -339,7 +339,7 @@ Per default the action is using the default branch as the target. To change this
 
 ```yaml
   - name: Checkout
-    uses: actions/checkout@v4
+    uses: actions/checkout@v6
     with:
       ref: <target_branch>  # defaults to the default branch
 ```
@@ -445,7 +445,7 @@ jobs:
     steps:
       # To use this repository's private action, you must check out the repository
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: actions-template-sync
         uses: AndreasAugustin/actions-template-sync@v2
@@ -512,7 +512,7 @@ jobs:
     steps:
       # To use this repository's private action, you must check out the repository
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: actions-template-sync first steps
         uses: AndreasAugustin/actions-template-sync@v2
@@ -690,7 +690,7 @@ This happens because the template repository is trying to overwrite some files i
         steps:
           # To use this repository's private action, you must check out the repository
           - name: Checkout
-            uses: actions/checkout@v4
+            uses: actions/checkout@v6
             with:
               # submodules: true
               persist-credentials: false # needed
