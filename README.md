@@ -284,37 +284,37 @@ jobs:
 
 ### Action Inputs
 
-| Variable                    | Description                                                                                                   | Required | Default                                                           |
-|-----------------------------|---------------------------------------------------------------------------------------------------------------|----------|-----------------------------------------------------------------------|
-| github_token                | :warning: [Deprecated] please use `source_gh_token` instead to have a declarative name. Token for the repo. Can be passed in using `${{ secrets.GITHUB_TOKEN }}`                                     | `true`   |   `${{ github.token }}`                                                                    |
+| Variable | Description | Required | Default |
+| -------- | ----------- | -------- | ------- |
+| github_token | :warning: [Deprecated] please use `source_gh_token` instead to have a declarative name. Token for the repo. Can be passed in using `${{ secrets.GITHUB_TOKEN }}` | `true` | `${{ github.token }}` |
 | source_gh_token | `[optional]` used for the source github repo token. Can be passed in using `${{ secrets.GITHUB_TOKEN }}` | `false` | `${{ github.token }}` |
 | target_gh_token | `[optional]` used for the source github repo token. Can be passed in using `${{ secrets.GITHUB_TOKEN }}` | `false` | `${{ github.token }}` |
-| source_repo_path            | Repository path of the template                                                                               | `true`   |                                                                       |
-| upstream_branch             | The target branch                                                                                             | `false`  | The remote's default (usually `main`)                                                |
-| source_repo_ssh_private_key | `[optional]` private ssh key for the source repository. [see](#private-template-repository)                   | `false`  |                                                                       |
-| pr_branch_name_prefix       | `[optional]` the prefix of branches created by this action                                                    | `false`  | `chore/template_sync`                                                 |
-| pr_title                    | `[optional]` the title of PRs opened by this action. Must be already created.                                 | `false`  | `upstream merge template repository`                                  |
-| pr_body                     | `[optional]` the body of PRs opened by this action. | `false` | `Merge ${SOURCE_REPO} ${TEMPLATE_GIT_HASH}` |
-| pr_labels                   | `[optional]` comma separated list. [pull request labels][pr-labels].                                          | `false`  | `sync_template`                                                       |
-| pr_reviewers                | `[optional]` comma separated list of pull request reviewers.                                                  | `false`  |                                                                       |
-| pr_commit_msg               | `[optional]` commit message in the created pull request                                                       | `false`  | `chore(template): merge template changes :up:`                        |
-| hostname                    | `[optional]` the hostname of the repository                                                                   | `false`  | `github.com`                                                          |
+| source_repo_path | Repository path of the template | `true` | |
+| upstream_branch | The target branch | `false` | The remote's default (usually `main`) |
+| source_repo_ssh_private_key | `[optional]` private ssh key for the source repository. [see](#private-template-repository) | `false` | |
+| pr_branch_name_prefix | `[optional]` the prefix of branches created by this action | `false` | `chore/template_sync` |
+| pr_title | `[optional]` the title of PRs opened by this action. Must be already created. | `false` | `upstream merge template repository` |
+| pr_body | `[optional]` the body of PRs opened by this action. | `false` | `Merge ${SOURCE_REPO} ${TEMPLATE_GIT_HASH}` |
+| pr_labels | `[optional]` comma separated list. [pull request labels][pr-labels]. | `false` | `sync_template` |
+| pr_reviewers | `[optional]` comma separated list of pull request reviewers. | `false` | |
+| pr_commit_msg | `[optional]` commit message in the created pull request | `false` | `chore(template): merge template changes :up:` |
+| hostname | `[optional]` the hostname of the repository | `false` | `github.com` |
 | is_git_lfs | `[optional]` set to `true` if you want to enalbe git lfs | `false` | `false` |
-| is_dry_run                  | `[optional]` set to `true` if you do not want to push the changes and not want to create a PR                 | `false`  |                                                                       |
-| is_allow_hooks              | `[optional]` set to `true` if you want to enable lifecycle hooks. Use this with caution!                      | `false`  | `false`                                                               |
+| is_dry_run | `[optional]` set to `true` if you do not want to push the changes and not want to create a PR | `false` | |
+| is_allow_hooks | `[optional]` set to `true` if you want to enable lifecycle hooks. Use this with caution! | `false` | `false` |
 | hooks | `[optional]` please check the lifecycle hooks section below | `false` | |
-| is_force_push_pr            | `[optional]` set to `true` if you want to force push and pr update. Needs further permissions (see below) | `false`  | `false`                                                               |
-| is_pr_cleanup               | `[optional]` set to `true` if you want to cleanup older PRs targeting the same branch. Use this with caution! | `false`  | `false`                                                               |
+| is_force_push_pr | `[optional]` set to `true` if you want to force push and pr update. Needs further permissions (see below) | `false` | `false` |
+| is_pr_cleanup | `[optional]` set to `true` if you want to cleanup older PRs targeting the same branch. Use this with caution! | `false` | `false` |
 | is_keep_branch_on_pr_cleanup | `[optional]` set to `true` if you want to keep the branch when pr is cleanup. Only makes sense together with `is_pr_cleanup` | `false` | `false` |
-| is_not_source_github        | `[optional]` set to `true` if the source git provider is not GitHub                                           | `false`  | `false`                                                               |
+| is_not_source_github | `[optional]` set to `true` if the source git provider is not GitHub | `false` | `false` |
 | is_force_deletion | `[optional]` set to `true` if you want to force delete files which are deleted within the source repository even if they contain changes. You need to also adjust `git_remote_pull_params` (see below for details) | `false` | `false` |
-| git_user_name               | `[optional]` set the committer git user.name                                                                  | `false`  | `${GITHUB_ACTOR}`                                                     |
-| git_user_email              | `[optional]` set the committer git user.email                                                                 | `false`  | `github-action@actions-template-sync.noreply.${SOURCE_REPO_HOSTNAME}` |
-| git_remote_pull_params      | `[optional]` set remote pull parameters                                                                       | `false`  | `--allow-unrelated-histories --squash --strategy=recursive -X theirs` |
+| git_user_name | `[optional]` set the committer git user.name | `false` | `${GITHUB_ACTOR}` |
+| git_user_email | `[optional]` set the committer git user.email | `false` | `github-action@actions-template-sync.noreply.${SOURCE_REPO_HOSTNAME}` |
+| git_remote_pull_params | `[optional]` set remote pull parameters | `false` | `--allow-unrelated-histories --squash --strategy=recursive -X theirs` |
 | gpg_private_key | `[optional]` set if you want to sign commits | `false` | |
 | gpg_passphrase | `[optional]` set if your optional gpg private key has a passphrase | `false` | |
 | steps | `[optional] add the steps you want to execute within the action` | `false` | all steps will be executed |
-| template_sync_ignore_file_path | `[optional] set the path to the ignore file.` | false |`.templatesyncignore` |
+| template_sync_ignore_file_path | `[optional] set the path to the ignore file.` | `false` | `.templatesyncignore` |
 | is_with_tags | `[optional]` set to `true` if tags should be synced | `false` | `false` |
 
 ### Action Outputs
@@ -731,17 +731,17 @@ For more information, see "[Enabling debug logging.][enabling-debug-logging]"
 
 There are other great tools available within GitHub. Here you can find a comparison.
 
-| **feature** | **actions-template-sync** |[github-sync][other-repo-sync]| [git-repo-sync][other-git-repo-sync] | [action-template-repository-sync][other-action-template-repository-sync] |
+| **feature** | **actions-template-sync** | [github-sync][other-repo-sync] | [git-repo-sync][other-git-repo-sync] | [action-template-repository-sync][other-action-template-repository-sync] |
 | ----------- | ------------------------- | -------------------------- | ------------------------------------ | --------------------------------- |
 | GitHub action | :heavy_check_mark: | :heavy_check_mark: | :x: | :heavy_check_mark: |
 | hooks | :heavy_check_mark: | :x: | :x: | :x: |
 | available docker image | :heavy_check_mark: | :x: | :x: | :heavy_check_mark: |
-| sync between private and public repo | :heavy_check_mark: `PAT,ssh,Github app` | :heavy_check_mark: `PAT,ssh` |:x: local repos | :heavy_check_mark: `PAT` |
+| sync between private and public repo | :heavy_check_mark: `PAT,ssh,Github app` | :heavy_check_mark: `PAT,ssh` | :x: local repos | :heavy_check_mark: `PAT` |
 | sync between 2 private repos | :heavy_check_mark: `PAT,ssh,Github app` | :heavy_check_mark: `PAT,ssh` | :x: local repos | :heavy_check_mark: `PAT` |
 | sync between 2 public repos | :heavy_check_mark: | :heavy_check_mark: | :x: local repos | :heavy_check_mark: |
 | two way sync | :x: | :heavy_check_mark: | :x: | :x: |
 | Sync from a third-party repo to a Github repo | :heavy_check_mark: | :heavy_check_mark: | :x: local repos | :x: |
-| dry run | :heavy_check_mark: | :x: | :x: | :heavy_check_mark:  |
+| dry run | :heavy_check_mark: | :x: | :x: | :heavy_check_mark: |
 | ignore files | :heavy_check_mark: | :x: | :x: | :heavy_check_mark: |
 | creates a PR | :heavy_check_mark: | :heavy_check_mark: | :x: | :heavy_check_mark: |
 | sign commits | :heavy_check_mark: | :x: | :x: | :x: |
