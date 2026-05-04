@@ -413,6 +413,15 @@
       "contributions": [
         "ideas"
       ]
+    },
+    {
+      "login": "Eric-Liu-SANDAG",
+      "name": "Eric Liu",
+      "avatar_url": "https://avatars.githubusercontent.com/u/108823453?v=4",
+      "profile": "https://github.com/Eric-Liu-SANDAG",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7,
