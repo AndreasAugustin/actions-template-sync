@@ -140,6 +140,7 @@ function set_github_action_outputs() {
     info "env var 'GITHUB_RUN_ID' is empty -> no github action workflow"
   else
     # https://docs.github.com/en/actions/using-workflows/workflow-commands-for-github-actions#setting-an-output-parameter
+    # shellcheck disable=SC2129
     echo "pr_branch=${pr_branch}" >> "$GITHUB_OUTPUT"
     echo "template_git_hash=${template_git_hash}" >> "$GITHUB_OUTPUT"
     echo "pr_number=${pr_number}" >> "$GITHUB_OUTPUT"
