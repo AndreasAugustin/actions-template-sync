@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.5.3](https://github.com/AndreasAugustin/actions-template-sync/compare/v2.5.2...v2.5.3) (2026-05-04)
+
+
+### Bug Fixes
+
+* **lint:** schellcheck issue ([396583a](https://github.com/AndreasAugustin/actions-template-sync/commit/396583a931934103aa1f50c43c9868b44298aef6))
+* **lint:** schellcheck issue ([d0fb833](https://github.com/AndreasAugustin/actions-template-sync/commit/d0fb83334311817239120f8e3638641b82cbddda))
+
 ## [2.5.2](https://github.com/AndreasAugustin/actions-template-sync/compare/v2.5.1...v2.5.2) (2025-07-16)
 
 
