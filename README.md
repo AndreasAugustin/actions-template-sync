@@ -321,15 +321,21 @@ jobs:
 
 > Properties that are available after the action executed.
 
-| output | description |
-| ------ | ----------- |
-| pr_branch | The name of the branch used for the pull request |
-| template_git_hash | The template source repository git hash |
+| output            | description                                       |
+|-------------------|---------------------------------------------------|
+| pr_branch         | The name of the branch used for the pull request  |
+| pr_number         | The number of the pr created for the sync branch  |
+| template_git_hash | The template source repository git hash           |
 
 **Remarks** Please consider following edge cases
 
 * **pr_branch**
   * If PR branch already exists (e.g. after a 2nd run) the action won't update the branch but will still output the branch name
+  * If the remote repository already contains the source repository changes the action will exit and the output variable will be undefined
+  * If there are no changes the action will exit and the output variable will be undefined
+
+* **pr_number**
+  * If PR branch already exists (e.g. after a 2nd run) the action will set pr_number undefined (as there was no created PR's).
   * If the remote repository already contains the source repository changes the action will exit and the output variable will be undefined
   * If there are no changes the action will exit and the output variable will be undefined
 

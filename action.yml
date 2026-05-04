@@ -87,6 +87,9 @@ inputs:
     description: "[optional] set to true if tags should be synced"
     default: "false"
 outputs:
+  pr_number:
+    description: "The number of the PR created"
+    value: ${{ steps.sync.outputs.pr_number }}
   pr_branch:
     description: "The name of the PR branch"
     value: ${{ steps.sync.outputs.pr_branch }}
