@@ -231,9 +231,9 @@ settings -> actions -> general.
 * `metadata` -> read
 * `pull requests` -> write
 
-If you are automatically adding reviewers you also need
+If you are automatically adding reviewers or assignees you also need
 
-* `organisation:members` read permissions to the PAT token.
+* `organisation:members` read permissions to the PAT token (so GitHub can resolve organization members as reviewers or assignees).
 
 ![pat-scopes-fine-grained](docs/assets/pat_fine_grained_needed_scopes.png)
 
@@ -297,6 +297,7 @@ jobs:
 | pr_body | `[optional]` the body of PRs opened by this action. | `false` | `Merge ${SOURCE_REPO} ${TEMPLATE_GIT_HASH}` |
 | pr_labels | `[optional]` comma separated list. [pull request labels][pr-labels]. | `false` | `sync_template` |
 | pr_reviewers | `[optional]` comma separated list of pull request reviewers. | `false` | |
+| pr_assignees | `[optional]` comma separated list of pull request assignees. | `false` | |
 | pr_commit_msg | `[optional]` commit message in the created pull request | `false` | `chore(template): merge template changes :up:` |
 | hostname | `[optional]` the hostname of the repository | `false` | `github.com` |
 | is_git_lfs | `[optional]` set to `true` if you want to enalbe git lfs | `false` | `false` |
