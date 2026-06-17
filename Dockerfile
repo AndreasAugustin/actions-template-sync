@@ -1,7 +1,7 @@
 ########################################
 # prod image
 #######################################
-FROM alpine:3.23.4 AS prod
+FROM alpine:3.24.0 AS prod
 
 ARG GH_CLI_VER=2.44.1
 
@@ -55,7 +55,7 @@ ENTRYPOINT ["/bin/zsh"]
 #######################################
 # image for creating the documentation
 ######################################
-FROM node:25.9.0-alpine AS docs
+FROM node:26.3.0-alpine AS docs
 
 # install packages
 RUN apk add --update --no-cache bash make git zsh curl tmux
