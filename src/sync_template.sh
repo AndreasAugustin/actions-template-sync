@@ -363,6 +363,7 @@ function push () {
 #   branch
 #   labels
 #   reviewers
+#   assignees
 ###################################
 function create_pr() {
   info "create pr"
@@ -371,13 +372,15 @@ function create_pr() {
   local branch=$3
   local labels=$4
   local reviewers=$5
+  local assignees=$6
 
   gh pr create \
     --title "${title}" \
     --body "${body}" \
     --base "${branch}" \
     --label "${labels}" \
-    --reviewer "${reviewers}" || create_pr_has_issues=true
+    --reviewer "${reviewers}" \
+    --assignee "${assignees}" || create_pr_has_issues=true
 
   if [ "$create_pr_has_issues" == true ] ; then
     warn "Creating the PR failed."
@@ -395,6 +398,7 @@ function create_pr() {
 #   upstream_branch
 #   labels
 #   reviewers
+#   assignees
 ###################################
 function create_or_edit_pr() {
   info "create pr or edit the pr"
@@ -403,13 +407,14 @@ function create_or_edit_pr() {
   local upstream_branch=$3
   local labels=$4
   local reviewers=$5
-  local pr_branch=$6
+  local assignees=$6
 
-  create_pr "${title}" "${body}" "${upstream_branch}" "${labels}" "${reviewers}" || gh pr edit \
+  create_pr "${title}" "${body}" "${upstream_branch}" "${labels}" "${reviewers}" "${assignees}" || gh pr edit \
     --title "${title}" \
     --body "${body}" \
     --add-label "${labels}" \
-    --add-reviewer "${reviewers}"
+    --add-reviewer "${reviewers}" \
+    --add-assignee "${assignees}"
 }
 
 #########################################
@@ -551,9 +556,9 @@ function arr_prepare_pr_create_pr() {
 
   cmd_from_yml "prepr"
   if [ "$IS_FORCE_PUSH_PR" == true ] ; then
-    create_or_edit_pr "${PR_TITLE}" "${PR_BODY}" "${UPSTREAM_BRANCH}" "${PR_LABELS}" "${PR_REVIEWERS}"
+    create_or_edit_pr "${PR_TITLE}" "${PR_BODY}" "${UPSTREAM_BRANCH}" "${PR_LABELS}" "${PR_REVIEWERS}" "${PR_ASSIGNEES}"
   else
-    create_pr "${PR_TITLE}" "${PR_BODY}" "${UPSTREAM_BRANCH}" "${PR_LABELS}" "${PR_REVIEWERS}"
+    create_pr "${PR_TITLE}" "${PR_BODY}" "${UPSTREAM_BRANCH}" "${PR_LABELS}" "${PR_REVIEWERS}" "${PR_ASSIGNEES}"
   fi
 
   PR_NUMBER="$(gh pr view "$PR_BRANCH" --json number --jq '.number' 2>/dev/null || true)"
