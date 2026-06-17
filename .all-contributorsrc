@@ -422,6 +422,15 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "mzglinski",
+      "name": "mzglinski",
+      "avatar_url": "https://avatars.githubusercontent.com/u/23341314?v=4",
+      "profile": "https://github.com/mzglinski",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
