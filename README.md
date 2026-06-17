@@ -375,6 +375,8 @@ You can use all [triggers][action-triggers] which are supported for GitHub actio
 
 ## Ignore Files
 
+:warning: `.templatesyncignore` within the target repository is not supported (functionality is on purpose similar to a `.gitignore` file).
+
 Create a `.templatesyncignore` file. Just like writing a `.gitignore` file, follow the [glob pattern][glob-pattern]
 in defining the files and folders that should be excluded from syncing with the template repository.
 
