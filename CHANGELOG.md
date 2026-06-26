@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.6.0](https://github.com/AndreasAugustin/actions-template-sync/compare/v2.5.3...v2.6.0) (2026-06-26)
+
+
+### Features
+
+* support setting pr assignes ([#690](https://github.com/AndreasAugustin/actions-template-sync/issues/690)) ([1b34da4](https://github.com/AndreasAugustin/actions-template-sync/commit/1b34da48324432a5a09c70af638dc8a8bb585ced))
+
 ## [2.5.3](https://github.com/AndreasAugustin/actions-template-sync/compare/v2.5.2...v2.5.3) (2026-05-04)
 
 
