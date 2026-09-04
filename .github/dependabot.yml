@@ -4,9 +4,19 @@ updates:
   directory: "/"
   schedule:
     interval: "weekly"
+  groups:
+    github-actions-minor-and-patch:
+      update-types:
+      - "minor"
+      - "patch"
 - package-ecosystem: docker
   directory: "/"
   schedule:
     interval: weekly
     time: "04:00"
   open-pull-requests-limit: 10
+  groups:
+    docker-minor-and-patch:
+      update-types:
+      - "minor"
+      - "patch"
