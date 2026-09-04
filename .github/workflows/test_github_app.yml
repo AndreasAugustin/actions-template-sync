@@ -17,7 +17,7 @@ jobs:
     steps:
       # To use this repository's private action, you must check out the repository
       - name: token-generation
-        uses: actions/create-github-app-token@v3
+        uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
         id: source-app-token
         with:
           app-id: ${{ secrets.TEST_GITHUB_APP_ID }}
@@ -27,7 +27,7 @@ jobs:
 
       - name: Checkout
         # https://github.com/actions/checkout#usage
-        uses: actions/checkout@v6
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
         with:
           token: ${{ steps.source-app-token.outputs.token }}
           persist-credentials: false # Don't set this to true as otherwise the token will be stored in the local git config and the run will fail
@@ -43,6 +43,5 @@ jobs:
           upstream_branch: main
           is_dry_run: false
           is_allow_hooks: true
-
 
 

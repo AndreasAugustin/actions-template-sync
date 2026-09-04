@@ -35,4 +35,8 @@ prune: ## delete the whole environment
 
 .Phony: shellcheck
 shellcheck:  ## run shellcheck
-	docker compose run shellcheck -x src/*.sh
+	docker compose run shellcheck -x src/*.sh tests/*.sh
+
+.PHONY: shelltest
+shelltest:  ## run shell BDD tests
+	bash tests/sync_common_test.sh

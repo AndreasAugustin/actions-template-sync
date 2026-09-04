@@ -17,7 +17,7 @@ jobs:
     steps:
       # To use this repository's private action, you must check out the repository
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
       - name: Test action step ssh
         if: github.repository_owner == 'AndreasAugustin'
         uses: ./ # Uses an action in the root directory
