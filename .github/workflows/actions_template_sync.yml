@@ -7,6 +7,10 @@ on:
   # manual trigger
   workflow_dispatch:
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
 jobs:
   repo-sync:
     runs-on: ubuntu-latest
