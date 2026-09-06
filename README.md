@@ -775,6 +775,12 @@ make help
 
 For some architectural notes please have a look at the [docs](./docs/README.md)
 
+## Sponsorship
+
+If `actions-template-sync` helps you or your team, please consider
+[sponsoring the project](https://github.com/sponsors/AndreasAugustin). Your
+support helps maintain the action and continue its development.
+
 ## Contributors ✨
 
 Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
