@@ -1,5 +1,14 @@
 # Changelog
 
+## [2.6.0](https://github.com/AndreasAugustin/actions-template-sync/compare/v2.5.3...v2.6.0) (2026-09-06)
+
+
+### Features
+
+* **#547:** select latest semantic release from remote ([#715](https://github.com/AndreasAugustin/actions-template-sync/issues/715)) ([b8695e2](https://github.com/AndreasAugustin/actions-template-sync/commit/b8695e228b8f472ea6705f48d9e3aa63d85fb584))
+* support setting pr assignes ([#690](https://github.com/AndreasAugustin/actions-template-sync/issues/690)) ([1b34da4](https://github.com/AndreasAugustin/actions-template-sync/commit/1b34da48324432a5a09c70af638dc8a8bb585ced))
+* **sync:** support selecting source branch ([#717](https://github.com/AndreasAugustin/actions-template-sync/issues/717)) ([23c1e26](https://github.com/AndreasAugustin/actions-template-sync/commit/23c1e26175f347a5cafdc8c1a1ddc3ee6b15b1c1))
+
 ## [2.5.3](https://github.com/AndreasAugustin/actions-template-sync/compare/v2.5.2...v2.5.3) (2026-05-04)
 
 
