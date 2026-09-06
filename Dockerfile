@@ -35,6 +35,10 @@ RUN mkdir -p /root/.ssh \
 
 WORKDIR /app
 
+ADD src/*.sh /app/src/
+ADD tests/*.sh /app/tests/
+ADD action.yml /app/action.yml
+
 RUN git config --global --add safe.directory /app/
 
 ENTRYPOINT ["/bin/bash", "/bin/entrypoint.sh"]

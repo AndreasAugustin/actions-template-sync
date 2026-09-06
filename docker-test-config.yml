@@ -12,6 +12,15 @@ fileExistenceTests:
   - name: "SSH known hosts are configured"
     path: "/root/.ssh/known_hosts"
     shouldExist: true
+  - name: "shell tests are present"
+    path: "/app/tests/sync_common_test.sh"
+    shouldExist: true
+  - name: "shell test helpers are present"
+    path: "/app/tests/test_common.sh"
+    shouldExist: true
+  - name: "action metadata is present"
+    path: "/app/action.yml"
+    shouldExist: true
 commandTests:
   - name: "gh is installed"
     command: "which"
@@ -25,3 +34,11 @@ commandTests:
     command: "which"
     args: ["git"]
     expectedOutput: ["/usr/bin/git"]
+  - name: "sync common shell tests pass"
+    command: "bash"
+    args: ["/app/tests/sync_common_test.sh"]
+    expectedOutput: ["TEST RESULTS: 18 passed, 0 failed"]
+  - name: "sync template shell tests pass"
+    command: "bash"
+    args: ["/app/tests/sync_template_test.sh"]
+    expectedOutput: ["TEST RESULTS: 3 passed, 0 failed"]
