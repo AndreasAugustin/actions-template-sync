@@ -37,8 +37,12 @@ test_starts_and_ends_log_groups() {
 test_semver_check() {
   is_semver "1.2.3"
   is_semver "v1.2.3-rc1"
-  ! is_semver "1.2"
-  ! is_semver "release-1.2.3"
+  if is_semver "1.2"; then
+    return 1
+  fi
+  if is_semver "release-1.2.3"; then
+    return 1
+  fi
 }
 
 test_latest_semantic_version_tag_from_remote() {

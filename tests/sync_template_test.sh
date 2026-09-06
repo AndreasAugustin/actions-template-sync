@@ -88,7 +88,9 @@ test_sync_uses_latest_stable_semver() {
   [[ -f "${temp_dir}/target-false/file" ]]
   grep -q '^stable$' "${temp_dir}/target-false/file"
   grep -q '^release$' "${temp_dir}/target-false/file"
-  ! grep -q '^prerelease$' "${temp_dir}/target-false/file"
+  if grep -q '^prerelease$' "${temp_dir}/target-false/file"; then
+    return 1
+  fi
   rm -rf "${temp_dir}"
 }
 
@@ -110,8 +112,8 @@ test_action_wires_semver_inputs() {
   action=$(<"${REPO_ROOT}/action.yml")
   assert_contains "is_sync_to_latest_semver:" "${action}"
   assert_contains "is_include_prerelease:" "${action}"
-  assert_contains 'IS_SYNC_TO_LATEST_SEMVER: ${{ inputs.is_sync_to_latest_semver }}' "${action}"
-  assert_contains 'IS_INCLUDE_PRERELEASE: ${{ inputs.is_include_prerelease }}' "${action}"
+  assert_contains "IS_SYNC_TO_LATEST_SEMVER: \${{ inputs.is_sync_to_latest_semver }}" "${action}"
+  assert_contains "IS_INCLUDE_PRERELEASE: \${{ inputs.is_include_prerelease }}" "${action}"
 }
 
 it "syncs to the latest stable semantic version" test_sync_uses_latest_stable_semver
