@@ -1,0 +1,23 @@
+schemaVersion: '2.0.0'
+metadataTest:
+  entrypoint: ["docker-entrypoint.sh"]
+  workdir: "/app"
+fileExistenceTests:
+  - name: "markdownlint is installed"
+    path: "/usr/local/bin/markdownlint"
+    shouldExist: true
+  - name: "zsh is installed"
+    path: "/bin/zsh"
+    shouldExist: true
+  - name: "tmux is installed"
+    path: "/usr/bin/tmux"
+    shouldExist: true
+commandTests:
+  - name: "node is installed"
+    command: "which"
+    args: ["node"]
+    expectedOutput: ["/usr/local/bin/node"]
+  - name: "npm is installed"
+    command: "which"
+    args: ["npm"]
+    expectedOutput: ["/usr/local/bin/npm"]

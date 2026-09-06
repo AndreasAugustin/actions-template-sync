@@ -33,6 +33,10 @@ RUN chmod +x /bin/entrypoint.sh \
 RUN mkdir -p /root/.ssh \
   && ssh-keyscan -t rsa github.com >> /root/.ssh/known_hosts
 
+WORKDIR /app
+
+RUN git config --global --add safe.directory /app/
+
 ENTRYPOINT ["/bin/bash", "/bin/entrypoint.sh"]
 #######################################
 # image for dev build environment

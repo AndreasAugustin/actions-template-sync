@@ -41,3 +41,21 @@ shellcheck:  ## run shellcheck
 shelltest:  ## run shell BDD tests
 	bash tests/sync_common_test.sh
 	bash tests/sync_template_test.sh
+
+.PHONY: docker-test
+docker-test: ## build and test all Docker image targets
+	docker build --target prod --tag actions-template-sync:prod .
+	docker build --target dev --tag actions-template-sync:dev .
+	docker build --target docs --tag actions-template-sync:docs .
+	@container_structure_test="$$(mktemp)"; \
+	trap 'rm -f "$$container_structure_test"' EXIT; \
+	curl --fail --silent --show-error \
+		https://storage.googleapis.com/container-structure-test/latest/container-structure-test-linux-amd64 \
+		-o "$$container_structure_test"; \
+	chmod +x "$$container_structure_test"; \
+	"$$container_structure_test" test \
+		--image actions-template-sync:prod --config docker-test-config.yml; \
+	"$$container_structure_test" test \
+		--image actions-template-sync:dev --config docker-test-config.yml; \
+	"$$container_structure_test" test \
+		--image actions-template-sync:docs --config docker-docs-test-config.yml

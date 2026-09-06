@@ -1,6 +1,27 @@
 schemaVersion: '2.0.0'
+metadataTest:
+  workdir: "/app"
+fileExistenceTests:
+  - name: "entrypoint is present"
+    path: "/bin/entrypoint.sh"
+    shouldExist: true
+    permissions: "-rwxrwxr-x"
+  - name: "sync scripts are present"
+    path: "/bin/sync_common.sh"
+    shouldExist: true
+  - name: "SSH known hosts are configured"
+    path: "/root/.ssh/known_hosts"
+    shouldExist: true
 commandTests:
   - name: "gh is installed"
     command: "which"
     args: ["gh"]
     expectedOutput: ["/bin/gh"]
+  - name: "bash is installed"
+    command: "which"
+    args: ["bash"]
+    expectedOutput: ["/bin/bash"]
+  - name: "git is installed"
+    command: "which"
+    args: ["git"]
+    expectedOutput: ["/usr/bin/git"]

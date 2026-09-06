@@ -29,3 +29,30 @@ jobs:
         run: make shelltest
       - name: prune
         run: make prune
+
+  docker:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: build Docker images
+        run: |
+          docker build --target prod --tag actions-template-sync:prod .
+          docker build --target dev --tag actions-template-sync:dev .
+          docker build --target docs --tag actions-template-sync:docs .
+      - name: install container test tools
+        run: |
+          curl -LO https://storage.googleapis.com/container-structure-test/latest/container-structure-test-linux-amd64
+          chmod +x container-structure-test-linux-amd64
+          sudo mv container-structure-test-linux-amd64 /usr/local/bin/container-structure-test
+      - name: test Docker images
+        run: |
+          container-structure-test test \
+            --image actions-template-sync:prod \
+            --config docker-test-config.yml
+          container-structure-test test \
+            --image actions-template-sync:dev \
+            --config docker-test-config.yml
+          container-structure-test test \
+            --image actions-template-sync:docs \
+            --config docker-docs-test-config.yml
