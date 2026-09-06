@@ -103,7 +103,7 @@ info "variables done"
 #   github_server url
 #######################################
 function gh_login_target_github() {
-  echo "::group::login target github"
+  start_group "login target github"
   local github_server_url=$1
 
   if [[ -n "${TARGET_GH_TOKEN}" ]]; then
@@ -118,7 +118,7 @@ function gh_login_target_github() {
     gh auth status --hostname "${target_repo_hostname}"
   fi
 
-  echo "::endgroup::"
+  end_group
 }
 
 #######################################
@@ -128,7 +128,7 @@ function gh_login_target_github() {
 #   template_git_hash
 #######################################
 function set_github_action_outputs() {
-  echo "::group::set gh action outputs"
+  start_group "set gh action outputs"
 
   local pr_branch=$1
   local template_git_hash=$2
@@ -145,7 +145,7 @@ function set_github_action_outputs() {
     echo "template_git_hash=${template_git_hash}" >> "$GITHUB_OUTPUT"
     echo "pr_number=${pr_number}" >> "$GITHUB_OUTPUT"
   fi
-  echo "::endgroup::"
+  end_group
 }
 
 #######################################
@@ -459,7 +459,7 @@ function handle_templatesyncignore() {
 
 function arr_prechecks() {
   info "prechecks"
-  echo "::group::prechecks"
+  start_group "prechecks"
   if [ "${IS_FORCE_PUSH_PR}" == "true" ]; then
     warn "skipping prechecks because we force push and pr"
     return 0
@@ -468,7 +468,7 @@ function arr_prechecks() {
 
   check_if_commit_already_in_hist_graceful_exit "${TEMPLATE_REMOTE_GIT_HASH}"
 
-  echo "::endgroup::"
+  end_group
 }
 
 
@@ -476,7 +476,7 @@ function arr_checkout_branch_and_pull() {
   info "checkout branch and pull"
   cmd_from_yml "prepull"
 
-  echo "::group::checkout branch and pull"
+  start_group "checkout branch and pull"
 
   debug "create new branch from default branch with name ${PR_BRANCH}"
   git checkout -b "${PR_BRANCH}"
@@ -490,7 +490,7 @@ function arr_checkout_branch_and_pull() {
     force_delete_files "${LOCAL_CURRENT_GIT_HASH}"
   fi
 
-  echo "::endgroup::"
+  end_group
 }
 
 
@@ -499,7 +499,7 @@ function arr_commit() {
 
   cmd_from_yml "precommit"
 
-  echo "::group::commit changes"
+  start_group "commit changes"
 
   git add .
 
@@ -509,21 +509,21 @@ function arr_commit() {
 
   git commit --signoff -m "${PR_COMMIT_MSG}"
 
-  echo "::endgroup::"
+  end_group
 }
 
 
 function arr_push() {
   info "push"
 
-  echo "::group::push"
+  start_group "push"
   if [ "$IS_DRY_RUN" == "true" ]; then
     warn "dry_run option is set to on. skipping push"
     return 0
   fi
   cmd_from_yml "prepush"
   push "${PR_BRANCH}" "${IS_FORCE_PUSH_PR}" "${IS_WITH_TAGS}"
-  echo "::endgroup::"
+  end_group
 }
 
 function arr_prepare_pr_create_pr() {
@@ -532,13 +532,13 @@ function arr_prepare_pr_create_pr() {
     warn "dry_run option is set to on. skipping labels check, cleanup older PRs, push and create pr"
     return 0
   fi
-  echo "::group::check for missing labels"
+  start_group "check for missing labels"
 
   eventual_create_labels "${PR_LABELS}"
 
-  echo "::endgroup::"
+  end_group
 
-  echo "::group::cleanup older PRs"
+  start_group "cleanup older PRs"
   if [ "$IS_PR_CLEANUP" != "false" ]; then
     if [[ -z "${PR_LABELS}" ]]; then
     warn "env var 'PR_LABELS' is empty. Skipping older prs cleanup"
@@ -550,9 +550,9 @@ function arr_prepare_pr_create_pr() {
     warn "is_pr_cleanup option is set to off. Skipping older prs cleanup"
   fi
 
-  echo "::endgroup::"
+  end_group
 
-  echo "::group::create PR"
+  start_group "create PR"
 
   cmd_from_yml "prepr"
   if [ "$IS_FORCE_PUSH_PR" == true ] ; then
@@ -563,7 +563,7 @@ function arr_prepare_pr_create_pr() {
 
   PR_NUMBER="$(gh pr view "$PR_BRANCH" --json number --jq '.number' 2>/dev/null || true)"
   export PR_NUMBER
-  echo "::endgroup::"
+  end_group
 }
 
 declare -A cmd_arr

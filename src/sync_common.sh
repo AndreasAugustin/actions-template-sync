@@ -41,34 +41,63 @@ function info() {
 }
 
 #######################################
-# Get the latest semantic version tag reachable from a branch.
+# Start a GitHub Actions log group.
 # Arguments:
-#   source_branch
+#   group name
+#######################################
+function start_group() {
+  echo "::group::$*";
+}
+
+#######################################
+# End a GitHub Actions log group.
+#######################################
+function end_group() {
+  echo "::endgroup::";
+}
+
+#######################################
+# Get the latest semantic version tag from a remote repository.
+# Arguments:
+#   remote_repository
+#   include_prerelease (optional, defaults to false)
 # Outputs:
 #   the latest semantic version tag
 #######################################
 function get_latest_semantic_version_tag() {
-  local source_branch=$1
+  local remote_repository=$1
+  local include_prerelease=${2:-false}
+  local remote_tags
   local tag
 
-  if [[ -z "${source_branch}" ]]; then
-    err "Missing variable 'source_branch'."
+  if [[ -z "${remote_repository}" ]]; then
+    err "Missing variable 'remote_repository'."
     return 1
   fi
 
-  if ! git rev-parse --verify "${source_branch}^{commit}" >/dev/null 2>&1; then
-    err "Source branch '${source_branch}' does not exist."
+  if [[ "${include_prerelease}" != true && "${include_prerelease}" != false ]]; then
+    err "Invalid value for 'include_prerelease': '${include_prerelease}'. Expected true or false."
+    return 1
+  fi
+
+  if ! remote_tags=$(git ls-remote --tags --refs "${remote_repository}"); then
+    err "Unable to list tags from remote repository '${remote_repository}'."
     return 1
   fi
 
   while IFS= read -r tag; do
-    if [[ "${tag}" =~ ^v?[0-9]+\.[0-9]+\.[0-9]+([-.][0-9A-Za-z.-]+)?$ ]]; then
-      printf '%s\n' "${tag}"
+    if [[ "${tag}" =~ ^v?[0-9]+\.[0-9]+\.[0-9]+$ ||
+      ( "${include_prerelease}" == true &&
+        "${tag}" =~ ^v?[0-9]+\.[0-9]+\.[0-9]+-[0-9A-Za-z.-]+$ ) ]]; then
+      info "${tag}"
       return 0
     fi
-  done < <(git tag --merged "${source_branch}" --sort=-v:refname)
+  done < <(
+    awk '{sub("refs/tags/", "", $2); print $2}' <<< "${remote_tags}" |
+      sort -Vr
+  )
 
-  err "No semantic version tag found on branch '${source_branch}'."
+  err "No semantic version tag found in remote repository '${remote_repository}'."
   return 1
 }
 

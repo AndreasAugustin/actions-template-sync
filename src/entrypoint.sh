@@ -68,7 +68,7 @@ SOURCE_REPO_PREFIX="https://${SOURCE_REPO_HOSTNAME}/"
 #   SRC_SSH_PRIVATEKEY_ABS_PATH
 #######################################
 function ssh_setup() {
-  echo "::group::ssh setup"
+  start_group "ssh setup"
 
   info "prepare ssh"
 
@@ -100,7 +100,7 @@ function ssh_setup() {
   # adjusting outer variable source repo prefix
   SOURCE_REPO_PREFIX="git@${source_repo_hostname}:"
 
-  echo "::endgroup::"
+  end_group
 }
 
 #######################################
@@ -110,7 +110,7 @@ function ssh_setup() {
 #   git_user_email
 #######################################
 function gpg_setup() {
-  echo "::group::gpg setup"
+  start_group "gpg setup"
   info "start prepare gpg"
 
   local gpg_private_key=$1
@@ -135,7 +135,7 @@ function gpg_setup() {
   git config gpg.program "${SCRIPT_DIR}/gpg_no_tty.sh"
 
   info "done prepare gpg"
-  echo "::endgroup::"
+  end_group
 }
 
 
@@ -147,7 +147,7 @@ function gpg_setup() {
 #   source_repo_hostname
 #######################################
 function git_init() {
-  echo "::group::git init"
+  start_group "git init"
   info "set git global configuration"
 
   local git_user_email=$1
@@ -171,7 +171,7 @@ function git_init() {
   else
     info "the source repository is located within GitHub."
   fi
-  echo "::endgroup::"
+  end_group
 }
 
 #######################################
@@ -180,7 +180,7 @@ function git_init() {
 #   source_repo_hostname
 #######################################
 function gh_login_src_github() {
-  echo "::group::login src github"
+  start_group "login src github"
   local source_repo_hostname=$1
   # GITHUB_TOKEN is deprecated and can be removed in the future
   if [[ -n "${SOURCE_GH_TOKEN}" ]] || [[ -n "${GITHUB_TOKEN}" ]] &>/dev/null; then
@@ -209,7 +209,7 @@ function gh_login_src_github() {
     gh auth setup-git --hostname "${source_repo_hostname}"
     gh auth status --hostname "${source_repo_hostname}"
   fi
-  echo "::endgroup::"
+  end_group
 }
 
 ###################################################

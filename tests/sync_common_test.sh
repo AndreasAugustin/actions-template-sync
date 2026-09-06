@@ -56,9 +56,18 @@ test_debug_logs_a_debug_message() {
   assert_equal "::debug::details" "${output}"
 }
 
-test_latest_semantic_version_tag_is_reachable_from_branch() {
-  local temp_dir output
+test_starts_and_ends_log_groups() {
+  local output
+  output=$(start_group "setup")
+  assert_equal "::group::setup" "${output}"
+  output=$(end_group)
+  assert_equal "::endgroup::" "${output}"
+}
+
+test_latest_semantic_version_tag_from_remote() {
+  local temp_dir remote_dir output
   temp_dir=$(mktemp -d)
+  remote_dir="${temp_dir}/remote.git"
 
   (
     cd "${temp_dir}"
@@ -68,21 +77,21 @@ test_latest_semantic_version_tag_is_reachable_from_branch() {
     touch file
     git add file
     git commit --quiet -m initial
-    git branch -M main
     git tag v1.0.0
     git tag v2.0.0
     git tag not-a-version
-    git checkout --quiet -b other
-    git commit --quiet --allow-empty -m other
-    output=$(get_latest_semantic_version_tag main)
-    assert_equal "v2.0.0" "${output}"
+    git init --bare --quiet "${remote_dir}"
+    git push --quiet "${remote_dir}" HEAD --tags
+    output=$(get_latest_semantic_version_tag "${remote_dir}")
+    assert_equal "::info::v2.0.0" "${output}"
   )
   rm -rf "${temp_dir}"
 }
 
-test_latest_semantic_version_tag_ignores_unreachable_tags() {
-  local temp_dir output
+test_latest_semantic_version_tag_excludes_prereleases_by_default() {
+  local temp_dir remote_dir output
   temp_dir=$(mktemp -d)
+  remote_dir="${temp_dir}/remote.git"
 
   (
     cd "${temp_dir}"
@@ -92,14 +101,91 @@ test_latest_semantic_version_tag_ignores_unreachable_tags() {
     touch file
     git add file
     git commit --quiet -m initial
-    git checkout --quiet -b source
-    git commit --quiet --allow-empty -m source
     git tag v1.0.0
-    git checkout --quiet -b unrelated HEAD~1
-    git commit --quiet --allow-empty -m unrelated
+    git tag v9.0.0-rc1
+    git tag not-a-version
+    git init --bare --quiet "${remote_dir}"
+    git push --quiet "${remote_dir}" HEAD --tags
+    output=$(get_latest_semantic_version_tag "${remote_dir}")
+    assert_equal "::info::v1.0.0" "${output}"
+  )
+  rm -rf "${temp_dir}"
+}
+
+test_latest_semantic_version_tag_includes_prereleases_when_requested() {
+  local temp_dir remote_dir output
+  temp_dir=$(mktemp -d)
+  remote_dir="${temp_dir}/remote.git"
+
+  (
+    cd "${temp_dir}"
+    git init --quiet
+    git config user.email test@example.com
+    git config user.name test
+    touch file
+    git add file
+    git commit --quiet -m initial
+    git tag v1.0.0
+    git tag v9.0.0-rc1
+    git tag not-a-version
+    git init --bare --quiet "${remote_dir}"
+    git push --quiet "${remote_dir}" HEAD --tags
+    output=$(get_latest_semantic_version_tag "${remote_dir}" true)
+    assert_equal "::info::v9.0.0-rc1" "${output}"
+  )
+  rm -rf "${temp_dir}"
+}
+
+test_latest_semantic_version_tag_requires_remote() {
+  local output
+  if output=$(get_latest_semantic_version_tag "" 2>&1); then
+    return 1
+  fi
+  assert_contains "Missing variable 'remote_repository'." "${output}"
+}
+
+test_latest_semantic_version_tag_rejects_invalid_prerelease_option() {
+  local output
+  if output=$(get_latest_semantic_version_tag remote invalid 2>&1); then
+    return 1
+  fi
+  assert_contains "Invalid value for 'include_prerelease'" "${output}"
+}
+
+test_latest_semantic_version_tag_reports_missing_tags() {
+  local temp_dir remote_dir output
+  temp_dir=$(mktemp -d)
+  remote_dir="${temp_dir}/remote.git"
+
+  (
+    git init --bare --quiet "${remote_dir}"
+    if output=$(get_latest_semantic_version_tag "${remote_dir}" 2>&1); then
+      return 1
+    fi
+    assert_contains "No semantic version tag found" "${output}"
+  )
+  rm -rf "${temp_dir}"
+}
+
+test_latest_semantic_version_tag_does_not_use_local_tags() {
+  local temp_dir remote_dir output
+  temp_dir=$(mktemp -d)
+  remote_dir="${temp_dir}/remote.git"
+
+  (
+    cd "${temp_dir}"
+    git init --quiet
+    git config user.email test@example.com
+    git config user.name test
+    touch file
+    git add file
+    git commit --quiet -m initial
+    git tag v1.0.0
+    git init --bare --quiet "${remote_dir}"
+    git push --quiet "${remote_dir}" HEAD --tags
     git tag v9.0.0
-    output=$(get_latest_semantic_version_tag source)
-    assert_equal "v1.0.0" "${output}"
+    output=$(get_latest_semantic_version_tag "${remote_dir}")
+    assert_equal "::info::v1.0.0" "${output}"
   )
   rm -rf "${temp_dir}"
 }
@@ -150,8 +236,14 @@ describe "sync_common logging"
 it "logs info messages" test_info_logs_an_info_message
 it "logs warning messages" test_warn_logs_a_warning_message
 it "logs debug messages" test_debug_logs_a_debug_message
-it "gets the latest reachable semantic version tag" test_latest_semantic_version_tag_is_reachable_from_branch
-it "ignores unreachable semantic version tags" test_latest_semantic_version_tag_ignores_unreachable_tags
+it "starts and ends log groups" test_starts_and_ends_log_groups
+it "gets the latest semantic version tag from a remote" test_latest_semantic_version_tag_from_remote
+it "excludes prereleases by default" test_latest_semantic_version_tag_excludes_prereleases_by_default
+it "includes prereleases when requested" test_latest_semantic_version_tag_includes_prereleases_when_requested
+it "requires a remote repository" test_latest_semantic_version_tag_requires_remote
+it "rejects an invalid prerelease option" test_latest_semantic_version_tag_rejects_invalid_prerelease_option
+it "reports missing semantic version tags" test_latest_semantic_version_tag_reports_missing_tags
+it "does not use local tags" test_latest_semantic_version_tag_does_not_use_local_tags
 it "logs error messages" test_err_logs_an_error_message
 
 describe "sync_common hooks"
