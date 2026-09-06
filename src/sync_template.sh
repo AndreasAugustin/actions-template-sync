@@ -56,9 +56,19 @@ TEMPLATE_SYNC_IGNORE_FILE_PATH="${TEMPLATE_SYNC_IGNORE_FILE_PATH:-".templatesync
 IS_WITH_TAGS="${IS_WITH_TAGS:-"false"}"
 IS_FORCE_PUSH_PR="${IS_FORCE_PUSH_PR:-"false"}"
 IS_KEEP_BRANCH_ON_PR_CLEANUP="${IS_KEEP_BRANCH_ON_PR_CLEANUP:-"false"}"
+IS_SYNC_TO_LATEST_SEMVER="${IS_SYNC_TO_LATEST_SEMVER:-"false"}"
+IS_INCLUDE_PRERELEASE="${IS_INCLUDE_PRERELEASE:-"false"}"
 GIT_REMOTE_PULL_PARAMS="${GIT_REMOTE_PULL_PARAMS:---allow-unrelated-histories --squash --strategy=recursive -X theirs}"
 
-TEMPLATE_REMOTE_GIT_HASH=$(git ls-remote "${SOURCE_REPO}" HEAD | awk '{print $1}')
+SOURCE_PULL_REF=""
+if [[ "${IS_SYNC_TO_LATEST_SEMVER}" == "true" ]]; then
+  LATEST_SEMVER_TAG="$(get_latest_semantic_version_tag "${SOURCE_REPO}" "${IS_INCLUDE_PRERELEASE}" | sed 's/^::info:://')"
+  SOURCE_PULL_REF="refs/tags/${LATEST_SEMVER_TAG}"
+  TEMPLATE_REMOTE_GIT_HASH="$(get_remote_tag_commit "${SOURCE_REPO}" "${SOURCE_PULL_REF}")"
+  info "syncing to latest semantic version tag: ${LATEST_SEMVER_TAG}"
+else
+  TEMPLATE_REMOTE_GIT_HASH=$(git ls-remote "${SOURCE_REPO}" HEAD | awk '{print $1}')
+fi
 SHORT_TEMPLATE_GIT_HASH=$(git rev-parse --short "${TEMPLATE_REMOTE_GIT_HASH}")
 LOCAL_CURRENT_GIT_HASH=$(git rev-parse HEAD)  # need to be run before a pull to get the current local git hash
 
@@ -274,8 +284,13 @@ function pull_source_changes() {
   info "pull changes from source repository"
   local source_repo=$1
   local git_remote_pull_params=$2
+  local source_pull_ref=${3:-}
 
-  eval "git pull ${source_repo} --tags ${git_remote_pull_params}" || pull_has_issues=true
+  if [[ -n "${source_pull_ref}" ]]; then
+    eval "git pull ${source_repo} --tags ${git_remote_pull_params} ${source_pull_ref}" || pull_has_issues=true
+  else
+    eval "git pull ${source_repo} --tags ${git_remote_pull_params}" || pull_has_issues=true
+  fi
 
   info "finished pulling from the source."
   info "logging out from source ${SOURCE_REPO_HOSTNAME}."
@@ -482,7 +497,7 @@ function arr_checkout_branch_and_pull() {
   git checkout -b "${PR_BRANCH}"
   debug "pull changes from template"
 
-  pull_source_changes "${SOURCE_REPO}" "${GIT_REMOTE_PULL_PARAMS}"
+  pull_source_changes "${SOURCE_REPO}" "${GIT_REMOTE_PULL_PARAMS}" "${SOURCE_PULL_REF}"
 
   restore_templatesyncignore_file "${TEMPLATE_SYNC_IGNORE_FILE_PATH}"
 

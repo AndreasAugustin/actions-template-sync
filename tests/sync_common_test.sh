@@ -5,38 +5,8 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
 
-# shellcheck source=src/sync_common.sh
-source "${REPO_ROOT}/src/sync_common.sh"
-
-PASS_COUNT=0
-FAIL_COUNT=0
-
-describe() {
-  printf '\n%s\n' "$1"
-}
-
-it() {
-  local description=$1
-  shift
-
-  if "$@"; then
-    printf '  \033[32m✓\033[0m %s\n' "${description}"
-    PASS_COUNT=$((PASS_COUNT + 1))
-  else
-    printf '  \033[31m✗\033[0m %s\n' "${description}" >&2
-    FAIL_COUNT=$((FAIL_COUNT + 1))
-  fi
-}
-
-assert_contains() {
-  local expected=$1
-  local actual=$2
-  [[ "${actual}" == *"${expected}"* ]]
-}
-
-assert_equal() {
-  [[ "$1" == "$2" ]]
-}
+# shellcheck source=tests/test_common.sh
+source "${SCRIPT_DIR}/test_common.sh"
 
 test_info_logs_an_info_message() {
   local output
@@ -190,6 +160,67 @@ test_latest_semantic_version_tag_does_not_use_local_tags() {
   rm -rf "${temp_dir}"
 }
 
+test_remote_tag_commit_resolves_lightweight_tag() {
+  local temp_dir remote_dir expected_commit output
+  temp_dir=$(mktemp -d)
+  remote_dir="${temp_dir}/remote.git"
+
+  (
+    cd "${temp_dir}"
+    git init --quiet
+    git config user.email test@example.com
+    git config user.name test
+    touch file
+    git add file
+    git commit --quiet -m initial
+    expected_commit=$(git rev-parse HEAD)
+    git tag v1.0.0
+    git init --bare --quiet "${remote_dir}"
+    git push --quiet "${remote_dir}" HEAD --tags
+    output=$(get_remote_tag_commit "${remote_dir}" refs/tags/v1.0.0)
+    assert_equal "${expected_commit}" "${output}"
+  )
+  rm -rf "${temp_dir}"
+}
+
+test_remote_tag_commit_resolves_annotated_tag() {
+  local temp_dir remote_dir expected_commit output
+  temp_dir=$(mktemp -d)
+  remote_dir="${temp_dir}/remote.git"
+
+  (
+    cd "${temp_dir}"
+    git init --quiet
+    git config user.email test@example.com
+    git config user.name test
+    touch file
+    git add file
+    git commit --quiet -m initial
+    expected_commit=$(git rev-parse HEAD)
+    git tag --annotate v1.0.0 --message release
+    git init --bare --quiet "${remote_dir}"
+    git push --quiet "${remote_dir}" HEAD --tags
+    output=$(get_remote_tag_commit "${remote_dir}" refs/tags/v1.0.0)
+    assert_equal "${expected_commit}" "${output}"
+  )
+  rm -rf "${temp_dir}"
+}
+
+test_remote_tag_commit_reports_missing_tag() {
+  local temp_dir remote_dir output
+  temp_dir=$(mktemp -d)
+  remote_dir="${temp_dir}/remote.git"
+
+  (
+    git init --bare --quiet "${remote_dir}"
+    if output=$(get_remote_tag_commit "${remote_dir}" refs/tags/v1.0.0 2>&1); then
+      return 1
+    fi
+    assert_contains "was not found" "${output}"
+  )
+  rm -rf "${temp_dir}"
+}
+
 test_err_logs_an_error_message() {
   local output
   output=$(err "failed" 2>&1)
@@ -244,11 +275,13 @@ it "requires a remote repository" test_latest_semantic_version_tag_requires_remo
 it "rejects an invalid prerelease option" test_latest_semantic_version_tag_rejects_invalid_prerelease_option
 it "reports missing semantic version tags" test_latest_semantic_version_tag_reports_missing_tags
 it "does not use local tags" test_latest_semantic_version_tag_does_not_use_local_tags
+it "resolves lightweight remote tags" test_remote_tag_commit_resolves_lightweight_tag
+it "resolves annotated remote tags" test_remote_tag_commit_resolves_annotated_tag
+it "reports missing remote tags" test_remote_tag_commit_reports_missing_tag
 it "logs error messages" test_err_logs_an_error_message
 
 describe "sync_common hooks"
 it "skips hooks when disabled" test_hooks_are_skipped_when_disabled
 it "executes commands from hook input" test_hooks_execute_commands_from_input
 
-printf '\n%d passed, %d failed\n' "${PASS_COUNT}" "${FAIL_COUNT}"
-[[ "${FAIL_COUNT}" -eq 0 ]]
+finish_tests

@@ -65,6 +65,7 @@ flowchart LR
   See [.github/workflows/test_ssh_gitlab.yml](.github/workflows/test_ssh_gitlab.yml) for an example.
 * It is not necessarily needed that source and target repository have the same base history.
   Because of that reason, it is possible to merge 2 totally different repositories with the help of the action.
+* Sync to the latest semantic version tag from the source repository, optionally including prereleases.
 
 ## Usage
 
@@ -106,6 +107,9 @@ jobs:
           source_repo_path: <owner/repo>
           upstream_branch: <target_branch> # defaults to main
           pr_labels: <label1>,<label2>[,...] # defaults to template_sync
+          # Optional release-based sync:
+          # is_sync_to_latest_semver: true
+          # is_include_prerelease: true
 ```
 
 You will receive a pull request within your repository if there are some changes available in the template.
@@ -317,6 +321,8 @@ jobs:
 | steps | `[optional] add the steps you want to execute within the action` | `false` | all steps will be executed |
 | template_sync_ignore_file_path | `[optional] set the path to the ignore file.` | `false` | `.templatesyncignore` |
 | is_with_tags | `[optional]` set to `true` if tags should be synced | `false` | `false` |
+| is_sync_to_latest_semver | `[optional]` set to `true` to sync to the latest semantic version tag from the source repository | `false` | `false` |
+| is_include_prerelease | `[optional]` set to `true` to include prerelease tags when `is_sync_to_latest_semver` is enabled | `false` | `false` |
 
 ### Action Outputs
 

@@ -54,6 +54,9 @@ end
 subgraph sync["sync_template.sh"]
   SyncChecks{Required variables and tools present?}
   SetVariables["Resolve branches and hashes<br/>configure sync variables"]
+  LatestSemver{Sync to latest semantic version?}
+  ResolveSemver["List remote tags<br/>select latest stable semver or prerelease"]
+  ResolveHead["Use source repository HEAD"]
   Steps{STEPS provided?}
   ValidateSteps{All steps supported?}
   DefaultSteps["Run all steps:<br/>prechecks, pull, commit, push, pr"]
@@ -64,7 +67,11 @@ subgraph sync["sync_template.sh"]
   SourceReady --> SyncChecks
   SyncChecks -->|no| Failure
   SyncChecks -->|yes| SetVariables
-  SetVariables --> Steps
+  SetVariables --> LatestSemver
+  LatestSemver -->|yes| ResolveSemver
+  LatestSemver -->|no| ResolveHead
+  ResolveSemver --> Steps
+  ResolveHead --> Steps
   Steps -->|no| DefaultSteps
   Steps -->|yes| ValidateSteps
   ValidateSteps -->|no| Unsupported

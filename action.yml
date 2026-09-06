@@ -88,6 +88,12 @@ inputs:
   is_with_tags:
     description: "[optional] set to true if tags should be synced"
     default: "false"
+  is_sync_to_latest_semver:
+    description: "[optional] set to true to sync to the latest semantic version tag from the source repository"
+    default: "false"
+  is_include_prerelease:
+    description: "[optional] set to true to include prerelease tags when syncing to the latest semantic version"
+    default: "false"
 outputs:
   pr_number:
     description: "The number of the PR created"
@@ -141,3 +147,5 @@ runs:
         STEPS: ${{ inputs.steps }}
         TEMPLATE_SYNC_IGNORE_FILE_PATH: ${{ inputs.template_sync_ignore_file_path }}
         IS_WITH_TAGS: ${{ inputs.is_with_tags }}
+        IS_SYNC_TO_LATEST_SEMVER: ${{ inputs.is_sync_to_latest_semver }}
+        IS_INCLUDE_PRERELEASE: ${{ inputs.is_include_prerelease }}

@@ -102,6 +102,54 @@ function get_latest_semantic_version_tag() {
 }
 
 #######################################
+# Get the commit hash referenced by a remote tag.
+# Arguments:
+#   remote_repository
+#   tag_reference
+# Outputs:
+#   the tag commit hash
+#######################################
+function get_remote_tag_commit() {
+  local remote_repository=$1
+  local tag_reference=$2
+  local remote_refs
+  local commit
+
+  if [[ -z "${remote_repository}" ]]; then
+    err "Missing variable 'remote_repository'."
+    return 1
+  fi
+
+  if [[ -z "${tag_reference}" ]]; then
+    err "Missing variable 'tag_reference'."
+    return 1
+  fi
+
+  if ! remote_refs=$(git ls-remote "${remote_repository}" "${tag_reference}" "${tag_reference}^{}"); then
+    err "Unable to resolve tag '${tag_reference}' from remote repository '${remote_repository}'."
+    return 1
+  fi
+
+  commit=$(
+    awk -v tag_reference="${tag_reference}" '
+      $2 == tag_reference "^{}" { print $1; found = 1; exit }
+      $2 == tag_reference { fallback = $1 }
+      END {
+        if (!found && fallback != "") {
+          print fallback
+        }
+      }' <<< "${remote_refs}"
+  )
+
+  if [[ -z "${commit}" ]]; then
+    err "Tag '${tag_reference}' was not found in remote repository '${remote_repository}'."
+    return 1
+  fi
+
+  printf '%s\n' "${commit}"
+}
+
+#######################################
 # Executes commands defined within yml file or env variable
 # Arguments:
 #   hook -> the hook to use
