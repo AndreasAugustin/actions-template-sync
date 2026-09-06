@@ -1,0 +1,649 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../ARCHITECTURE/">
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>DOCKER - actions-template-sync</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.ec1eaa64.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#docker" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="actions-template-sync" class="md-header__button md-logo" aria-label="actions-template-sync" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            actions-template-sync
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              DOCKER
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="actions-template-sync" class="md-nav__button md-logo" aria-label="actions-template-sync" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    actions-template-sync
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Docs
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ARCHITECTURE/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DOCKER
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    DOCKER
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#abstract" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        abstract
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#use-the-production-image" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Use the production image
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Use the production image">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pull-and-run" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pull and run
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#private-source-repositories-over-ssh" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Private source repositories over SSH
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#build-the-image-locally" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Build the image locally
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#abstract" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        abstract
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#use-the-production-image" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Use the production image
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Use the production image">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pull-and-run" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pull and run
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#private-source-repositories-over-ssh" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Private source repositories over SSH
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#build-the-image-locally" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Build the image locally
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="docker">DOCKER</h1>
+<h2 id="abstract">abstract</h2>
+<p>If you want to test things out or if you want to build your own action (e.g. in on prem environments) you are able to use docker images.</p>
+<ul>
+<li><a href="https://github.com/AndreasAugustin/actions-template-sync/pkgs/container/actions-template-sync">github registry</a></li>
+<li><a href="https://hub.docker.com/r/andyaugustin/actions-template-sync">dockerhub registry</a></li>
+</ul>
+<h2 id="use-the-production-image">Use the production image</h2>
+<p>The production image runs the same synchronization script used by the GitHub
+Action. It expects the target repository to be mounted into the container and
+requires tokens for both the source and target repositories.</p>
+<p>The image entrypoint requires these environment variables:</p>
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>SOURCE_GH_TOKEN</code></td>
+<td>Token with read access to the source repository</td>
+</tr>
+<tr>
+<td><code>TARGET_GH_TOKEN</code></td>
+<td>Token with permission to create branches and pull requests in the target repository</td>
+</tr>
+<tr>
+<td><code>SOURCE_REPO_PATH</code></td>
+<td>Source repository path, for example <code>owner/template-repository</code></td>
+</tr>
+<tr>
+<td><code>SOURCE_BRANCH</code></td>
+<td>Optional source branch to synchronize; defaults to the source repository's default branch</td>
+</tr>
+<tr>
+<td><code>GITHUB_SERVER_URL</code></td>
+<td>GitHub server URL, for example <code>https://github.com</code></td>
+</tr>
+</tbody>
+</table>
+<p>The container should run from the mounted target repository. Git, GitHub CLI,
+SSH, Git LFS, and the synchronization scripts are included in the image.</p>
+<h3 id="pull-and-run">Pull and run</h3>
+<p>Use either registry image. Replace <code>v2</code> with the desired release tag:</p>
+<div class="highlight"><pre><span></span><code>docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--workdir<span class="w"> </span>/github/workspace<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--volume<span class="w"> </span><span class="s2">"</span><span class="nv">$PWD</span><span class="s2">:/github/workspace"</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--env<span class="w"> </span>SOURCE_GH_TOKEN<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--env<span class="w"> </span>TARGET_GH_TOKEN<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--env<span class="w"> </span><span class="nv">SOURCE_REPO_PATH</span><span class="o">=</span>owner/template-repository<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--env<span class="w"> </span><span class="nv">SOURCE_BRANCH</span><span class="o">=</span>develop<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--env<span class="w"> </span><span class="nv">UPSTREAM_BRANCH</span><span class="o">=</span>main<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--env<span class="w"> </span><span class="nv">GITHUB_SERVER_URL</span><span class="o">=</span>https://github.com<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--env<span class="w"> </span><span class="nv">GITHUB_ACTOR</span><span class="o">=</span>automation<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>ghcr.io/andreasaugustin/actions-template-sync:v2
+</code></pre></div>
+<p>The same command using Docker Hub is:</p>
+<div class="highlight"><pre><span></span><code>docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--workdir<span class="w"> </span>/github/workspace<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--volume<span class="w"> </span><span class="s2">"</span><span class="nv">$PWD</span><span class="s2">:/github/workspace"</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--env<span class="w"> </span>SOURCE_GH_TOKEN<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--env<span class="w"> </span>TARGET_GH_TOKEN<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--env<span class="w"> </span><span class="nv">SOURCE_REPO_PATH</span><span class="o">=</span>owner/template-repository<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--env<span class="w"> </span><span class="nv">GITHUB_SERVER_URL</span><span class="o">=</span>https://github.com<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>andyaugustin/actions-template-sync:v2
+</code></pre></div>
+<p>The <code>--env NAME</code> form reads the value from the host environment. Set the token
+variables without putting their values in shell history:</p>
+<div class="highlight"><pre><span></span><code><span class="nb">export</span><span class="w"> </span><span class="nv">SOURCE_GH_TOKEN</span><span class="o">=</span><span class="s1">'source-token'</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">TARGET_GH_TOKEN</span><span class="o">=</span><span class="s1">'target-token'</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">SOURCE_REPO_PATH</span><span class="o">=</span><span class="s1">'owner/template-repository'</span>
+</code></pre></div>
+<p>For repeatable runs, put non-secret configuration in an environment file and
+provide secrets through the environment or a secret manager:</p>
+<div class="highlight"><pre><span></span><code>SOURCE_REPO_PATH=owner/template-repository
+UPSTREAM_BRANCH=main
+GITHUB_SERVER_URL=https://github.com
+GITHUB_ACTOR=automation
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--env-file<span class="w"> </span>./templatesync.env<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--env<span class="w"> </span>SOURCE_GH_TOKEN<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--env<span class="w"> </span>TARGET_GH_TOKEN<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--workdir<span class="w"> </span>/github/workspace<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--volume<span class="w"> </span><span class="s2">"</span><span class="nv">$PWD</span><span class="s2">:/github/workspace"</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>ghcr.io/andreasaugustin/actions-template-sync:v2
+</code></pre></div>
+<h3 id="private-source-repositories-over-ssh">Private source repositories over SSH</h3>
+<p>Set <code>SSH_PRIVATE_KEY_SRC</code> to use SSH instead of the GitHub CLI token for the
+source repository. The image already contains GitHub's SSH host key.</p>
+<div class="highlight"><pre><span></span><code>docker<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--workdir<span class="w"> </span>/github/workspace<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--volume<span class="w"> </span><span class="s2">"</span><span class="nv">$PWD</span><span class="s2">:/github/workspace"</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--env<span class="w"> </span>SSH_PRIVATE_KEY_SRC<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--env<span class="w"> </span>TARGET_GH_TOKEN<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--env<span class="w"> </span><span class="nv">SOURCE_REPO_PATH</span><span class="o">=</span>owner/private-template<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--env<span class="w"> </span><span class="nv">GITHUB_SERVER_URL</span><span class="o">=</span>https://github.com<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>ghcr.io/andreasaugustin/actions-template-sync:v2
+</code></pre></div>
+<p>For GitHub Enterprise or another Git provider, set <code>HOSTNAME</code> to the source
+host and use the matching <code>GITHUB_SERVER_URL</code>.</p>
+<h3 id="build-the-image-locally">Build the image locally</h3>
+<p>Build the production target from a checkout of this repository:</p>
+<div class="highlight"><pre><span></span><code>docker<span class="w"> </span>build<span class="w"> </span>--target<span class="w"> </span>prod<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--tag<span class="w"> </span>actions-template-sync:prod<span class="w"> </span>.
+</code></pre></div>
+<p>Then replace the registry image name in the examples with
+<code>actions-template-sync:prod</code>.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": [], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>
