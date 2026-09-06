@@ -21,6 +21,10 @@ on:
         required: true
         type: string
 
+concurrency:
+  group: push-docker-${{ github.ref }}
+  cancel-in-progress: false
+
 jobs:
   build_and_push:
     runs-on: ubuntu-latest

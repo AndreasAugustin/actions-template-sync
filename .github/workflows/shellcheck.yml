@@ -8,6 +8,10 @@ on:
   workflow_call:
   workflow_dispatch:
 
+concurrency:
+  group: shellcheck-${{ github.ref }}
+  cancel-in-progress: true
+
 permissions:
   contents: read
 

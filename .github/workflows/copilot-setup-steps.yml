@@ -10,7 +10,7 @@ on:
       - .github/workflows/copilot-setup-steps.yml
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
+  group: copilot-setup-steps-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
