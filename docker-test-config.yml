@@ -5,7 +5,7 @@ fileExistenceTests:
   - name: "entrypoint is present"
     path: "/bin/entrypoint.sh"
     shouldExist: true
-    permissions: "-rwxrwxr-x"
+    permissions: "-rwxr-xr-x"
   - name: "sync scripts are present"
     path: "/bin/sync_common.sh"
     shouldExist: true

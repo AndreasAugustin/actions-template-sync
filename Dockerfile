@@ -25,10 +25,10 @@ RUN tar --strip-components=1 -xf ghcli.tar.gz \
     && rm ghcli.tar.gz
 
 ADD src/*.sh /bin/
-RUN chmod +x /bin/entrypoint.sh \
-  && chmod +x /bin/sync_template.sh \
-  && chmod +x /bin/sync_common.sh \
-  && chmod +x /bin/gpg_no_tty.sh
+RUN chmod 755 /bin/entrypoint.sh \
+  && chmod 755 /bin/sync_template.sh \
+  && chmod 755 /bin/sync_common.sh \
+  && chmod 755 /bin/gpg_no_tty.sh
 
 RUN mkdir -p /root/.ssh \
   && ssh-keyscan -t rsa github.com >> /root/.ssh/known_hosts
