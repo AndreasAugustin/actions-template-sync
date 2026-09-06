@@ -101,6 +101,7 @@ function ssh_setup() {
   SOURCE_REPO_PREFIX="git@${source_repo_hostname}:"
 
   end_group
+  return $?
 }
 
 #######################################
@@ -136,6 +137,7 @@ function gpg_setup() {
 
   info "done prepare gpg"
   end_group
+  return $?
 }
 
 
@@ -172,6 +174,7 @@ function git_init() {
     info "the source repository is located within GitHub."
   fi
   end_group
+  return $?
 }
 
 #######################################
@@ -210,6 +213,7 @@ function gh_login_src_github() {
     gh auth status --hostname "${source_repo_hostname}"
   fi
   end_group
+  return $?
 }
 
 ###################################################

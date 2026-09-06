@@ -11,6 +11,7 @@ set -e
 #######################################
 function err() {
   echo "::error::[$(date +'%Y-%m-%dT%H:%M:%S%z')]: $*" >&2;
+  return $?
 }
 
 #######################################
@@ -20,6 +21,7 @@ function err() {
 #######################################
 function debug() {
   echo "::debug::$*";
+  return $?
 }
 
 #######################################
@@ -29,6 +31,7 @@ function debug() {
 #######################################
 function warn() {
   echo "::warn::$*";
+  return $?
 }
 
 #######################################
@@ -38,6 +41,7 @@ function warn() {
 #######################################
 function info() {
   echo "::info::$*";
+  return $?
 }
 
 #######################################
@@ -47,6 +51,7 @@ function info() {
 #######################################
 function start_group() {
   echo "::group::$*";
+  return $?
 }
 
 #######################################
@@ -54,6 +59,21 @@ function start_group() {
 #######################################
 function end_group() {
   echo "::endgroup::";
+  return $?
+}
+
+#######################################
+# Check whether a string is a semantic version.
+# Arguments:
+#   version
+# Returns:
+#   0 if the string is a semantic version, otherwise 1
+#######################################
+function is_semver() {
+  local version=${1:-}
+
+  [[ "${version}" =~ ^v?[0-9]+\.[0-9]+\.[0-9]+([\-][0-9A-Za-z.-]+)?$ ]]
+  return $?
 }
 
 #######################################
@@ -86,9 +106,8 @@ function get_latest_semantic_version_tag() {
   fi
 
   while IFS= read -r tag; do
-    if [[ "${tag}" =~ ^v?[0-9]+\.[0-9]+\.[0-9]+$ ||
-      ( "${include_prerelease}" == true &&
-        "${tag}" =~ ^v?[0-9]+\.[0-9]+\.[0-9]+-[0-9A-Za-z.-]+$ ) ]]; then
+    if is_semver "${tag}" &&
+      [[ "${include_prerelease}" == true || "${tag}" != *-* ]]; then
       info "${tag}"
       return 0
     fi
@@ -147,6 +166,7 @@ function get_remote_tag_commit() {
   fi
 
   printf '%s\n' "${commit}"
+  return $?
 }
 
 #######################################
@@ -185,4 +205,6 @@ function cmd_from_yml() {
 
     for key in "${cmd_Arr[@]}"; do echo "${key}" | bash; done
   fi
+
+  return $?
 }

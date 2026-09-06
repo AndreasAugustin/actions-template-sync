@@ -34,6 +34,13 @@ test_starts_and_ends_log_groups() {
   assert_equal "::endgroup::" "${output}"
 }
 
+test_semver_check() {
+  is_semver "1.2.3"
+  is_semver "v1.2.3-rc1"
+  ! is_semver "1.2"
+  ! is_semver "release-1.2.3"
+}
+
 test_latest_semantic_version_tag_from_remote() {
   local temp_dir remote_dir output
   temp_dir=$(mktemp -d)
@@ -268,6 +275,7 @@ it "logs info messages" test_info_logs_an_info_message
 it "logs warning messages" test_warn_logs_a_warning_message
 it "logs debug messages" test_debug_logs_a_debug_message
 it "starts and ends log groups" test_starts_and_ends_log_groups
+it "checks semantic versions" test_semver_check
 it "gets the latest semantic version tag from a remote" test_latest_semantic_version_tag_from_remote
 it "excludes prereleases by default" test_latest_semantic_version_tag_excludes_prereleases_by_default
 it "includes prereleases when requested" test_latest_semantic_version_tag_includes_prereleases_when_requested

@@ -63,6 +63,10 @@ GIT_REMOTE_PULL_PARAMS="${GIT_REMOTE_PULL_PARAMS:---allow-unrelated-histories --
 SOURCE_PULL_REF=""
 if [[ "${IS_SYNC_TO_LATEST_SEMVER}" == "true" ]]; then
   LATEST_SEMVER_TAG="$(get_latest_semantic_version_tag "${SOURCE_REPO}" "${IS_INCLUDE_PRERELEASE}" | sed 's/^::info:://')"
+  if ! is_semver "${LATEST_SEMVER_TAG}"; then
+    err "Latest semantic version tag '${LATEST_SEMVER_TAG}' is not a valid semantic version."
+    exit 1
+  fi
   SOURCE_PULL_REF="refs/tags/${LATEST_SEMVER_TAG}"
   TEMPLATE_REMOTE_GIT_HASH="$(get_remote_tag_commit "${SOURCE_REPO}" "${SOURCE_PULL_REF}")"
   info "syncing to latest semantic version tag: ${LATEST_SEMVER_TAG}"
@@ -129,6 +133,7 @@ function gh_login_target_github() {
   fi
 
   end_group
+  return $?
 }
 
 #######################################
@@ -156,6 +161,7 @@ function set_github_action_outputs() {
     echo "pr_number=${pr_number}" >> "$GITHUB_OUTPUT"
   fi
   end_group
+  return $?
 }
 
 #######################################
@@ -176,6 +182,7 @@ function check_branch_remote_existing() {
     set_github_action_outputs "${branch_to_check}"
     exit 0
   fi
+  return $?
 }
 
 #######################################
@@ -194,6 +201,7 @@ function check_if_commit_already_in_hist_graceful_exit() {
     warn "repository is up to date!"
     exit 0
   fi
+  return $?
 }
 
 ##########################################
@@ -205,6 +213,7 @@ function check_staged_files_available_graceful_exit() {
     info "nothing to commit"
     exit 0
   fi
+  return $?
 }
 
 #######################################
@@ -224,6 +233,7 @@ function force_delete_files() {
   if [[ -n "${files_to_delete}" ]]; then
     echo "${files_to_delete}" | xargs rm
   fi
+  return $?
 }
 
 #######################################
@@ -272,6 +282,7 @@ function cleanup_older_prs () {
       debug "Closed PR #${older_pr}"
     fi
   done
+  return $?
 }
 
 ##################################
@@ -302,6 +313,7 @@ function pull_source_changes() {
   fi
 
   gh_login_target_github "${GITHUB_SERVER_URL}"
+  return $?
 }
 
 #######################################
@@ -337,6 +349,7 @@ function eventual_create_labels () {
       fi
     fi
   done
+  return $?
 }
 
 ##############################
@@ -367,7 +380,7 @@ function push () {
   fi
 
   git push "${args[@]}"
-
+  return $?
 }
 
 ####################################
@@ -430,6 +443,7 @@ function create_or_edit_pr() {
     --add-label "${labels}" \
     --add-reviewer "${reviewers}" \
     --add-assignee "${assignees}"
+  return $?
 }
 
 #########################################
@@ -444,6 +458,7 @@ function restore_templatesyncignore_file() {
     git reset "${template_sync_ignore_file_path}"
     git checkout -- "${template_sync_ignore_file_path}" || warn "not able to checkout the former .templatesyncignore file. Most likely the file was not present"
   fi
+  return $?
 }
 
 #########################################
@@ -466,6 +481,7 @@ function handle_templatesyncignore() {
     debug "discard all unstaged changes"
     git checkout -- .
   fi
+  return $?
 }
 
 ########################################################
@@ -484,6 +500,7 @@ function arr_prechecks() {
   check_if_commit_already_in_hist_graceful_exit "${TEMPLATE_REMOTE_GIT_HASH}"
 
   end_group
+  return $?
 }
 
 
@@ -506,6 +523,7 @@ function arr_checkout_branch_and_pull() {
   fi
 
   end_group
+  return $?
 }
 
 
@@ -525,6 +543,7 @@ function arr_commit() {
   git commit --signoff -m "${PR_COMMIT_MSG}"
 
   end_group
+  return $?
 }
 
 
@@ -539,6 +558,7 @@ function arr_push() {
   cmd_from_yml "prepush"
   push "${PR_BRANCH}" "${IS_FORCE_PUSH_PR}" "${IS_WITH_TAGS}"
   end_group
+  return $?
 }
 
 function arr_prepare_pr_create_pr() {
@@ -579,6 +599,7 @@ function arr_prepare_pr_create_pr() {
   PR_NUMBER="$(gh pr view "$PR_BRANCH" --json number --jq '.number' 2>/dev/null || true)"
   export PR_NUMBER
   end_group
+  return $?
 }
 
 declare -A cmd_arr
