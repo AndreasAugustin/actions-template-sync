@@ -22,6 +22,7 @@ create_source_repository() {
   git -C "${work_dir}" add file
   git -C "${work_dir}" commit --quiet -m initial
   git -C "${work_dir}" tag v1.0.0
+  git -C "${work_dir}" branch source-branch
 
   printf 'release\n' >> "${work_dir}/file"
   git -C "${work_dir}" add file
@@ -34,6 +35,7 @@ create_source_repository() {
   git -C "${work_dir}" tag v9.0.0-rc1
 
   git -C "${work_dir}" push --quiet "${remote_dir}" HEAD --tags
+  git -C "${work_dir}" push --quiet "${remote_dir}" source-branch
   printf '%s\n' "${remote_dir}"
 }
 
@@ -77,6 +79,44 @@ run_sync_to_latest_semver() {
   printf '%s\n' "${output_file}"
 }
 
+run_sync_to_source_branch() {
+  local temp_dir=$1
+  local source_repository=$2
+  local target_dir="${temp_dir}/target-source-branch"
+  local output_file="${temp_dir}/output-source-branch"
+  local github_output="${temp_dir}/github-output-source-branch"
+  local fake_bin="${temp_dir}/bin"
+
+  mkdir -p "${fake_bin}" "${target_dir}"
+  printf '#!/usr/bin/env bash\nexit 0\n' > "${fake_bin}/gh"
+  chmod +x "${fake_bin}/gh"
+
+  git -C "${target_dir}" init --quiet
+  git -C "${target_dir}" config user.email test@example.com
+  git -C "${target_dir}" config user.name test
+  git -C "${target_dir}" config pull.rebase false
+  git -C "${target_dir}" commit --quiet --allow-empty -m target
+
+  (
+    cd "${target_dir}"
+    PATH="${fake_bin}:${PATH}" \
+      SOURCE_REPO="${source_repository}" \
+      SOURCE_BRANCH="source-branch" \
+      PR_COMMIT_MSG="sync" \
+      GITHUB_SERVER_URL="https://github.com" \
+      UPSTREAM_BRANCH="main" \
+      TEMPLATE_SYNC_IGNORE_FILE_PATH=".templatesyncignore" \
+      PR_BRANCH_NAME_PREFIX="chore/template_sync" \
+      IS_FORCE_PUSH_PR=true \
+      IS_DRY_RUN=true \
+      STEPS="pull" \
+      GITHUB_OUTPUT="${github_output}" \
+      bash "${REPO_ROOT}/src/sync_template.sh"
+  ) > "${output_file}"
+
+  printf '%s\n' "${output_file}"
+}
+
 test_sync_uses_latest_stable_semver() {
   local temp_dir source_repository output_file output
   temp_dir=$(mktemp -d)
@@ -107,6 +147,21 @@ test_sync_uses_latest_prerelease_when_enabled() {
   rm -rf "${temp_dir}"
 }
 
+test_sync_uses_configured_source_branch() {
+  local temp_dir source_repository output_file output
+  temp_dir=$(mktemp -d)
+  source_repository=$(create_source_repository "${temp_dir}")
+  output_file=$(run_sync_to_source_branch "${temp_dir}" "${source_repository}")
+  output=$(<"${output_file}")
+
+  assert_contains "::info::syncing source branch: source-branch" "${output}"
+  grep -q '^stable$' "${temp_dir}/target-source-branch/file"
+  if grep -q '^release$' "${temp_dir}/target-source-branch/file"; then
+    return 1
+  fi
+  rm -rf "${temp_dir}"
+}
+
 test_action_wires_semver_inputs() {
   local action
   action=$(<"${REPO_ROOT}/action.yml")
@@ -116,8 +171,17 @@ test_action_wires_semver_inputs() {
   assert_contains "IS_INCLUDE_PRERELEASE: \${{ inputs.is_include_prerelease }}" "${action}"
 }
 
+test_action_wires_source_branch_input() {
+  local action
+  action=$(<"${REPO_ROOT}/action.yml")
+  assert_contains "source_branch:" "${action}"
+  assert_contains "SOURCE_BRANCH: \${{ inputs.source_branch }}" "${action}"
+}
+
 it "syncs to the latest stable semantic version" test_sync_uses_latest_stable_semver
 it "syncs to the latest prerelease when enabled" test_sync_uses_latest_prerelease_when_enabled
+it "syncs from the configured source branch" test_sync_uses_configured_source_branch
 it "wires semantic-version inputs in action.yml" test_action_wires_semver_inputs
+it "wires the source branch input in action.yml" test_action_wires_source_branch_input
 
 finish_tests

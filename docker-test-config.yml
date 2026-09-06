@@ -41,4 +41,4 @@ commandTests:
   - name: "sync template shell tests pass"
     command: "bash"
     args: ["/app/tests/sync_template_test.sh"]
-    expectedOutput: ["TEST RESULTS: 3 passed, 0 failed"]
+    expectedOutput: ["TEST RESULTS: 5 passed, 0 failed"]
