@@ -56,9 +56,23 @@ TEMPLATE_SYNC_IGNORE_FILE_PATH="${TEMPLATE_SYNC_IGNORE_FILE_PATH:-".templatesync
 IS_WITH_TAGS="${IS_WITH_TAGS:-"false"}"
 IS_FORCE_PUSH_PR="${IS_FORCE_PUSH_PR:-"false"}"
 IS_KEEP_BRANCH_ON_PR_CLEANUP="${IS_KEEP_BRANCH_ON_PR_CLEANUP:-"false"}"
+IS_SYNC_TO_LATEST_SEMVER="${IS_SYNC_TO_LATEST_SEMVER:-"false"}"
+IS_INCLUDE_PRERELEASE="${IS_INCLUDE_PRERELEASE:-"false"}"
 GIT_REMOTE_PULL_PARAMS="${GIT_REMOTE_PULL_PARAMS:---allow-unrelated-histories --squash --strategy=recursive -X theirs}"
 
-TEMPLATE_REMOTE_GIT_HASH=$(git ls-remote "${SOURCE_REPO}" HEAD | awk '{print $1}')
+SOURCE_PULL_REF=""
+if [[ "${IS_SYNC_TO_LATEST_SEMVER}" == "true" ]]; then
+  LATEST_SEMVER_TAG="$(get_latest_semantic_version_tag "${SOURCE_REPO}" "${IS_INCLUDE_PRERELEASE}" | sed 's/^::info:://')"
+  if ! is_semver "${LATEST_SEMVER_TAG}"; then
+    err "Latest semantic version tag '${LATEST_SEMVER_TAG}' is not a valid semantic version."
+    exit 1
+  fi
+  SOURCE_PULL_REF="refs/tags/${LATEST_SEMVER_TAG}"
+  TEMPLATE_REMOTE_GIT_HASH="$(get_remote_tag_commit "${SOURCE_REPO}" "${SOURCE_PULL_REF}")"
+  info "syncing to latest semantic version tag: ${LATEST_SEMVER_TAG}"
+else
+  TEMPLATE_REMOTE_GIT_HASH=$(git ls-remote "${SOURCE_REPO}" HEAD | awk '{print $1}')
+fi
 SHORT_TEMPLATE_GIT_HASH=$(git rev-parse --short "${TEMPLATE_REMOTE_GIT_HASH}")
 LOCAL_CURRENT_GIT_HASH=$(git rev-parse HEAD)  # need to be run before a pull to get the current local git hash
 
@@ -103,7 +117,7 @@ info "variables done"
 #   github_server url
 #######################################
 function gh_login_target_github() {
-  echo "::group::login target github"
+  start_group "login target github"
   local github_server_url=$1
 
   if [[ -n "${TARGET_GH_TOKEN}" ]]; then
@@ -118,7 +132,8 @@ function gh_login_target_github() {
     gh auth status --hostname "${target_repo_hostname}"
   fi
 
-  echo "::endgroup::"
+  end_group
+  return $?
 }
 
 #######################################
@@ -128,7 +143,7 @@ function gh_login_target_github() {
 #   template_git_hash
 #######################################
 function set_github_action_outputs() {
-  echo "::group::set gh action outputs"
+  start_group "set gh action outputs"
 
   local pr_branch=$1
   local template_git_hash=$2
@@ -145,7 +160,8 @@ function set_github_action_outputs() {
     echo "template_git_hash=${template_git_hash}" >> "$GITHUB_OUTPUT"
     echo "pr_number=${pr_number}" >> "$GITHUB_OUTPUT"
   fi
-  echo "::endgroup::"
+  end_group
+  return $?
 }
 
 #######################################
@@ -166,6 +182,7 @@ function check_branch_remote_existing() {
     set_github_action_outputs "${branch_to_check}"
     exit 0
   fi
+  return $?
 }
 
 #######################################
@@ -184,6 +201,7 @@ function check_if_commit_already_in_hist_graceful_exit() {
     warn "repository is up to date!"
     exit 0
   fi
+  return $?
 }
 
 ##########################################
@@ -195,6 +213,7 @@ function check_staged_files_available_graceful_exit() {
     info "nothing to commit"
     exit 0
   fi
+  return $?
 }
 
 #######################################
@@ -214,6 +233,7 @@ function force_delete_files() {
   if [[ -n "${files_to_delete}" ]]; then
     echo "${files_to_delete}" | xargs rm
   fi
+  return $?
 }
 
 #######################################
@@ -262,6 +282,7 @@ function cleanup_older_prs () {
       debug "Closed PR #${older_pr}"
     fi
   done
+  return $?
 }
 
 ##################################
@@ -274,8 +295,13 @@ function pull_source_changes() {
   info "pull changes from source repository"
   local source_repo=$1
   local git_remote_pull_params=$2
+  local source_pull_ref=${3:-}
 
-  eval "git pull ${source_repo} --tags ${git_remote_pull_params}" || pull_has_issues=true
+  if [[ -n "${source_pull_ref}" ]]; then
+    eval "git pull ${source_repo} --tags ${git_remote_pull_params} ${source_pull_ref}" || pull_has_issues=true
+  else
+    eval "git pull ${source_repo} --tags ${git_remote_pull_params}" || pull_has_issues=true
+  fi
 
   info "finished pulling from the source."
   info "logging out from source ${SOURCE_REPO_HOSTNAME}."
@@ -287,6 +313,7 @@ function pull_source_changes() {
   fi
 
   gh_login_target_github "${GITHUB_SERVER_URL}"
+  return $?
 }
 
 #######################################
@@ -322,6 +349,7 @@ function eventual_create_labels () {
       fi
     fi
   done
+  return $?
 }
 
 ##############################
@@ -352,7 +380,7 @@ function push () {
   fi
 
   git push "${args[@]}"
-
+  return $?
 }
 
 ####################################
@@ -415,6 +443,7 @@ function create_or_edit_pr() {
     --add-label "${labels}" \
     --add-reviewer "${reviewers}" \
     --add-assignee "${assignees}"
+  return $?
 }
 
 #########################################
@@ -429,6 +458,7 @@ function restore_templatesyncignore_file() {
     git reset "${template_sync_ignore_file_path}"
     git checkout -- "${template_sync_ignore_file_path}" || warn "not able to checkout the former .templatesyncignore file. Most likely the file was not present"
   fi
+  return $?
 }
 
 #########################################
@@ -451,6 +481,7 @@ function handle_templatesyncignore() {
     debug "discard all unstaged changes"
     git checkout -- .
   fi
+  return $?
 }
 
 ########################################################
@@ -459,7 +490,7 @@ function handle_templatesyncignore() {
 
 function arr_prechecks() {
   info "prechecks"
-  echo "::group::prechecks"
+  start_group "prechecks"
   if [ "${IS_FORCE_PUSH_PR}" == "true" ]; then
     warn "skipping prechecks because we force push and pr"
     return 0
@@ -468,7 +499,8 @@ function arr_prechecks() {
 
   check_if_commit_already_in_hist_graceful_exit "${TEMPLATE_REMOTE_GIT_HASH}"
 
-  echo "::endgroup::"
+  end_group
+  return $?
 }
 
 
@@ -476,13 +508,13 @@ function arr_checkout_branch_and_pull() {
   info "checkout branch and pull"
   cmd_from_yml "prepull"
 
-  echo "::group::checkout branch and pull"
+  start_group "checkout branch and pull"
 
   debug "create new branch from default branch with name ${PR_BRANCH}"
   git checkout -b "${PR_BRANCH}"
   debug "pull changes from template"
 
-  pull_source_changes "${SOURCE_REPO}" "${GIT_REMOTE_PULL_PARAMS}"
+  pull_source_changes "${SOURCE_REPO}" "${GIT_REMOTE_PULL_PARAMS}" "${SOURCE_PULL_REF}"
 
   restore_templatesyncignore_file "${TEMPLATE_SYNC_IGNORE_FILE_PATH}"
 
@@ -490,7 +522,8 @@ function arr_checkout_branch_and_pull() {
     force_delete_files "${LOCAL_CURRENT_GIT_HASH}"
   fi
 
-  echo "::endgroup::"
+  end_group
+  return $?
 }
 
 
@@ -499,7 +532,7 @@ function arr_commit() {
 
   cmd_from_yml "precommit"
 
-  echo "::group::commit changes"
+  start_group "commit changes"
 
   git add .
 
@@ -509,21 +542,23 @@ function arr_commit() {
 
   git commit --signoff -m "${PR_COMMIT_MSG}"
 
-  echo "::endgroup::"
+  end_group
+  return $?
 }
 
 
 function arr_push() {
   info "push"
 
-  echo "::group::push"
+  start_group "push"
   if [ "$IS_DRY_RUN" == "true" ]; then
     warn "dry_run option is set to on. skipping push"
     return 0
   fi
   cmd_from_yml "prepush"
   push "${PR_BRANCH}" "${IS_FORCE_PUSH_PR}" "${IS_WITH_TAGS}"
-  echo "::endgroup::"
+  end_group
+  return $?
 }
 
 function arr_prepare_pr_create_pr() {
@@ -532,13 +567,13 @@ function arr_prepare_pr_create_pr() {
     warn "dry_run option is set to on. skipping labels check, cleanup older PRs, push and create pr"
     return 0
   fi
-  echo "::group::check for missing labels"
+  start_group "check for missing labels"
 
   eventual_create_labels "${PR_LABELS}"
 
-  echo "::endgroup::"
+  end_group
 
-  echo "::group::cleanup older PRs"
+  start_group "cleanup older PRs"
   if [ "$IS_PR_CLEANUP" != "false" ]; then
     if [[ -z "${PR_LABELS}" ]]; then
     warn "env var 'PR_LABELS' is empty. Skipping older prs cleanup"
@@ -550,9 +585,9 @@ function arr_prepare_pr_create_pr() {
     warn "is_pr_cleanup option is set to off. Skipping older prs cleanup"
   fi
 
-  echo "::endgroup::"
+  end_group
 
-  echo "::group::create PR"
+  start_group "create PR"
 
   cmd_from_yml "prepr"
   if [ "$IS_FORCE_PUSH_PR" == true ] ; then
@@ -563,7 +598,8 @@ function arr_prepare_pr_create_pr() {
 
   PR_NUMBER="$(gh pr view "$PR_BRANCH" --json number --jq '.number' 2>/dev/null || true)"
   export PR_NUMBER
-  echo "::endgroup::"
+  end_group
+  return $?
 }
 
 declare -A cmd_arr

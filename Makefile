@@ -40,3 +40,4 @@ shellcheck:  ## run shellcheck
 .PHONY: shelltest
 shelltest:  ## run shell BDD tests
 	bash tests/sync_common_test.sh
+	bash tests/sync_template_test.sh
