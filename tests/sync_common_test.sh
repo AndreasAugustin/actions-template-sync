@@ -56,6 +56,54 @@ test_debug_logs_a_debug_message() {
   assert_equal "::debug::details" "${output}"
 }
 
+test_latest_semantic_version_tag_is_reachable_from_branch() {
+  local temp_dir output
+  temp_dir=$(mktemp -d)
+
+  (
+    cd "${temp_dir}"
+    git init --quiet
+    git config user.email test@example.com
+    git config user.name test
+    touch file
+    git add file
+    git commit --quiet -m initial
+    git branch -M main
+    git tag v1.0.0
+    git tag v2.0.0
+    git tag not-a-version
+    git checkout --quiet -b other
+    git commit --quiet --allow-empty -m other
+    output=$(get_latest_semantic_version_tag main)
+    assert_equal "v2.0.0" "${output}"
+  )
+  rm -rf "${temp_dir}"
+}
+
+test_latest_semantic_version_tag_ignores_unreachable_tags() {
+  local temp_dir output
+  temp_dir=$(mktemp -d)
+
+  (
+    cd "${temp_dir}"
+    git init --quiet
+    git config user.email test@example.com
+    git config user.name test
+    touch file
+    git add file
+    git commit --quiet -m initial
+    git checkout --quiet -b source
+    git commit --quiet --allow-empty -m source
+    git tag v1.0.0
+    git checkout --quiet -b unrelated HEAD~1
+    git commit --quiet --allow-empty -m unrelated
+    git tag v9.0.0
+    output=$(get_latest_semantic_version_tag source)
+    assert_equal "v1.0.0" "${output}"
+  )
+  rm -rf "${temp_dir}"
+}
+
 test_err_logs_an_error_message() {
   local output
   output=$(err "failed" 2>&1)
@@ -102,6 +150,8 @@ describe "sync_common logging"
 it "logs info messages" test_info_logs_an_info_message
 it "logs warning messages" test_warn_logs_a_warning_message
 it "logs debug messages" test_debug_logs_a_debug_message
+it "gets the latest reachable semantic version tag" test_latest_semantic_version_tag_is_reachable_from_branch
+it "ignores unreachable semantic version tags" test_latest_semantic_version_tag_ignores_unreachable_tags
 it "logs error messages" test_err_logs_an_error_message
 
 describe "sync_common hooks"

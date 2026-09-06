@@ -41,6 +41,38 @@ function info() {
 }
 
 #######################################
+# Get the latest semantic version tag reachable from a branch.
+# Arguments:
+#   source_branch
+# Outputs:
+#   the latest semantic version tag
+#######################################
+function get_latest_semantic_version_tag() {
+  local source_branch=$1
+  local tag
+
+  if [[ -z "${source_branch}" ]]; then
+    err "Missing variable 'source_branch'."
+    return 1
+  fi
+
+  if ! git rev-parse --verify "${source_branch}^{commit}" >/dev/null 2>&1; then
+    err "Source branch '${source_branch}' does not exist."
+    return 1
+  fi
+
+  while IFS= read -r tag; do
+    if [[ "${tag}" =~ ^v?[0-9]+\.[0-9]+\.[0-9]+([-.][0-9A-Za-z.-]+)?$ ]]; then
+      printf '%s\n' "${tag}"
+      return 0
+    fi
+  done < <(git tag --merged "${source_branch}" --sort=-v:refname)
+
+  err "No semantic version tag found on branch '${source_branch}'."
+  return 1
+}
+
+#######################################
 # Executes commands defined within yml file or env variable
 # Arguments:
 #   hook -> the hook to use

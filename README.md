@@ -5,7 +5,7 @@
 
  [![actions-template-sync](https://github.com/AndreasAugustin/actions-template-sync/actions/workflows/actions_template_sync.yml/badge.svg)](https://github.com/AndreasAugustin/actions-template-sync/actions/workflows/actions_template_sync.yml)
 
-[![Lint](https://github.com/AndreasAugustin/actions-template-sync/actions/workflows/lint.yml/badge.svg)](https://github.com/AndreasAugustin/actions-template-sync/actions/workflows/lint.yml)
+[![ci](https://github.com/AndreasAugustin/actions-template-sync/actions/workflows/lint.yml/badge.svg)](https://github.com/AndreasAugustin/actions-template-sync/actions/workflows/ci.yml)
 
 [![shellcheck](https://github.com/AndreasAugustin/actions-template-sync/actions/workflows/shellcheck.yml/badge.svg)](https://github.com/AndreasAugustin/actions-template-sync/actions/workflows/shellcheck.yml)
 
