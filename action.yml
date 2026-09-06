@@ -20,6 +20,8 @@ inputs:
   source_repo_path:
     description: "Repository path of the template"
     required: true
+  source_branch:
+    description: "[optional] branch of the source repository to synchronize"
   upstream_branch:
     description: "The target branch"
   source_repo_ssh_private_key:
@@ -120,6 +122,7 @@ runs:
         GITHUB_TOKEN: ${{ inputs.github_token }}
         #
         SOURCE_REPO_PATH: ${{ inputs.source_repo_path }}
+        SOURCE_BRANCH: ${{ inputs.source_branch }}
         UPSTREAM_BRANCH: ${{ inputs.upstream_branch }}
         SSH_PRIVATE_KEY_SRC: ${{ inputs.source_repo_ssh_private_key }}
         PR_BRANCH_NAME_PREFIX: ${{ inputs.pr_branch_name_prefix }}

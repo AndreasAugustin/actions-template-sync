@@ -70,6 +70,14 @@ if [[ "${IS_SYNC_TO_LATEST_SEMVER}" == "true" ]]; then
   SOURCE_PULL_REF="refs/tags/${LATEST_SEMVER_TAG}"
   TEMPLATE_REMOTE_GIT_HASH="$(get_remote_tag_commit "${SOURCE_REPO}" "${SOURCE_PULL_REF}")"
   info "syncing to latest semantic version tag: ${LATEST_SEMVER_TAG}"
+elif [[ -n "${SOURCE_BRANCH}" ]]; then
+  SOURCE_PULL_REF="refs/heads/${SOURCE_BRANCH}"
+  TEMPLATE_REMOTE_GIT_HASH=$(git ls-remote "${SOURCE_REPO}" "${SOURCE_PULL_REF}" | awk '{print $1}')
+  if [[ -z "${TEMPLATE_REMOTE_GIT_HASH}" ]]; then
+    err "Source branch '${SOURCE_BRANCH}' was not found in '${SOURCE_REPO}'."
+    exit 1
+  fi
+  info "syncing source branch: ${SOURCE_BRANCH}"
 else
   TEMPLATE_REMOTE_GIT_HASH=$(git ls-remote "${SOURCE_REPO}" HEAD | awk '{print $1}')
 fi

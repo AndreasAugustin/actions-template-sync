@@ -20,6 +20,7 @@ The image entrypoint requires these environment variables:
 | `SOURCE_GH_TOKEN` | Token with read access to the source repository |
 | `TARGET_GH_TOKEN` | Token with permission to create branches and pull requests in the target repository |
 | `SOURCE_REPO_PATH` | Source repository path, for example `owner/template-repository` |
+| `SOURCE_BRANCH` | Optional source branch to synchronize; defaults to the source repository's default branch |
 | `GITHUB_SERVER_URL` | GitHub server URL, for example `https://github.com` |
 
 The container should run from the mounted target repository. Git, GitHub CLI,
@@ -36,6 +37,7 @@ docker run --rm \
   --env SOURCE_GH_TOKEN \
   --env TARGET_GH_TOKEN \
   --env SOURCE_REPO_PATH=owner/template-repository \
+  --env SOURCE_BRANCH=develop \
   --env UPSTREAM_BRANCH=main \
   --env GITHUB_SERVER_URL=https://github.com \
   --env GITHUB_ACTOR=automation \

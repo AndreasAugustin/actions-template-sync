@@ -22,6 +22,7 @@ create_source_repository() {
   git -C "${work_dir}" add file
   git -C "${work_dir}" commit --quiet -m initial
   git -C "${work_dir}" tag v1.0.0
+  git -C "${work_dir}" branch source-branch
 
   printf 'release\n' >> "${work_dir}/file"
   git -C "${work_dir}" add file
@@ -116,8 +117,16 @@ test_action_wires_semver_inputs() {
   assert_contains "IS_INCLUDE_PRERELEASE: \${{ inputs.is_include_prerelease }}" "${action}"
 }
 
+test_action_wires_source_branch_input() {
+  local action
+  action=$(<"${REPO_ROOT}/action.yml")
+  assert_contains "source_branch:" "${action}"
+  assert_contains "SOURCE_BRANCH: \${{ inputs.source_branch }}" "${action}"
+}
+
 it "syncs to the latest stable semantic version" test_sync_uses_latest_stable_semver
 it "syncs to the latest prerelease when enabled" test_sync_uses_latest_prerelease_when_enabled
 it "wires semantic-version inputs in action.yml" test_action_wires_semver_inputs
+it "wires the source branch input in action.yml" test_action_wires_source_branch_input
 
 finish_tests
