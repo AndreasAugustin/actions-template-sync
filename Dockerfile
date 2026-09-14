@@ -63,7 +63,7 @@ ENTRYPOINT ["/bin/zsh"]
 #######################################
 # image for creating the documentation
 ######################################
-FROM node:26.8.1-alpine AS docs
+FROM node:26.8.2-alpine AS docs
 
 # install packages
 RUN apk add --update --no-cache bash make git zsh curl tmux
