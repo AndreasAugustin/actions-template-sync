@@ -23,7 +23,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - name: actions-template-sync
-        uses: AndreasAugustin/actions-template-sync@8a0f668b83c32a0f673353086d74f12b8853d4f5 # v2.5.3
+        uses: AndreasAugustin/actions-template-sync@6e1d0089686f8940604fc15baae62367bf6ee860 # v2.6.0
         with:
           source_gh_token: ${{ secrets.GITHUB_TOKEN }}
           source_repo_path: AndreasAugustin/template
