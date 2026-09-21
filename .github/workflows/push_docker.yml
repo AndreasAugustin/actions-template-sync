@@ -63,7 +63,7 @@ jobs:
           tags: |
             type=semver,pattern={{raw}},value=${{ inputs.tag }}${{ matrix.target == 'dev' && '-dev' || '' }}
       - name: Build ${{ matrix.variant }}
-        uses: docker/build-push-action@53b7df96c91f9c12dcc8a07bcb9ccacbed38856a # v7.3.0
+        uses: docker/build-push-action@c3c9e263c25d99ce0380d002d59b67737d91b0dc # v7.4.0
         with:
           context: .
           target: ${{ matrix.target }}
@@ -86,7 +86,7 @@ jobs:
             --image ghcr.io/andreasaugustin/${{ matrix.variant }}:${{ inputs.tag }}${{ matrix.target == 'dev' && '-dev' || '' }}\
             --config docker-test-config.yml
       - name: push ${{ matrix.variant }}
-        uses: docker/build-push-action@53b7df96c91f9c12dcc8a07bcb9ccacbed38856a # v7.3.0
+        uses: docker/build-push-action@c3c9e263c25d99ce0380d002d59b67737d91b0dc # v7.4.0
         with:
           context: .
           target: ${{ matrix.target }}
